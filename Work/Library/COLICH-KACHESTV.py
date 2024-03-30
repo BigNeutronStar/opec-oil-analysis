@@ -1,7 +1,7 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 
-dfs = pd.read_excel('Work\\Data\\nf_db.xlsx', sheet_name=None)
+dfs = pd.read_excel('./Work/Data/nf_db.xlsx', sheet_name=None)
 
 for i, df in dfs.items():
     grouped_data = df.groupby('Страна')['Средняя добыча за год (1000 баррелей/день)'].mean()
