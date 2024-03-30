@@ -1,6 +1,5 @@
 import pandas as pd
 import matplotlib.pyplot as plt
-import numpy as np
 
 df = pd.read_excel('./Work/Data/nf_db.xlsx', sheet_name=0)
 
