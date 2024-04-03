@@ -2,12 +2,19 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 df = pd.read_excel('./Work/Data/nf_db.xlsx', sheet_name=0)
+currency_pair = pd.read_excel('./Work/Data/currency-pair_db.xlsx')
+oil_price = pd.read_excel('./Work/Data/oil-price_db.xlsx')
 
-# Построение категоризированной гистограммы box-and-whiskers (ящик с усами)
-df.boxplot(by='Страна', column='Добыча (1000 баррелей/день)', grid=True)
+currency_pair.boxplot(column='Course', grid=True)
+plt.show()
+
+oil_price.boxplot(column='Price', grid=True)
+plt.show()
+
+df.boxplot(by='Страна', column='Добыча (1000 баррелей)', grid=True)
 plt.suptitle('')
+plt.show()
 
-df.boxplot(by='Номер страны по добыче', column='Добыча (1000 баррелей/день)', grid=True)
+df.boxplot(by='Номер страны по добыче', column='Добыча (1000 баррелей)', grid=True)
 plt.suptitle('')
-
 plt.show()
