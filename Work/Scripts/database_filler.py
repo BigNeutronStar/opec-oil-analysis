@@ -1,13 +1,17 @@
 import pandas as pd
-from Library import rating, production
+import sys, os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'Library')))
+import rating
+import production
+
 
 prod = pd.read_excel('./Work/Data/oil-production_db.xlsx')
 date_id = pd.read_excel('./Work/Data/db.xlsx', sheet_name=1)
 bd = pd.read_excel('./Work/Data/db_test.xlsx')
 
-dates = list(date_id['Дата'])
-price = list(date_id['Цена за баррель $'])
-curr = list(date_id['Курс рубля'])
+dates = list(date_id['Дата'])[:5]
+price = list(date_id['Цена за баррель'])[:5]
+curr = list(date_id['Курс рубля'])[:5]
 countries = list(prod['Страна'])
 
 
@@ -34,6 +38,8 @@ bd['country_id'] = temp_id
 bd['Страна'] = temp
 bd['Номер страны по добыче'] = temp_rate
 bd['Среднедневная добыча за год (1000 бар/д)'] = temp_prod
+
+
 
 
 bd.to_excel('./Work/Data/db_test.xlsx')
