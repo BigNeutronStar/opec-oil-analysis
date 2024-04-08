@@ -9,9 +9,9 @@ prod = pd.read_excel('./Work/Data/oil-production_db.xlsx')
 date_id = pd.read_excel('./Work/Data/db.xlsx', sheet_name=1)
 bd = pd.read_excel('./Work/Data/db_test.xlsx')
 
-dates = list(date_id['Дата'])[:5]
-price = list(date_id['Цена за баррель'])[:5]
-curr = list(date_id['Курс рубля'])[:5]
+dates = list(date_id['Дата'])
+price = list(date_id['Цена за баррель'])
+curr = list(date_id['Курс рубля'])
 countries = list(prod['Страна'])
 
 
