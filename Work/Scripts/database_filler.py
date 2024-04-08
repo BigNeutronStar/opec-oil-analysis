@@ -1,5 +1,6 @@
 import pandas as pd
-import rating
+from Library import rating, production
+
 prod = pd.read_excel('./Work/Data/oil-production_db.xlsx')
 date_id = pd.read_excel('./Work/Data/db.xlsx', sheet_name=1)
 bd = pd.read_excel('./Work/Data/db_test.xlsx')
