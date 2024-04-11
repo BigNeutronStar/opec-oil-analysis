@@ -4,8 +4,7 @@ prod = dict()
 rating = dict()
 countries = bd['Страна']
 
-def form():
-    global prod, rating
+def form(prod = prod, rating = rating):
     for i in range(len(countries)):
         row = bd.iloc[i]
         sum = round(pd.to_numeric(row, errors='coerce').sum(), 3)

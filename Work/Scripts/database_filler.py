@@ -1,9 +1,13 @@
 import pandas as pd
+from openpyxl import Workbook
 import sys, os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'Library')))
-import rating
-import production
 
+import rating
+
+path = "./Work/Data/db_test.xlsx"
+
+Workbook().save(path)
 
 prod = pd.read_excel('./Work/Data/oil-production_db.xlsx')
 date_id = pd.read_excel('./Work/Data/db.xlsx', sheet_name=1)
@@ -39,7 +43,5 @@ bd['Страна'] = temp
 bd['Номер страны по добыче'] = temp_rate
 bd['Среднедневная добыча за год (1000 бар/д)'] = temp_prod
 
+bd.to_excel('./Work/Data/db_test.xlsx', index=False)
 
-
-
-bd.to_excel('./Work/Data/db_test.xlsx')
