@@ -1,46 +1,29 @@
-import pandas as pd
-from openpyxl import Workbook
+import numpy as np
+
 import sys
 sys.path.append('./Work/Library')
-import rating
 
-path = "./Work/Data/db_test.xlsx"
+from dbmanager import *
 
-Workbook().save(path)
-
-prod = pd.read_excel('./Work/Data/oil-production_db.xlsx')
-date_id = pd.read_excel('./Work/Data/db.xlsx', sheet_name=1)
-bd = pd.read_excel(path)
-
-dates = list(date_id['Дата'])
-price = list(date_id['Цена за баррель'])
-curr = list(date_id['Курс рубля'])
-countries = list(prod['Страна'])
+bd['date_id'] = np.tile(np.arange(dates.size), countries.size)
+bd['Дата'] = np.tile(dates.dt.strftime('%d.%m.%Y'), countries.size)
+bd['Цена за баррель'] = np.tile(price, countries.size)
+bd['Курс рубля'] = np.tile(currency, countries.size)
 
 
-dates_count = len(dates)
-country_count = len(countries)
+bd['country_id'] = np.repeat(np.arange(countries.size), dates.size)
+bd['Страна'] = np.repeat(countries, dates.size)
+bd['Номер страны по добыче'] = np.repeat(ratings, dates.size)
 
-bd['date_id'] = list(range(1, dates_count + 1)) * country_count
-bd['Дата'] = dates * country_count
-bd['Цена за баррель'] = price * country_count
-bd['Курс рубля'] = curr * country_count
+prod = []
+for row in productions.values():
+    prod = np.append(prod, np.repeat(row, dates_count))
+bd['Среднедневная добыча за год (1000 бар/д)'] = prod
 
-rating.form()
-
-temp = list()
-temp_id = list()
-temp_rate = list()
-temp_prod = list()
-for i in range(country_count):
-        temp_id += [i + 1] * dates_count
-        temp += [countries[i]] * dates_count
-        temp_rate += [rating.get_rating(countries[i])] * dates_count
-        temp_prod += [rating.get_production(countries[i])] * dates_count
-bd['country_id'] = temp_id
-bd['Страна'] = temp
-bd['Номер страны по добыче'] = temp_rate
-bd['Среднедневная добыча за год (1000 бар/д)'] = temp_prod
+prod = []
+for c in countries:
+    prod = np.append(prod, daily_production[c])
+bd['Добыча (1000 бар)'] = prod
 
 bd.to_excel(path, index=False)
 
