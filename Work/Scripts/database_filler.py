@@ -1,8 +1,7 @@
 import pandas as pd
 from openpyxl import Workbook
-import sys, os
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'Library')))
-
+import sys
+sys.path.append('./Work/Library')
 import rating
 
 path = "./Work/Data/db_test.xlsx"
