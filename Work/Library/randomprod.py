@@ -11,7 +11,7 @@ def generate_databases(countries, dates, productions, dates_count, daily_path):
         values = productions[c]
         res = []
         for mean, count in zip(values, dates_count):
-            randoms = np.round(np.random.normal(mean, 50, count), 3)
+            randoms = np.round(np.random.normal(mean, 50, count), 1)
             res = np.append(res, randoms)
         data[c] = res
 
