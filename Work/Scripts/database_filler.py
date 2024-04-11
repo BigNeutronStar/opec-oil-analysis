@@ -10,7 +10,7 @@ Workbook().save(path)
 
 prod = pd.read_excel('./Work/Data/oil-production_db.xlsx')
 date_id = pd.read_excel('./Work/Data/db.xlsx', sheet_name=1)
-bd = pd.read_excel('./Work/Data/db_test.xlsx')
+bd = pd.read_excel(path)
 
 dates = list(date_id['Дата'])
 price = list(date_id['Цена за баррель'])
@@ -42,5 +42,5 @@ bd['Страна'] = temp
 bd['Номер страны по добыче'] = temp_rate
 bd['Среднедневная добыча за год (1000 бар/д)'] = temp_prod
 
-bd.to_excel('./Work/Data/db_test.xlsx', index=False)
+bd.to_excel(path, index=False)
 
