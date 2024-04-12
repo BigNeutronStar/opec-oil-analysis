@@ -1,16 +1,23 @@
 import flet as ft
-from views.routes import router
-from user_controls.app_bar import NavBar
+from flet_route import Routing, path
+from views.home import Home
+from views.page1 import Page1
+from views.page2 import Page2
+
 
 def main(page: ft.Page):
 
-    page.theme_mode = "dark"
-    page.appbar = NavBar(page)
-    page.on_route_change = router.route_change
-    router.page = page
-    page.add(
-        router.body
-    )
-    page.go('/')
+    app_routes = [
 
-ft.app(target=main, assets_dir="assets")
+        path(url = "/", clear = True, view=Home),
+        path(url = "/page1/:name1", clear = True, view=Page1),
+        path(url = "/page2/:name2", clear = True, view=Page2)
+        
+    ]
+
+    Routing(page=page,
+            app_routes=app_routes,)
+
+    page.go(page.route)
+
+ft.app(target = main)
