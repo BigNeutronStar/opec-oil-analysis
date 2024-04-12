@@ -1,8 +1,8 @@
 import pandas as pd
 import numpy as np
 from openpyxl import Workbook
-import randomprod
-import rateCountries
+import production_generator
+import rate_countries
 
 prod_path="./Work/Data/oil-production_db.xlsx"
 date_path="./Work/Data/date_db.xlsx"
@@ -16,7 +16,7 @@ production = pd.read_excel(prod_path)
 date = pd.read_excel(date_path)
 bd = pd.read_excel(path)
 
-productions = rateCountries.form(production, rating_path)
+productions = rate_countries.form(production, rating_path)
 rating = pd.read_excel(rating_path)
 
 dates = date['Дата']
@@ -28,7 +28,7 @@ ratings = np.array(rating['Рейтинг'])
 years = list(production.head())[1:]
 dates_count = [(dates.dt.year == year).sum() for year in years]
 
-randomprod.generate_databases(countries, dates, productions, dates_count, daily_path)
+production_generator.generate_databases(countries, dates, productions, dates_count, daily_path)
 daily_production = pd.read_excel(daily_path)
 
 

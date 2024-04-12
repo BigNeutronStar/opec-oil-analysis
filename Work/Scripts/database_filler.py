@@ -3,7 +3,7 @@ import numpy as np
 import sys
 sys.path.append('./Work/Library')
 
-from dbmanager import *
+from database_manager import *
 
 bd['date_id'] = np.tile(np.arange(dates.size), countries.size)
 bd['Дата'] = np.tile(dates.dt.strftime('%d.%m.%Y'), countries.size)
