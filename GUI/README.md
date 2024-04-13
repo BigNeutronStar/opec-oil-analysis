@@ -20,7 +20,3 @@
 4. your data page
 ![urdata](./screens/yourData.png)
 *urdata*
-
-<video src="./screens/video.mov" width="640" height="360" controls>
-    Your browser does not support the video tag.
-</video>
