@@ -26,6 +26,7 @@ def form_date(path):
 
     currency['Дата'] = pd.to_datetime(currency['Дата'], format='%m.%d.%Y')
     currency.sort_values(by='Дата', inplace=True)
+    
     df = pd.DataFrame({
         'Дата' : dates.dt.strftime('%d.%m.%Y'),
         'Цена' : price['Цена'],
