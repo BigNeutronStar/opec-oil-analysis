@@ -16,15 +16,16 @@ def read(public_paths):
     production = dict(zip(countries, prds))
 
     price = pd.read_excel(public_paths['price'])
+    price['Дата'] = pd.to_datetime(price['Дата'], format='%Y-%m-%d')
     currency = pd.read_excel(public_paths['curr'])
+    currency['Дата'] = pd.to_datetime(currency['Дата'], format='%m.%d.%Y')
 
 def form_date(path):
     global dates, dates_count
 
-    dates = pd.to_datetime(price['Дата'], format='%Y-%m-%d')
+    dates = price['Дата']
     dates_count = [(dates.dt.year == year).sum() for year in years]
 
-    currency['Дата'] = pd.to_datetime(currency['Дата'], format='%m.%d.%Y')
     currency.sort_values(by='Дата', inplace=True)
     
     df = pd.DataFrame({
