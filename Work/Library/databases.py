@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
 
-__all__ = ['production', 'price', 'currency', 'dates', 'countries', 'years']
+__all__ = ['production', 'price', 'currency', 'dates', 'countries', 'years', 'daily_production']
 
 daily_production = production = price = currency = dates = pd.DataFrame()
 countries = years = dates_count = rating = list()
@@ -62,6 +62,7 @@ def form_rating(path, period = [2006, 2022]):
     df.to_excel(path, index=False)
     
 def form_dailyproduction(path):
+    global daily_production
     data = {
         'Дата' : dates.dt.strftime('%d.%m.%Y')
     }
