@@ -10,7 +10,6 @@ def Page1(page: ft.Page, params: Params, basket: Basket):
 
             ft.Text("Графики"),
             ft.ElevatedButton("Назад", on_click= lambda _: page.go("/")),
-            ft.ElevatedButton("Назад", on_click= lambda _: page.go("/"))
         ]
     )
 
