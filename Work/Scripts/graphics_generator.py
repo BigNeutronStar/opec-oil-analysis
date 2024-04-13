@@ -95,7 +95,7 @@ from Library.databases import *
 # for i in range(len(years)):
 #     data = np.array([prd[i] for prd in productions.values()])
 # plt.show()
-plt.hist()
-
-
+prd = [prod[0] for prod in production.values()]
+plt.hist(prd)
+plt.show()
 

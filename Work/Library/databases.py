@@ -3,7 +3,7 @@ import numpy as np
 
 __all__ = ['production', 'price', 'currency', 'dates', 'countries', 'years']
 
-production = price = currency = dates = pd.DataFrame()
+daily_production = production = price = currency = dates = pd.DataFrame()
 countries = years = dates_count = rating = list()
 
 def read(public_paths):
@@ -72,7 +72,7 @@ def form_dailyproduction(path):
             randoms = np.round(np.random.normal(mean, 50, count), 1)
             res = np.append(res, randoms)
         data[c] = res
-
+    daily_production = data
     df = pd.DataFrame(data)
     df.to_excel(path, index=False)
 
