@@ -1,5 +1,5 @@
-import Library
-import Scripts.data_collector
+from Scripts import data_collector
+
 
 
 
