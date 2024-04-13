@@ -1,7 +1,7 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 
-df = pd.read_excel('./Work/Data/nf_db.xlsx', sheet_name=0)
+df = pd.read_excel('./Work/Data/db.xlsx', sheet_name=0)
 
 x = df['Цена за баррель']
 y = df['Добыча (1000 баррелей)']

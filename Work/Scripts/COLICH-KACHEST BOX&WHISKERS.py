@@ -1,7 +1,7 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 
-df = pd.read_excel('./Work/Data/nf_db.xlsx', sheet_name=0)
+df = pd.read_excel('./Work/Data/db.xlsx', sheet_name=0)
 currency_pair = pd.read_excel('./Work/Data/currency-pair_db.xlsx')
 oil_price = pd.read_excel('./Work/Data/oil-price_db.xlsx')
 

@@ -1,9 +1,14 @@
 import numpy as np
+import os
+
+data_dir = "Work/Data/generated_data"
+if not os.path.exists(data_dir):
+    os.makedirs(data_dir)
 
 import sys
-sys.path.append('./Work/Library')
+sys.path.append('Work/Library')
+from databases import *
 
-from database_manager import *
 
 bd['date_id'] = np.tile(np.arange(dates.size), countries.size)
 bd['Дата'] = np.tile(dates.dt.strftime('%d.%m.%Y'), countries.size)

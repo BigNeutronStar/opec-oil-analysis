@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd 
 from openpyxl import Workbook
 
-def generate_databases(countries, dates, productions, dates_count, daily_path):
+def generate_dailyproduction(countries, dates, productions, dates_count, daily_path):
     data = {
         'Дата' : dates.dt.strftime('%d.%m.%Y')
     }
