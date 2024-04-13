@@ -14,21 +14,21 @@ def Page2(page: Page, params: Params = {}, basket: Basket = {}):
     dates = [] # здесь хранятся значения дат
     barrelPrice = []  # здесь хранятся значения цены за баррель
     course = []
-    countryName = []
-    countryRate = []
-    srDob = []
-    dnDob = []
+    countryNames = []
+    countryRates = []
+    srDobs = []
+    dnDobs = []
     bar_labels = []
     bar_colors = []
 
     # DEFINE INPUT FIELDS
-    nametxt = TextField(label="Name")
-    salarytxt = TextField(label="Salary")
-    iqtxt = TextField(label="IQ")
-    lengthtxt = TextField(label="Length")
-    beavertxt = TextField(label="Beaver")
-    srdob = TextField(label="Среднедневная добыча")
-    dndob = TextField(label="Дневная добыча")
+    date = TextField(label="date")
+    price = TextField(label="price")
+    usdRub = TextField(label="usd rub")
+    countryName = TextField(label="country name")
+    countryRate = TextField(label="country rate")
+    srDob = TextField(label="Среднедневная добыча")
+    dnDob = TextField(label="Дневная добыча")
 
     # FUNCTION TO CREATE CHART
     def create_chart(fig, ax):
@@ -37,32 +37,44 @@ def Page2(page: Page, params: Params = {}, basket: Basket = {}):
         ax.set_title("dates Data Visualization")
         ax.legend(title="dates Details")
 
+
+    mytable = DataTable(
+        columns=[
+            DataColumn(Text("date")),
+            DataColumn(Text("price")),
+            DataColumn(Text("usd rub")),
+            DataColumn(Text("country name")),
+            DataColumn(Text("rating")),
+            DataColumn(Text("sr dob")),
+            DataColumn(Text("dn dob")),
+        ],
+        rows=[]
+    )
     # FUNCTION TO ADD DATA AND UPDATE CHART
     def add_new_data(e):
         try:
-            # Validate and convert input to integers
-            salary = int(salarytxt.value)
-            iq = int(iqtxt.value)
-            length = int(lengthtxt.value)
-
-            # ADD DATA TO TABLE
             mytable.rows.append(
-                DataRow(
-                    cells=[
-                        DataCell(Text(nametxt.value)),
-                        DataCell(Text(str(salary))),  # Convert back to string for display
-                        DataCell(Text(str(iq))),
-                        DataCell(Text(str(length))),
-                        DataCell(Text(beavertxt.value)),
-                        DataCell(Text(srdob.value)),
-                        DataCell(Text(dndob.value)),
-                    ]
-                )
-            )
+			DataRow(
+				cells=[
+				DataCell(Text(date.value)),
+				DataCell(Text(price.value)),
+                DataCell(Text(usdRub.value)),
+				DataCell(Text(countryName.value)),
+                DataCell(Text(countryRate.value)),
+				DataCell(Text(srDob.value)),
+                DataCell(Text(dnDob.value)),
+				]
+				)
+			)
 
             # UPDATE CHART DATA
-            dates.append(nametxt.value)
-            barrelPrice.append(salary)
+            dates.append(date.value)
+            barrelPrice.append(price.value)
+            course.append(usdRub.value)
+            countryNames.append(countryName.value)
+            countryRates.append(countryRate.value)
+            srDobs.append(srDob.value)
+            dnDobs.append(dnDob.value)
 
             # GENERATE RANDOM BAR COLORS
             colors = ['purple', 'red', 'pink', 'green', 'blue', 'orange']
@@ -102,18 +114,7 @@ def Page2(page: Page, params: Params = {}, basket: Basket = {}):
     )
 
     # CREATE TABLE WITH NEW COLUMNS
-    mytable = DataTable(
-        columns=[
-            DataColumn(Text("Name")),
-            DataColumn(Text("Salary")),
-            DataColumn(Text("IQ")),
-            DataColumn(Text("Length")),
-            DataColumn(Text("Beaver")),
-            DataColumn(Text("srdob")),
-            DataColumn(Text("dndob")),
-        ],
-        rows=[],
-    )
+
 
     def open_chart(e):
         page.dialog = chartdialog
@@ -127,13 +128,13 @@ def Page2(page: Page, params: Params = {}, basket: Basket = {}):
         scroll=True,
         controls=[
             Text("Ваши данные"),
-            nametxt,
-            salarytxt,
-            iqtxt,
-            lengthtxt,
-            beavertxt,
-            srdob,
-            dndob,
+            date,
+            price,
+            usdRub,
+            countryName,
+            countryRate,
+            srDob,
+            dnDob,
             Row(
                 [
                     ElevatedButton("Add Data", on_click=add_new_data),
@@ -142,6 +143,6 @@ def Page2(page: Page, params: Params = {}, basket: Basket = {}):
             ),
             mytable,
             ElevatedButton("Назад", on_click=lambda _: page.go("/")),
-            ElevatedButton("print", on_click=lambda _: print(dates, barrelPrice, bar_labels))
+            ElevatedButton("print", on_click=lambda _: print(dates, barrelPrice, course, countryNames, countryRates, srDobs, dnDobs))
         ]
     )
