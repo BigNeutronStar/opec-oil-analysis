@@ -24,3 +24,6 @@
 <video src="./screens/video.mov" width="640" height="360" controls>
     Your browser does not support the video tag.
 </video>
+
+https://github.com/BigNeutronStar/python-project-1/assets/109436275/f8b8da3c-6a30-4635-92c4-54b7410c7683
+
