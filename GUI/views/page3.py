@@ -1,7 +1,7 @@
 import flet as ft
 from flet_route import Params, Basket
 
-def Page1(page: ft.Page, params: Params, basket: Basket):
+def Page3(page: ft.Page, params: Params, basket: Basket):
     
     return ft.View(
         "/page3/:name3",

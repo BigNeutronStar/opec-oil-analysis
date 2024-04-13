@@ -16,19 +16,19 @@ def Home(page: ft.Page, params: Params, basket: Basket):
             ),
                 ft.Row(
                     [
-                        ft.FilledButton("Graphics", icon=ft.icons.WB_SUNNY_OUTLINED, on_click= lambda _: page.go("/page1/FletApp"),width=250,height=75)
+                        ft.FilledButton("Graphics", icon=ft.icons.STACKED_LINE_CHART, on_click= lambda _: page.go("/page1/FletApp"),width=250,height=75)
                     ],
                     alignment=ft.MainAxisAlignment.CENTER
                 ),
                 ft.Row(
                     [
-                        ft.FilledButton("Use your data", icon=ft.icons.CLOSE, on_click=lambda _: page.go("/page2/FletApp"), icon_color="red",width=250,height=75)
+                        ft.FilledButton("Use your data", icon=ft.icons.FILE_UPLOAD, on_click=lambda _: page.go("/page2/FletApp"),width=250,height=75)
                     ],
                     alignment=ft.MainAxisAlignment.CENTER
                 ),
                 ft.Row(
                     [
-                        ft.FilledButton("Information about project", icon=ft.icons.MENU_BOOK_ROUNDED, on_click=lambda _: page.go("/page2/FletApp"),width=250,height=75)
+                        ft.FilledButton("Information about project", icon=ft.icons.MENU_BOOK_ROUNDED, on_click=lambda _: page.go("/page3/FletApp"),width=250,height=75)
                     ],
                     alignment=ft.MainAxisAlignment.CENTER
                 ),
