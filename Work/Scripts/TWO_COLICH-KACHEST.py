@@ -1,6 +1,8 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 
+
+#### УЗНАТЬ ЧЕ ТАКОЕ КТАГЕОРИЗИРОВАННАЯ ДИАГРММА РАССЕИВАНИЯ И КАКИЕ АТРИБУТЫ НАМ БРАТЬ
 df = pd.read_excel('./Work/Data/db.xlsx', sheet_name=0)
 
 x = df['Цена за баррель']

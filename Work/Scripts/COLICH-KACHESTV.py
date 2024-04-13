@@ -11,6 +11,8 @@ oil_prod_number = df.groupby('Номер страны по добыче')['До�
 currency_pair['Date'] = pd.to_datetime(currency_pair['Date'], format='%m.%d.%Y')
 currency_pair.sort_values(by='Date', inplace=True)
 
+
+# просто прямую сделать
 plt.bar(currency_pair['Date'], currency_pair['Course'])
 plt.title('Курс доллара к рублю')
 plt.xlabel('Дата')
@@ -22,6 +24,7 @@ plt.show()
 oil_price['Date'] = pd.to_datetime(oil_price['Date'], format='%Y-%m-%d')
 oil_price.sort_values(by='Date', inplace=True)
 
+# просто прямую сделать
 plt.bar(oil_price['Date'], oil_price['Price'])
 plt.title('Цена на нефть')
 plt.xlabel('Дата')
@@ -30,6 +33,9 @@ plt.xticks(rotation=0)
 plt.grid(True)
 plt.show()
 
+
+## НЕ ДЕЛАТЬ
+# заменить на гистограмму 
 oil_prod_country.plot(kind='bar')
 plt.title('Среднедневная добыча нефти по странам')
 plt.xlabel('Страна')
