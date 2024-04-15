@@ -2,7 +2,6 @@ import flet as ft
 from flet_route import Params, Basket
 
 
-
 def Page1(page: ft.Page, params: Params, basket: Basket):
     
     return ft.View(
@@ -22,31 +21,31 @@ def Page1(page: ft.Page, params: Params, basket: Basket):
             ),
             ft.Row(
                 [
-                    ft.ElevatedButton("Box&Whiskers",width=250,height=55),
+                    ft.ElevatedButton("Box&Whiskers", on_click= lambda _: page.go("/page4/FletApp"),width=250,height=55),
                 ],
                 alignment=ft.MainAxisAlignment.CENTER
             ),
             ft.Row(
                 [
-                    ft.ElevatedButton("Категоризированная гистограмма",width=250,height=55),
+                    ft.ElevatedButton("Категоризированная гистограмма", on_click= lambda _: page.go("/page5/FletApp"),width=250,height=55),
                 ],
                 alignment=ft.MainAxisAlignment.CENTER
             ),
             ft.Row(
                 [
-                    ft.ElevatedButton("Кластеризованная диаграмма",width=250,height=55),
+                    ft.ElevatedButton("Кластеризованная диаграмма", on_click= lambda _: page.go("/page6/FletApp"),width=250,height=55),
                 ],
                 alignment=ft.MainAxisAlignment.CENTER
             ),
             ft.Row(
                 [
-                    ft.ElevatedButton("Рассеивание",width=250,height=55),
+                    ft.ElevatedButton("Рассеивание", on_click= lambda _: page.go("/page7/FletApp"),width=250,height=55),
                 ],
                 alignment=ft.MainAxisAlignment.CENTER
             ),
             ft.Row(
                 [
-                    ft.ElevatedButton("Американские горки",width=250,height=55),
+                    ft.ElevatedButton("Американские горки", on_click= lambda _: page.go("/page8/FletApp"),width=250,height=55),
                 ],
                 alignment=ft.MainAxisAlignment.CENTER
             )
@@ -57,7 +56,7 @@ def Page1(page: ft.Page, params: Params, basket: Basket):
             ft.Row(
                 [
                     ft.Container(
-                    ft.ElevatedButton("Построить по собственным данным",width=300,height=55),
+                    ft.ElevatedButton("Построить по собственным данным",on_click= lambda _: page.go("/page9/FletApp"),width=300,height=55),
                     margin=100,
                     )
                 ], 
