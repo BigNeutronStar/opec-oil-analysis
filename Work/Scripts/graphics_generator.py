@@ -6,12 +6,13 @@ import numpy as np
 from Library.databases import *
 
 # ### box & whiskers
-currency.boxplot(column='Курс', grid=True, showmeans=True)
+plt.boxplot(currency, showmeans=True)
+plt.grid()
 plt.title('Курс 2006-2022 гг.')
 plt.ylabel('1$/1Р')
 plt.show()
 
-price.boxplot(column='Цена', grid=True, showmeans=True)
+plt.boxplot(price, showmeans=True)
 plt.title('Цена на нефть 2006-2022 гг.')
 plt.ylabel('Рубли')
 plt.show()
@@ -32,7 +33,7 @@ plt.show()
 
 #### Графики измененения цены и курса
 plt.figure(figsize=(10,6))
-plt.plot(currency['Дата'], currency['Курс'], label='Курс рубля')
+plt.plot(dates, currency, label='Курс рубля')
 plt.title('Курс 2006-2022 гг.')
 plt.xlabel('Дата')
 plt.ylabel('Рубли')
@@ -41,7 +42,7 @@ plt.grid(True)
 plt.show()
 
 plt.figure(figsize=(10,6))
-plt.plot(price['Дата'], price['Цена'], label='Цена на нефть')
+plt.plot(dates, price, label='Цена на нефть')
 plt.title('Цена на нефть 2006-2022 гг.')
 plt.xlabel('Дата')
 plt.ylabel('Рубли')
@@ -107,7 +108,7 @@ plt.show()
 
 ##### Диаграмма рассеивания  (ВСЕ)
 plt.figure(figsize=(10, 8))
-x = price['Цена']
+x = price
 
 for i in countries:
     y = daily_production[i]
@@ -121,7 +122,7 @@ plt.grid(True)
 plt.show()
 
 ##### Диаграмма рассеивания
-x = price['Цена']
+x = price
 
 for i in countries:
     plt.figure(figsize=(10, 8))

@@ -6,8 +6,8 @@ __all__ = ['production', 'price', 'currency', 'dates', 'countries', 'years', 'da
 daily_production = production = price = currency = dates = pd.DataFrame()
 countries = years = dates_count = rating = list()
 
-def read(public_paths):
-    global production, price, currency, countries, years
+def read_public(public_paths):
+    global production, dates, price, currency, countries, years
 
     production = pd.read_excel(public_paths['prd'])
     countries = production['Страна']
@@ -16,22 +16,25 @@ def read(public_paths):
     production = dict(zip(countries, prds))
 
     price = pd.read_excel(public_paths['price'])
-    price['Дата'] = pd.to_datetime(price['Дата'], format='%Y-%m-%d')
+    dates = pd.to_datetime(price['Дата'], format='%Y-%m-%d')
+    price = list(price['Цена'])
+
     currency = pd.read_excel(public_paths['curr'])
     currency['Дата'] = pd.to_datetime(currency['Дата'], format='%m.%d.%Y')
+    currency.sort_values(by='Дата', inplace=True)
+    currency = list(currency['Курс'])
 
 def form_date(path):
     global dates, dates_count
 
-    dates = price['Дата']
     dates_count = [(dates.dt.year == year).sum() for year in years]
 
-    currency.sort_values(by='Дата', inplace=True)
+    
     
     df = pd.DataFrame({
         'Дата' : dates.dt.strftime('%d.%m.%Y'),
-        'Цена' : price['Цена'],
-        'Курс' : np.array(currency['Курс']),
+        'Цена' : price,
+        'Курс' : currency,
     })
 
     df.to_excel(path, index=False)
@@ -47,8 +50,8 @@ def form_rating(path, period = [2006, 2022]):
     total_prod = dict(sorted(total_prod.items(), key=lambda item: item[1], reverse=True))
     
     rtn = dict(zip(countries, np.zeros((1, len(countries)))))
-    rating = rtn.values()
-
+    rating = list(rtn.values())
+    print(rating)
     i = 1
     for c in total_prod.keys():
         rtn[c] = i
@@ -76,6 +79,22 @@ def form_dailyproduction(path):
     daily_production = data
     df = pd.DataFrame(data)
     df.to_excel(path, index=False)
+
+def form_total(path):
+    data = pd.DataFrame({
+        'date_id' : np.tile(np.arange(dates.size), countries.size),
+        'Дата' : np.tile(dates.dt.strftime('%d.%m.%Y'), countries.size),
+        'Цена за баррель' : np.tile(price, countries.size),
+        'Курс доллара' : np.tile(currency, countries.size),
+
+        'country_id' : np.repeat(np.arange(countries.size), dates.size),
+        'Страна' : np.repeat(countries, dates.size),
+        'Номер страны по добыче' : np.repeat(rating, dates.size),
+        # 'Среднедневная добыча за год (1000 бар/д)' : list(np.repeat(row, dates_count) for row in production.values()),
+        # 'Добыча (1000 бар)' : np.array(daily_production[c] for c in countries).ravel(),
+    })
+
+    data.to_excel(path, index=False)
 
 def get_years_id(period):
     return (years.index(period[0]), years.index(period[1]))
