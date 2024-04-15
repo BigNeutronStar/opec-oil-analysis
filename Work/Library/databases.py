@@ -26,11 +26,7 @@ def read_public(public_paths):
 
 def form_date(path):
     global dates, dates_count
-
     dates_count = [(dates.dt.year == year).sum() for year in years]
-
-    
-    
     df = pd.DataFrame({
         'Дата' : dates.dt.strftime('%d.%m.%Y'),
         'Цена' : price,
@@ -50,12 +46,13 @@ def form_rating(path, period = [2006, 2022]):
     total_prod = dict(sorted(total_prod.items(), key=lambda item: item[1], reverse=True))
     
     rtn = dict(zip(countries, np.zeros((1, len(countries)))))
-    rating = list(rtn.values())
-    print(rating)
+
     i = 1
     for c in total_prod.keys():
         rtn[c] = i
         i += 1
+    
+    rating = list(rtn.values())
 
     df = pd.DataFrame({
         'Страна' : rtn.keys(),
@@ -90,8 +87,8 @@ def form_total(path):
         'country_id' : np.repeat(np.arange(countries.size), dates.size),
         'Страна' : np.repeat(countries, dates.size),
         'Номер страны по добыче' : np.repeat(rating, dates.size),
-        # 'Среднедневная добыча за год (1000 бар/д)' : list(np.repeat(row, dates_count) for row in production.values()),
-        # 'Добыча (1000 бар)' : np.array(daily_production[c] for c in countries).ravel(),
+        'Среднедневная добыча за год (1000 бар/д)' : np.array([np.repeat(row, dates_count) for row in production.values()]).ravel(),
+        'Добыча (1000 бар)' : np.array([daily_production[c] for c in countries]).ravel(),
     })
 
     data.to_excel(path, index=False)
