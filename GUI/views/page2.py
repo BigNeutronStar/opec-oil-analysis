@@ -114,6 +114,45 @@ def Page2(page: Page, params: Params = {}, basket: Basket = {}):
     )
 
     # CREATE TABLE WITH NEW COLUMNS
+    mytable = DataTable(
+        columns=[
+            DataColumn(Text("Name")),
+            DataColumn(Text("Salary")),
+            DataColumn(Text("IQ")),
+            DataColumn(Text("Length")),
+            DataColumn(Text("Beaver")),
+        ],
+        rows=[],
+    )
+
+    def open_chart(e):
+        page.dialog = chartdialog
+        chartdialog.open = True
+        page.update()
+
+    # Fix indentation here
+
+    return View(
+        "/page2/:name2",
+        controls=[
+            Text("Ваши данные"),
+            nametxt,
+            salarytxt,
+            iqtxt,
+            lengthtxt,
+            beavertxt,
+            Row(
+                [
+                    ElevatedButton("Add Data", on_click=add_new_data),
+                    ElevatedButton("Open Chart", on_click=open_chart),
+                ]
+        ),
+        mytable,
+            ElevatedButton("Назад", on_click=lambda _: page.go("/"))
+        ]
+    )
+
+    # CREATE TABLE WITH NEW COLUMNS
 
 
     def open_chart(e):
