@@ -116,35 +116,32 @@ def Page2(page: Page, params: Params = {}, basket: Basket = {}):
     # CREATE TABLE WITH NEW COLUMNS
     mytable = DataTable(
         columns=[
-            DataColumn(Text("Name")),
-            DataColumn(Text("Salary")),
-            DataColumn(Text("IQ")),
-            DataColumn(Text("Length")),
-            DataColumn(Text("Beaver")),
+            DataColumn(Text("date")),
+            DataColumn(Text("price")),
+            DataColumn(Text("usdRub")),
+            DataColumn(Text("countryName")),
+            DataColumn(Text("countryRate")),
+            DataColumn(Text("srDob")),
+            DataColumn(Text("dnDob")),
         ],
         rows=[],
     )
 
-    def open_chart(e):
-        page.dialog = chartdialog
-        chartdialog.open = True
-        page.update()
-
-    # Fix indentation here
 
     return View(
         "/page2/:name2",
         controls=[
             Text("Ваши данные"),
-            nametxt,
-            salarytxt,
-            iqtxt,
-            lengthtxt,
-            beavertxt,
+            date,
+            price,
+            usdRub,
+            countryName,
+            countryRate,
+            srDob,
+            dnDob,
             Row(
                 [
                     ElevatedButton("Add Data", on_click=add_new_data),
-                    ElevatedButton("Open Chart", on_click=open_chart),
                 ]
         ),
         mytable,
@@ -152,15 +149,7 @@ def Page2(page: Page, params: Params = {}, basket: Basket = {}):
         ]
     )
 
-    # CREATE TABLE WITH NEW COLUMNS
 
-
-    def open_chart(e):
-        page.dialog = chartdialog
-        chartdialog.open = True
-        page.update()
-
-    # Fix indentation here
 
     return View(
         "/page2/:name2",
@@ -177,7 +166,6 @@ def Page2(page: Page, params: Params = {}, basket: Basket = {}):
             Row(
                 [
                     ElevatedButton("Add Data", on_click=add_new_data),
-                    ElevatedButton("Open Chart", on_click=open_chart),
                 ]
             ),
             mytable,
