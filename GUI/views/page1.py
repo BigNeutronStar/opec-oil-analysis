@@ -6,7 +6,7 @@ def Page1(page: ft.Page, params: Params, basket: Basket):
     
     return ft.View(
         "/page1/:name1",
-
+        scroll=True,
         controls = [
             ft.ElevatedButton("Вернуться домой", on_click= lambda _: page.go("/"),icon=ft.icons.ARROW_BACK),
             ft.Column(

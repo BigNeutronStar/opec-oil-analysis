@@ -5,7 +5,7 @@ from flet_route import Params, Basket
 def Page3(page: ft.Page, params: Params, basket: Basket):
     return ft.View(
         "/page3/:name3",
-
+        scroll=True,
         controls=[
             ft.ElevatedButton(
                 " Go back to home",

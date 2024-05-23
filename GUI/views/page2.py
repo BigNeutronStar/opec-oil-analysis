@@ -104,67 +104,22 @@ def Page2(page: Page, params: Params = {}, basket: Basket = {}):
             page.snack_bar.open = True
             page.update()
 
-    # CREATE FIGURE AND AXES FOR CHART
-    fig, ax = plt.subplots()
-    create_chart(fig, ax)
-
-    # CREATE DIALOG FOR CHART
-    chartdialog = AlertDialog(
-        content=MatplotlibChart(fig, expand=True)
-    )
 
     # CREATE TABLE WITH NEW COLUMNS
     mytable = DataTable(
         columns=[
-            DataColumn(Text("Name")),
-            DataColumn(Text("Salary")),
-            DataColumn(Text("IQ")),
-            DataColumn(Text("Length")),
-            DataColumn(Text("Beaver")),
+            DataColumn(Text("date")),
+            DataColumn(Text("price")),
+            DataColumn(Text("usdRub")),
+            DataColumn(Text("countryName")),
+            DataColumn(Text("countryRate")),
+            DataColumn(Text("srDob")),
+            DataColumn(Text("dnDob")),
             
         ],
         rows=[],
     )
 
-    def open_chart(e):
-        page.dialog = chartdialog
-        chartdialog.open = True
-        page.update()
-
-    # Fix indentation here
-
-    return View(
-        "/page2/:name2",
-        controls=[
-            Text("Ваши данные"),
-            date,
-            price,
-            usdRub,
-            countryName,
-            countryRate,
-            srDob,
-            dnDob,
-
-            Row(
-                [
-                    ElevatedButton("Add Data", on_click=add_new_data),
-                    ElevatedButton("Open Chart", on_click=open_chart),
-                ]
-        ),
-        mytable,
-            ElevatedButton("Назад", on_click=lambda _: page.go("/"))
-        ]
-    )
-
-    # CREATE TABLE WITH NEW COLUMNS
-
-
-    def open_chart(e):
-        page.dialog = chartdialog
-        chartdialog.open = True
-        page.update()
-
-    # Fix indentation here
 
     return View(
         "/page2/:name2",
@@ -178,14 +133,37 @@ def Page2(page: Page, params: Params = {}, basket: Basket = {}):
             countryRate,
             srDob,
             dnDob,
+
             Row(
                 [
                     ElevatedButton("Add Data", on_click=add_new_data),
-                    ElevatedButton("Open Chart", on_click=open_chart),
                 ]
-            ),
-            mytable,
-            ElevatedButton("Назад", on_click=lambda _: page.go("/")),
-            ElevatedButton("print", on_click=lambda _: print(dates, barrelPrice, course, countryNames, countryRates, srDobs, dnDobs))
+        ),
+        mytable,
+            ElevatedButton("Назад", on_click=lambda _: page.go("/"))
         ]
     )
+
+
+    # return View(
+    #     "/page2/:name2",
+    #     scroll=True,
+    #     controls=[
+    #         Text("Ваши данные"),
+    #         date,
+    #         price,
+    #         usdRub,
+    #         countryName,
+    #         countryRate,
+    #         srDob,
+    #         dnDob,
+    #         Row(
+    #             [
+    #                 ElevatedButton("Add Data", on_click=add_new_data),
+    #             ]
+    #         ),
+    #         mytable,
+    #         ElevatedButton("Назад", on_click=lambda _: page.go("/")),
+    #         ElevatedButton("print", on_click=lambda _: print(dates, barrelPrice, course, countryNames, countryRates, srDobs, dnDobs))
+    #     ]
+    # )
