@@ -42,11 +42,11 @@ def Page2(page: Page, params: Params = {}, basket: Basket = {}):
         columns=[
             DataColumn(Text("date")),
             DataColumn(Text("price")),
-            DataColumn(Text("usd rub")),
-            DataColumn(Text("country name")),
-            DataColumn(Text("rating")),
-            DataColumn(Text("sr dob")),
-            DataColumn(Text("dn dob")),
+            DataColumn(Text("usdRub")),
+            DataColumn(Text("countryName")),
+            DataColumn(Text("countryRate")),
+            DataColumn(Text("srDob")),
+            DataColumn(Text("dnDob")),
         ],
         rows=[]
     )
@@ -121,6 +121,7 @@ def Page2(page: Page, params: Params = {}, basket: Basket = {}):
             DataColumn(Text("IQ")),
             DataColumn(Text("Length")),
             DataColumn(Text("Beaver")),
+            
         ],
         rows=[],
     )
@@ -136,11 +137,14 @@ def Page2(page: Page, params: Params = {}, basket: Basket = {}):
         "/page2/:name2",
         controls=[
             Text("Ваши данные"),
-            nametxt,
-            salarytxt,
-            iqtxt,
-            lengthtxt,
-            beavertxt,
+            date,
+            price,
+            usdRub,
+            countryName,
+            countryRate,
+            srDob,
+            dnDob,
+
             Row(
                 [
                     ElevatedButton("Add Data", on_click=add_new_data),
