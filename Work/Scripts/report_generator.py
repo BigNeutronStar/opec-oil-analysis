@@ -1,30 +1,16 @@
 import os
 import pandas as pd
 from datetime import datetime
+from Library.paths import report_dir, output_paths
+from Library.data import *
 
-# Получаем путь к текущей директории, где находится скрипт
-script_dir = os.path.dirname(os.path.abspath(__file__))
+file_path = output_paths["main"]
 
-# Получаем путь к директории Output (на один уровень выше папки Scripts)
-output_dir = os.path.abspath(os.path.join(script_dir, '..', 'Output'))
-
-# Проверяем, существует ли папка Output, если нет, то создаем ее
-if not os.path.exists(output_dir):
-    os.makedirs(output_dir)
-
-# Формируем путь к файлу Excel
-file_path = os.path.join(script_dir, '..', 'Data', 'generated_data', 'db.xlsx')
-
-# Считываем данные из файла Excel
-df = pd.read_excel(file_path)
-
-
-# Функция для создания текстового отчета
 def generate_report(column_name, report_name):
-    report_df = df[['Дата', 'Страна', column_name]]
+    report_df = total[['Дата', 'Страна', column_name]]
     report_df = report_df.groupby(['Дата', 'Страна']).mean().reset_index()
 
-    report_path = os.path.join(output_dir, report_name + '.txt')
+    report_path = os.path.join(report_dir, report_name + '.txt')
     with open(report_path, 'w', encoding='utf-8') as file:
         header = f"{'Дата':<12} | {'Страна':<20} | {column_name}\n"
         file.write(header)
@@ -42,13 +28,13 @@ def generate_report(column_name, report_name):
 
 
 def generate_annual_summary_report():
-    df['Год'] = pd.to_datetime(df['Дата'], format='%d.%m.%Y').dt.year
-    annual_summary = df.groupby('Год').agg({
+    total['Год'] = pd.to_datetime(total['Дата'], format='%d.%m.%Y').dt.year
+    annual_summary = total.groupby('Год').agg({
         'Цена за баррель': 'mean',
         'Курс доллара': 'mean'
     }).reset_index()
 
-    report_path = os.path.join(output_dir, 'annual_summary_report.txt')
+    report_path = os.path.join(report_dir, 'annual_summary_report.txt')
     with open(report_path, 'w', encoding='utf-8') as file:
         header = f"{'Год':<5} | {'Цена за баррель (средняя)':<30} | {'Курс доллара (средний)':<20}\n"
         separator = '-' * (5 + 3 + 30 + 3 + 20 + 2) + '\n'
@@ -64,8 +50,6 @@ def generate_annual_summary_report():
 
         file.write(separator)
 
-
-# Примеры создания отчетов
 generate_report('Среднедневная добыча за год (1000 бар/д)', 'отчет_1')
 generate_report('Цена за баррель', 'отчет_2')
 generate_annual_summary_report()

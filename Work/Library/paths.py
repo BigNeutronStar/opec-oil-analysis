@@ -1,10 +1,11 @@
-output_dir = "./Data/generated_data"
+output_dir = "./Data"
+report_dir = "./Output"
 
 output_paths = {
-    "main":"./Data/generated_data/db.xlsx",
-    "date":"./Data/generated_data/date_db.xlsx",
-    "rating":"./Data/generated_data/rating_db.xlsx",
-    "dailyprd":"./Data/generated_data/daily-production_db.xlsx",
+    ## "main":"./Data/database.xlsx",
+    "dates":"./Data/dates.xlsx",
+    "countries":"./Data/countries.xlsx",
+    "daily_production":"./Data/daily_production.xlsx",
 }
 
 public_paths = {
