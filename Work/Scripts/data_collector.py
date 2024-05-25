@@ -11,9 +11,11 @@ def generate():
             Workbook().save(path)
 
     data.read_public(public_paths)
-    data.form_dailyproduction(output_paths['dailyprd'])
     data.form_dates(output_paths['dates'])
     data.form_countries(output_paths['countries'])
+    data.form_dailyproduction(output_paths['daily_production'])
+
+    
     ##data.form_total(output_paths['main'])
 
 
