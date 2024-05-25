@@ -55,4 +55,16 @@ def generate_annual_minmax_report():
 
         file.write(separator)
 
+def generate_pivot_table():
+    pivot_table = pd.pivot_table(data.main, index=['Страна'], values=['Добыча'], aggfunc='sum')
+    report_path = os.path.join(report_dir, 'total_production.txt')
+    with open(report_path, 'w', encoding='utf-8') as f:
+        header = f"{'Страна':<20} | {'Суммарная добыча':<10}"
+        f.write(header + '\n')
+        f.write('-' * len(header) + '\n')
 
+        for index, row in pivot_table.iterrows():
+            line = f"{index:<20} | {row['Добыча']:<10}"
+            f.write(line + '\n')
+
+        f.write('-' * len(header) + '\n')
