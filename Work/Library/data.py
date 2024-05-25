@@ -39,22 +39,6 @@ def form_dates(path):
 
 def form_countries(path):
     global countries
-    
-    ##sum_prd = dict()
-
-    ##for country, prod in zip(production['Страна'], production['Добыча']):
-    ##    sum_prd[country] = round(sum(prod), 3)
-
-    ##total_prod = dict(zip(production.keys(), sum_prd))
-    ##total_prod = dict(sorted(total_prod.items(), key=lambda item: item[1], reverse=True))
-    
-   ## rtn = dict(zip(countries, np.zeros((1, len(countries)))))
-
-   ## i = 1
-   ## for c in total_prod.keys():
-    ##    i += 1
-    
-   ## rating = list(rtn.values())
 
     countries = pd.DataFrame({
         'country_id': np.arange(1, production['Страна'].size + 1),
@@ -84,24 +68,4 @@ def form_dailyproduction(path):
     data['Добыча'] = column
     daily_production = pd.DataFrame(data)
     daily_production.to_excel(path, index=False)
-
-def form_total(path):
-    global total
-    data = pd.DataFrame({
-        'date_id' : np.tile(np.arange(dates.size), countries.size),
-        'Дата' : np.tile(dates.dt.strftime('%d.%m.%Y'), countries.size),
-        'Цена за баррель' : np.tile(price, countries.size),
-        'Курс доллара' : np.tile(currency, countries.size),
-
-        'country_id' : np.repeat(np.arange(countries.size) + 1, dates.size),
-        'Страна' : np.repeat(countries, dates.size),
-        'Номер страны по добыче' : np.repeat(rating, dates.size),
-        'Среднедневная добыча за год (1000 бар/д)' : np.array([np.repeat(row, dates_count) for row in production.values()]).ravel(),
-        'Добыча (1000 бар)' : np.array([daily_production[c] for c in countries]).ravel(),
-    })
-
-    data.to_excel(path, index=False)
-    total = data
-
-
 
