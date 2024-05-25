@@ -1,4 +1,3 @@
-import os
 from openpyxl import Workbook
 from Library import data
 from Library.paths import main, databases_paths
