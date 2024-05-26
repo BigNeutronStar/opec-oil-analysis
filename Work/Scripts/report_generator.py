@@ -79,3 +79,8 @@ def generate_pivot_table_for_country(country_name):
 
         f.write('-' * len(header) + '\n')
 
+        for index, row in pivot_table.iterrows():
+            line = f"{index:<20} | {row['Добыча']:<10}"
+            f.write(line + '\n')
+
+        f.write('-' * len(header) + '\n')
