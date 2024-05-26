@@ -1,39 +1,79 @@
+import os
+import matplotlib
 import matplotlib.pyplot as plt
 from matplotlib.ticker import MultipleLocator
-
 import numpy as np
+import pandas as pd
 
+from Library import paths
 from Library import data
 
-def plot_boxwhiskers(atribute, label):
-    plt.boxplot(atribute, showmeans=True)
+def plot_boxwhiskers(atribute):
+    fig = plt.figure(figsize=(10,6))
+    if atribute == 'Курс':
+        column = data.dates[atribute]
+        plt.ylabel('1$/1P')
+        plt.boxplot(column, showmeans=True)
+        plt.xticks([])
+        path = os.path.join(paths.graphics_dir,"Box&Whiskers","Курс.png")
+    elif atribute == 'Цена':
+        column = data.dates[atribute]
+        plt.ylabel('Рубли')
+        plt.boxplot(column, showmeans=True)
+        plt.xticks([])
+        path = os.path.join(paths.graphics_dir,"Box&Whiskers","Цена.png")
+    elif atribute == 'Добыча':
+        positions = np.arange(2, len(countries) * 2 + 1, 2)
+
+        plt.boxplot(production.values(), showmeans=True, positions=positions)
+        plt.title('Среднедневная добыча 2006-2022 гг.')
+        plt.xticks(positions, [c for c in countries], rotation = 15)
+        plt.ylabel('Среднедневная добыча (1000 бар/д)')
+        plt.grid()
+        plt.suptitle('')
+ 
+        df = pd.DataFrame(
+            dict(
+                data.daily_production.groupby('country_id')['Добыча'].apply(list)
+            )
+        )
+        df.boxplot()
+        path = os.path.join(paths.graphics_dir,"Box&Whiskers","Добыча.png")
     plt.grid()
     plt.title(f'{atribute} 2006-2022 гг.')
-    plt.ylabel(label)
-    plt.xticks([])
-    plt.show()
+    plt.savefig(path)
+    return fig
 
 def plot_course():
-    plt.figure(figsize=(10,6))
-    plt.plot(data.dates['Дата'], data.dates['Курс'], label='Курс рубля')
+    fig = plt.figure(figsize=(10,6))
+    plt.plot(pd.to_datetime(data.dates['Дата'], format="%d.%m.%Y"), data.dates['Курс'], label='Курс рубля')
     plt.title('Курс 2006-2022 гг.')
     plt.xlabel('Дата')
     plt.ylabel('Рубли')
     plt.xticks(rotation=0)
     plt.grid(True)
-    plt.show()
+    path = os.path.join(paths.graphics_dir,"Графики изменения","Курс.png")
+    plt.savefig(path)
+    return fig
+   
 
 def plot_price():
-    plt.figure(figsize=(10,6))
-    plt.plot(data.dates['Дата'], data.dates['Цена'], label='Цена на нефть')
+    fig = plt.figure(figsize=(10,6))
+    plt.plot(pd.to_datetime(data.dates['Дата'], format="%d.%m.%Y"), data.dates['Цена'], label='Цена на нефть')
     plt.title('Цена на нефть 2006-2022 гг.')
     plt.xlabel('Дата')
     plt.ylabel('Рубли')
     plt.xticks(rotation=0)
     plt.grid(True)
-    plt.show()
+    path = os.path.join(paths.graphics_dir,"Графики изменения","Цена.png")
+    plt.savefig(path)
+    return fig
     
+def hist():
+    pass
 
+def diag():
+    pass
 
 def hui():
     plt.figure(figsize=(10,6))

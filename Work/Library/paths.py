@@ -1,4 +1,5 @@
 report_dir = "./Output"
+graphics_dir = "./Graphics"
 
 databases_paths = {
     "main":"./Data/main.xlsx",

@@ -1,5 +1,8 @@
 import flet as ft
 from flet_route import Params, Basket
+from flet.matplotlib_chart import MatplotlibChart
+import matplotlib
+from Scripts import graphics_generator
 
 def TitleBar(page: ft.page):
     def maximize_win(e):
@@ -9,88 +12,87 @@ def TitleBar(page: ft.page):
     def minimize_win(e):
         page.window_minimized = True
         page.update()
-    
+
     return ft.ResponsiveRow(
         [   
-            ft.WindowDragArea(
-                content = ft.Container(
-                    width = page.window_width,
-                    expand=True,
-                    margin=0,
-                    content = ft.Row(
-                        [
-                                    ft.FilledButton(
-                                        content = ft.Row(
+                    ft.WindowDragArea(
+                            content = ft.Container(
+                                width = page.window_width,
+                                expand=True,
+                                margin=0,
+                                content = ft.Row(
                                             [
-                                                ft.Icon(name=ft.icons.MINIMIZE_OUTLINED, size=9)
-                                            ]
-                                        ),
-                                        style=ft.ButtonStyle(
-                                            color={
-                                                ft.MaterialState.HOVERED: ft.colors.WHITE,
-                                                ft.MaterialState.DEFAULT: ft.colors.BLUE_200,
-                                            },
-                                            bgcolor={
-                                                ft.MaterialState.HOVERED: ft.colors.BLUE_200,
-                                                ft.MaterialState.DEFAULT: ft.colors.TRANSPARENT,
-                                            },
-                                            overlay_color=ft.colors.TRANSPARENT,
-                                            animation_duration = 0,
-                                            shape = ft.BeveledRectangleBorder(),
-                                        ),
-                                        on_click=minimize_win,
-                                    ),
-                                    ft.FilledButton(
-                                        content = ft.Row(
-                                            [
-                                                ft.Icon(name=ft.icons.CHECK_BOX_OUTLINE_BLANK, size=9)
-                                            ]
-                                        ),
-                                        style=ft.ButtonStyle(
-                                            color={
-                                                ft.MaterialState.HOVERED: ft.colors.WHITE,
-                                                ft.MaterialState.DEFAULT: ft.colors.BLUE_200,
-                                            },
-                                            bgcolor={
-                                                ft.MaterialState.HOVERED: ft.colors.BLUE_200,
-                                                ft.MaterialState.DEFAULT: ft.colors.TRANSPARENT,
-                                            },
-                                            overlay_color=ft.colors.TRANSPARENT,
-                                            shape = ft.BeveledRectangleBorder(),
-                                            padding = 0,
-                                        ),
-                                        on_click=maximize_win,
-                                    ),
-                                    ft.FilledButton(
-                                        content = ft.Row(
-                                            [
-                                                ft.Icon(name=ft.icons.CLOSE, size=9)
-                                            ]
-                                        ),
-                                        style=ft.ButtonStyle(
-                                            color={
-                                                ft.MaterialState.HOVERED: ft.colors.WHITE,
-                                                ft.MaterialState.DEFAULT: ft.colors.BLUE_200,
-                                            },
-                                            bgcolor={
-                                                ft.MaterialState.HOVERED: ft.colors.RED,
-                                                ft.MaterialState.DEFAULT: ft.colors.TRANSPARENT,
-                                            },
-                                            overlay_color=ft.colors.TRANSPARENT,
-                                            animation_duration = 0,
-                                            shape = ft.BeveledRectangleBorder(),
-                                            padding = 0,
-                                        ),
-                                        on_click=lambda _: page.window_close(),
-                                    ),
-                        ],
-                        alignment=ft.MainAxisAlignment.END
-                    ),
-                ),
-                height=20
-            ),
-            
-        ]
+                                                ft.FilledButton(
+                                                    content = ft.Row(
+                                                        [
+                                                            ft.Icon(name=ft.icons.MINIMIZE_OUTLINED, size=9)
+                                                        ]
+                                                    ),
+                                                    style=ft.ButtonStyle(
+                                                        color={
+                                                            ft.MaterialState.HOVERED: ft.colors.WHITE,
+                                                            ft.MaterialState.DEFAULT: ft.colors.BLUE_200,
+                                                        },
+                                                        bgcolor={
+                                                            ft.MaterialState.HOVERED: ft.colors.BLUE_200,
+                                                            ft.MaterialState.DEFAULT: ft.colors.TRANSPARENT,
+                                                        },
+                                                        overlay_color=ft.colors.TRANSPARENT,
+                                                        animation_duration = 0,
+                                                        shape = ft.BeveledRectangleBorder(),
+                                                    ),
+                                                    on_click=minimize_win,
+                                                ),
+                                                ft.FilledButton(
+                                                    content = ft.Row(
+                                                        [
+                                                            ft.Icon(name=ft.icons.CHECK_BOX_OUTLINE_BLANK, size=9)
+                                                        ]
+                                                    ),
+                                                    style=ft.ButtonStyle(
+                                                        color={
+                                                            ft.MaterialState.HOVERED: ft.colors.WHITE,
+                                                            ft.MaterialState.DEFAULT: ft.colors.BLUE_200,
+                                                        },
+                                                        bgcolor={
+                                                            ft.MaterialState.HOVERED: ft.colors.BLUE_200,
+                                                            ft.MaterialState.DEFAULT: ft.colors.TRANSPARENT,
+                                                        },
+                                                        overlay_color=ft.colors.TRANSPARENT,
+                                                        shape = ft.BeveledRectangleBorder(),
+                                                        padding = 0,
+                                                    ),
+                                                    on_click=maximize_win,
+                                                ),
+                                                ft.FilledButton(
+                                                    content = ft.Row(
+                                                        [
+                                                            ft.Icon(name=ft.icons.CLOSE, size=9)
+                                                        ]
+                                                    ),
+                                                    style=ft.ButtonStyle(
+                                                        color={
+                                                            ft.MaterialState.HOVERED: ft.colors.WHITE,
+                                                            ft.MaterialState.DEFAULT: ft.colors.BLUE_200,
+                                                        },
+                                                        bgcolor={
+                                                            ft.MaterialState.HOVERED: ft.colors.RED,
+                                                            ft.MaterialState.DEFAULT: ft.colors.TRANSPARENT,
+                                                        },
+                                                        overlay_color=ft.colors.TRANSPARENT,
+                                                        animation_duration = 0,
+                                                        shape = ft.BeveledRectangleBorder(),
+                                                        padding = 0,
+                                                    ),
+                                                    on_click=lambda _: page.window_close(),
+                                                ),
+                                            ],
+                                            alignment=ft.MainAxisAlignment.END
+                                ),
+                            ),      
+                            height=20
+                    )  
+        ], 
     )
 
 def Loading(page: ft.Page, params: Params, basket: Basket):
@@ -122,7 +124,6 @@ def Loading(page: ft.Page, params: Params, basket: Basket):
         padding = 0,
     )
 
-   
 def Home(page: ft.Page, params: Params, basket: Basket):
     return ft.View(
         "/home",
@@ -169,53 +170,147 @@ def Home(page: ft.Page, params: Params, basket: Basket):
     )
 
 def Graphics(page: ft.Page, params: Params, basket: Basket):
+    def put_plot(fig):
+        page.views[0].controls[2] = ft.Container(
+            content=ft.Row(
+                [
+                    ft.Column(
+                        [
+                            ft.ProgressRing()
+                        ],
+                        alignment=ft.MainAxisAlignment.CENTER,
+                        horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+                        expand=True,
+                    )
+                ],
+                alignment=ft.MainAxisAlignment.CENTER,
+                vertical_alignment=ft.CrossAxisAlignment.CENTER,
+                expand=True,
+            ),
+            alignment=ft.alignment.center,
+            width = page.window_width,
+            height = page.window_height - 200
+        ) 
+        page.update()
+        page.views[0].controls[2] = ft.Container(
+            content=ft.Container(
+                ft.Row(
+                    [
+                        ft.Column(
+                            [
+                                MatplotlibChart(fig)
+                            ],
+                            alignment=ft.MainAxisAlignment.CENTER,
+                            horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+                            expand=True,
+                        )
+                    ],
+                    alignment=ft.MainAxisAlignment.CENTER,
+                    vertical_alignment=ft.CrossAxisAlignment.CENTER,
+                    expand=True,
+                ),
+                width = page.window_width / 2,
+            ),
+            alignment=ft.alignment.center,
+            width = page.window_width,
+            height = page.window_height-200,
+        ) 
+        page.update()
+        
+    
+    scatter_buttons = []
+        
+    
     return ft.View(
         '/graphics',
         scroll=True,
         controls = [
             TitleBar(page),
-            ft.ElevatedButton("Домой", on_click= lambda _: page.go("/home"),icon=ft.icons.ARROW_BACK),
-            ft.Column(
+            ft.Row(
                 [
-                        ft.Row(
-                            [
-                                ft.Text("Графики", size=30), 
-                                ft.Icon(name=ft.icons.STACKED_LINE_CHART, size=30),
-                            ], 
-                            alignment=ft.MainAxisAlignment.CENTER,
+                    ft.MenuBar(
+                        style = ft.MenuStyle(
+                            bgcolor=ft.colors.TRANSPARENT,
+                            shadow_color=ft.colors.TRANSPARENT,
                         ),
-                        ft.Row(
-                            [
-                                ft.ElevatedButton("Box&Whiskers", on_click= lambda _: page.go("/page4/FletApp"),width=250,height=55),
-                            ],
-                            alignment=ft.MainAxisAlignment.CENTER
-                        ),
-                        ft.Row(
-                            [
-                                ft.ElevatedButton("Категоризированная\nгистограмма", on_click= lambda _: page.go("/page5/FletApp"),width=250,height=55),
-                            ],
-                            alignment=ft.MainAxisAlignment.CENTER
-                        ),
-                        ft.Row(
-                            [
-                                ft.ElevatedButton("Кластеризованная\nдиаграмма", on_click= lambda _: page.go("/page6/FletApp"),width=250,height=55),
-                            ],
-                            alignment=ft.MainAxisAlignment.CENTER
-                        ),
-                        ft.Row(
-                            [
-                                ft.ElevatedButton("Рассеивание", on_click= lambda _: page.go("/page7/FletApp"),width=250,height=55),
-                            ],
-                            alignment=ft.MainAxisAlignment.CENTER
-                        ),
-                        ft.Row(
-                            [
-                                ft.ElevatedButton("Американские горки", on_click= lambda _: page.go("/page8/FletApp"),width=250,height=55),
-                            ],
-                            alignment=ft.MainAxisAlignment.CENTER
-                        )
-                ]
+                        controls=[
+                            ft.MenuItemButton(
+                                content=ft.Text("Назад"),
+                                on_click=lambda _: page.go('/home'),
+                                style=ft.ButtonStyle(
+                                    overlay_color=ft.colors.TRANSPARENT,
+                                    animation_duration = 0,
+                                ),
+                            ),
+                            
+                            ft.SubmenuButton(
+                                content=ft.Text("Графики изменения"),
+                                style=ft.ButtonStyle(
+                                    overlay_color=ft.colors.TRANSPARENT,
+                                    animation_duration = 0,
+                                    shape = ft.RoundedRectangleBorder(),
+                                ),
+                                controls=[
+                                    ft.MenuItemButton(
+                                        content=ft.Text("Курс рубля"),
+                                        on_click = lambda _: put_plot(graphics_generator.plot_course())
+                                    ),
+                        
+                                    ft.MenuItemButton(
+                                        content=ft.Text("Цена на нефть"),
+                                        on_click = lambda _: put_plot(graphics_generator.plot_price())
+                                    ),
+                                ]
+                            ),
+                            
+                            ft.SubmenuButton(
+                                content=ft.Text("Box & Whiskers"),
+                                style=ft.ButtonStyle(
+                                    overlay_color=ft.colors.TRANSPARENT,
+                                    animation_duration = 0,
+                                    shape = ft.RoundedRectangleBorder(),
+                                ),
+                                controls=[
+                                    ft.MenuItemButton(
+                                        content=ft.Text("Курс рубля"),
+                                        on_click = lambda _: put_plot(graphics_generator.plot_boxwhiskers("Курс"))
+                                    ),
+                        
+                                    ft.MenuItemButton(
+                                        content=ft.Text("Цена на нефть"),
+                                        on_click = lambda _: put_plot(graphics_generator.plot_boxwhiskers("Цена"))
+                                    ),
+                            
+                                    ft.MenuItemButton(
+                                        content=ft.Text("Добыча нефти"),
+                                        on_click = lambda _: put_plot(graphics_generator.plot_boxwhiskers("Добыча"))
+                                    ),
+                        
+                                ]
+                            ),
+                            
+                            ft.MenuItemButton(
+                                content=ft.Text("Гистограмма"),
+                                on_click=lambda _: put_plot(graphics_generator.hist())
+                            ),
+                            
+                            ft.MenuItemButton(
+                                content=ft.Text("Диаграмма"),
+                                on_click=lambda _: put_plot(graphics_generator.diag())
+                            ),
+                            
+                            ft.SubmenuButton(
+                                content=ft.Text("Рассеивание"),
+                            )
+                        ],
+                    )
+                ],
+                alignment=ft.MainAxisAlignment.CENTER,
+            ),
+            ft.Container(
+                
             )
+           
         ],
         padding = 0,
     )
