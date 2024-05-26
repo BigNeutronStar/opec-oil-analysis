@@ -9,4 +9,5 @@ for param in sys.argv[1:]:
 data_collector.read_data()
 report_generator.generate_annual_average_report()
 report_generator.generate_annual_minmax_report()
-        
+report_generator.generate_pivot_table()
+report_generator.generate_pivot_table_for_country("Iraq")
