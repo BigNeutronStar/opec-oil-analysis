@@ -23,7 +23,12 @@ def plot_boxwhiskers(atribute):
         plt.xticks([])
         path = os.path.join(paths.graphics_dir,"Box&Whiskers","Цена.png")
     elif atribute == 'Добыча':
-        positions = np.arange(2, len(countries) * 2 + 1, 2)
+        positions = np.arange(2, data.countries['Страна'].size * 2 + 1, 2)
+        df = data.main[['Дата', 'Страна', 'Добыча']].copy()
+        df['Дата'] = pd.to_datetime(df['Дата'], format='%d.%m.%y').dt.year
+        df.groupby(['Страна', 'Дата'])['Добыча'].mean()
+        
+        
 
         plt.boxplot(production.values(), showmeans=True, positions=positions)
         plt.title('Среднедневная добыча 2006-2022 гг.')
@@ -41,7 +46,8 @@ def plot_boxwhiskers(atribute):
         path = os.path.join(paths.graphics_dir,"Box&Whiskers","Добыча.png")
     plt.grid()
     plt.title(f'{atribute} 2006-2022 гг.')
-    plt.savefig(path)
+    if not os.path.exists(path):
+            plt.savefig(path)
     return fig
 
 def plot_course():
@@ -52,8 +58,8 @@ def plot_course():
     plt.ylabel('Рубли')
     plt.xticks(rotation=0)
     plt.grid(True)
-    path = os.path.join(paths.graphics_dir,"Графики изменения","Курс.png")
-    plt.savefig(path)
+    #path = os.path.join(paths.graphics_dir,"Графики изменения","Курс.png")
+    #plt.savefig(path)
     return fig
    
 

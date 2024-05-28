@@ -11,7 +11,7 @@ from Library.pages import ViewData
 
 from Scripts import data_collector
 
-def main(page: ft.Page):
+def setup_page(page: ft.Page):
     page.theme_mode='dark'
     page.window_maximized = True
     page.window_title_bar_hidden = True
@@ -20,7 +20,7 @@ def main(page: ft.Page):
     page.window_min_width = 700
     page.spacing = 0
     page.padding = 0
-    
+
     app_routes = [
         path(url = "/", clear = True, view=Loading),
         path(url = "/home", clear = True, view=Home),
@@ -28,14 +28,14 @@ def main(page: ft.Page):
         path(url = "/info", clear=True, view=Info),
         path(url = "/view_data", clear=True, view=ViewData),
     ]
-    
+
     Routing(page=page,
             app_routes=app_routes)
-    
+
+def run_app(page: ft.Page):
     page.go(page.route)
     data_collector.read_data()
     page.go('/home')
     
-def run_app():
-    ft.app(target = main)
+     
     
