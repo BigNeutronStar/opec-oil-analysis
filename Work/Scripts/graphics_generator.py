@@ -8,6 +8,8 @@ import pandas as pd
 from Library import paths
 from Library import data
 
+matplotlib.use('agg')
+
 def plot_boxwhiskers(atribute):
     fig = plt.figure(figsize=(10,6))
     if atribute == 'Курс':

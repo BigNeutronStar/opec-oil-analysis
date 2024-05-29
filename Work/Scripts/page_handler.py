@@ -5,6 +5,7 @@ from flet_route import Routing, path
 
 from Library.pages import Home
 from Library.pages import Graphics
+from Library.pages import Reports
 from Library.pages import Info
 from Library.pages import Loading
 from Library.pages import ViewData
@@ -27,6 +28,7 @@ def setup_page(page: ft.Page):
         path(url = "/graphics", clear=True, view=Graphics),
         path(url = "/info", clear=True, view=Info),
         path(url = "/view_data", clear=True, view=ViewData),
+        path(url = "/reports", clear=True, view=Reports),
     ]
 
     Routing(page=page,
