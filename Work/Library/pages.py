@@ -1,8 +1,13 @@
+import subprocess
+from math import pi
+import shutil
+import os
 import flet as ft
 from flet_route import Params, Basket
 from flet.matplotlib_chart import MatplotlibChart
 import matplotlib
 from Scripts import graphics_generator
+
 
 def TitleBar(page: ft.page):
     def maximize_win(e):
@@ -95,6 +100,99 @@ def TitleBar(page: ft.page):
         ], 
     )
 
+###### REPORTS ###### REPORTS ###### REPORTS ###### REPORTS ###### REPORTS ###### REPORTS ######
+###### REPORTS ###### REPORTS ###### REPORTS ###### REPORTS ###### REPORTS ###### REPORTS ######
+
+def Reports(page: ft.Page, params: Params, basket: Basket):
+    
+    def run_report_generator():
+        subprocess.run(["python3", "/Users/artem/Desktop/University/python-project-1/Work/Scripts/report_generator.py"])
+
+        reports_dir = "/Users/artem/Desktop/University/python-project-1/Work/Output"
+        reports = [f for f in os.listdir(reports_dir) if f.endswith(".txt")]
+        return reports
+
+    def open_reports_dialog(page: ft.Page, reports):
+        report_contents = []
+        for report in reports:
+            with open(os.path.join("/Users/artem/Desktop/University/python-project-1/Work/Output", report), "r") as file:
+                content = file.read()
+                report_contents.append(ft.Text(content))
+
+        page.dialog = ft.Dialog(
+            content=ft.Container(
+                content=ft.Column(
+                    report_contents,
+                    scroll=True,
+                ),
+                width=600,
+                height=400,
+                padding=20
+            ),
+            open=True
+        )
+        page.update()
+
+    def on_create_reports_click(e):
+        reports = run_report_generator()
+        open_reports_dialog(e.page, reports)
+
+    def download_report(page: ft.Page, report):
+        report_path = os.path.join("/Users/artem/Desktop/University/python-project-1/Work/Output", report)
+        with open(report_path, "rb") as file:
+            file_contents = file.read()
+            page.launch_file(file.name, file_contents)
+
+    def on_download_reports_click(e):
+        reports = [f for f in os.listdir("/Users/artem/Desktop/University/python-project-1/Work/Output") if f.endswith(".txt")]
+        for report in reports:
+            download_report(e.page, report)
+
+    return ft.View(
+        "/reports",
+        [
+            TitleBar(page),
+            ft.Container(
+                content=ft.Column(
+                    [
+                        ft.Row(
+                            [
+                                ft.ElevatedButton(
+                                    "Создать отчеты",
+                                    on_click=on_create_reports_click,
+                                    width=250,
+                                    height=75
+                                ),
+                                ft.ElevatedButton(
+                                    "Скачать отчеты",
+                                    on_click=on_download_reports_click,
+                                    width=250,
+                                    height=75
+                                )
+                            ],
+                            alignment=ft.MainAxisAlignment.CENTER,
+                        )
+                    ],
+                    alignment=ft.MainAxisAlignment.CENTER,
+                    horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+                    expand=True,
+                ),
+                alignment=ft.alignment.center,
+                expand=True
+            )
+        ],
+        padding=0,
+    )
+
+###### REPORTS ###### REPORTS ###### REPORTS ###### REPORTS ###### REPORTS ###### REPORTS ######
+###### REPORTS ###### REPORTS ###### REPORTS ###### REPORTS ###### REPORTS ###### REPORTS ######
+
+
+
+
+###### LOADING ###### LOADING ###### LOADING ###### LOADING ###### LOADING ###### LOADING ######
+###### LOADING ###### LOADING ###### LOADING ###### LOADING ###### LOADING ###### LOADING ######
+
 def Loading(page: ft.Page, params: Params, basket: Basket):
     return ft.View(
         "/",
@@ -154,6 +252,12 @@ def Home(page: ft.Page, params: Params, basket: Basket):
                         ft.Row(
                             [
                                 ft.ElevatedButton("О проекте", icon=ft.icons.MENU_BOOK_ROUNDED, on_click=lambda _: page.go("/info"),width=250,height=75)
+                            ],
+                            alignment=ft.MainAxisAlignment.CENTER
+                        ),
+                        ft.Row(
+                            [
+                                ft.ElevatedButton("Просмотр отчетов", icon=ft.icons.MENU_BOOK_ROUNDED, on_click=lambda _: page.go("/reports"),width=250,height=75)
                             ],
                             alignment=ft.MainAxisAlignment.CENTER
                         ),
@@ -360,3 +464,4 @@ def ViewData(page: ft.Page, params: Params, basket: Basket):
         ],
         padding = 0,
     )
+
