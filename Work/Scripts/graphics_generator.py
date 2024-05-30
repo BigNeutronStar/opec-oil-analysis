@@ -15,39 +15,29 @@ def plot_boxwhiskers(atribute):
         plt.ylabel('1$/1P')
         plt.boxplot(column, showmeans=True)
         plt.xticks([])
-        path = os.path.join(paths.graphics_dir,"Box&Whiskers","Курс.png")
+        path = paths.graphics_dir + "/Box&Whiskers" + "/Курс.png"
     elif atribute == 'Цена':
         column = data.dates[atribute]
         plt.ylabel('Рубли')
         plt.boxplot(column, showmeans=True)
         plt.xticks([])
-        path = os.path.join(paths.graphics_dir,"Box&Whiskers","Цена.png")
+        path = paths.graphics_dir + "/Box&Whiskers" + "/Цена.png"
     elif atribute == 'Добыча':
-        positions = np.arange(2, data.countries['Страна'].size * 2 + 1, 2)
         df = data.main[['Дата', 'Страна', 'Добыча']].copy()
         df['Дата'] = pd.to_datetime(df['Дата'], format='%d.%m.%y').dt.year
         df.groupby(['Страна', 'Дата'])['Добыча'].mean()
-        
-        
 
-        plt.boxplot(production.values(), showmeans=True, positions=positions)
+        plt.boxplot(df.groupby(['Страна'])['Добыча'].agg(list).reset_index(name='Страна'), showmeans=True)
         plt.title('Среднедневная добыча 2006-2022 гг.')
-        plt.xticks(positions, [c for c in countries], rotation = 15)
         plt.ylabel('Среднедневная добыча (1000 бар/д)')
         plt.grid()
         plt.suptitle('')
- 
-        df = pd.DataFrame(
-            dict(
-                data.daily_production.groupby('country_id')['Добыча'].apply(list)
-            )
-        )
-        df.boxplot()
-        path = os.path.join(paths.graphics_dir,"Box&Whiskers","Добыча.png")
+
+        path = paths.graphics_dir + "/Box&Whiskers" + "/Добыча.png"
     plt.grid()
     plt.title(f'{atribute} 2006-2022 гг.')
     if not os.path.exists(path):
-            plt.savefig(path)
+        plt.savefig(path)
     return fig
 
 def plot_course():
@@ -58,8 +48,9 @@ def plot_course():
     plt.ylabel('Рубли')
     plt.xticks(rotation=0)
     plt.grid(True)
-    #path = os.path.join(paths.graphics_dir,"Графики изменения","Курс.png")
-    #plt.savefig(path)
+    path = paths.graphics_dir + "/Графики" + "/Курс.png"
+    if not os.path.exists(path):
+        plt.savefig(path)
     return fig
    
 
@@ -71,34 +62,29 @@ def plot_price():
     plt.ylabel('Рубли')
     plt.xticks(rotation=0)
     plt.grid(True)
-    path = os.path.join(paths.graphics_dir,"Графики изменения","Цена.png")
-    plt.savefig(path)
+    path = paths.graphics_dir + "/Графики" + "/Цена.png"
+    if not os.path.exists(path):
+        plt.savefig(path)
     return fig
     
 def hist():
-    pass
-
-def diag():
-    pass
-
-def hui():
-    plt.figure(figsize=(10,6))
-    positions = np.arange(2, len(countries['Страна'].size) * 2 + 1, 2)
-
-    plt.boxplot(production.values(), showmeans=True, positions=positions)
-    plt.title('Среднедневная добыча 2006-2022 гг.')
-    plt.xticks(positions, [c for c in countries], rotation = 15)
-    plt.ylabel('Среднедневная добыча (1000 бар/д)')
-    plt.grid()
-    plt.suptitle('')
+    fig, ax = plt.subplots(2, 3)
+    for i in range(2):
+        for j in range(3):
+            ax[i, j].hist([prod[(i + 1) * (j + 1)] for prod in production.values()], alpha=0.7, color='skyblue', edgecolor='black', bins=10)
+            ax[i, j].set_title(years[(i + 1) * (j + 1)])
+            ax[i, j].yaxis.set_major_locator(MultipleLocator(base = 1))
+            ax[i, j].xaxis.set_major_locator(MultipleLocator(base = 500)) 
+            ax[i, j].grid()
+            ax[i, j].set_xlabel('Среднедневная добыча')
+            ax[i, j].set_ylabel('Частота')
+            
+    fig.suptitle('Гистограммы среднедневной добычи по годам', fontsize=16)
+    plt.tight_layout()
     plt.show()
 
-    #### Графики измененения цены и курса
-   
 
-   
-
-    ####### Кластеризованная столбчатая
+def diag():
     fig = plt.figure(figsize=(30, 6))
     ax = fig.add_subplot()
     ax.set_ylabel('Среднедневная добыча (1000 бар/д)')
@@ -137,24 +123,7 @@ def hui():
     plt.legend(loc='upper right', bbox_to_anchor=(1.13, 1))
     plt.show()
 
-
-    ###### Категоризированная гистограмма
-    fig, ax = plt.subplots(2, 3)
-    for i in range(2):
-        for j in range(3):
-            ax[i, j].hist([prod[(i + 1) * (j + 1)] for prod in production.values()], alpha=0.7, color='skyblue', edgecolor='black', bins=10)
-            ax[i, j].set_title(years[(i + 1) * (j + 1)])
-            ax[i, j].yaxis.set_major_locator(MultipleLocator(base = 1))
-            ax[i, j].xaxis.set_major_locator(MultipleLocator(base = 500)) 
-            ax[i, j].grid()
-            ax[i, j].set_xlabel('Среднедневная добыча')
-            ax[i, j].set_ylabel('Частота')
-            
-    fig.suptitle('Гистограммы среднедневной добычи по годам', fontsize=16)
-    plt.tight_layout()
-    plt.show()
-
-    ##### Диаграмма рассеивания  (ВСЕ)
+def scatter():
     plt.figure(figsize=(10, 8))
     x = price
 
