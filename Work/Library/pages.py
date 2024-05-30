@@ -184,15 +184,6 @@ def Reports(page: ft.Page, params: Params, basket: Basket):
         padding=0,
     )
 
-###### REPORTS ###### REPORTS ###### REPORTS ###### REPORTS ###### REPORTS ###### REPORTS ######
-###### REPORTS ###### REPORTS ###### REPORTS ###### REPORTS ###### REPORTS ###### REPORTS ######
-
-
-
-
-###### LOADING ###### LOADING ###### LOADING ###### LOADING ###### LOADING ###### LOADING ######
-###### LOADING ###### LOADING ###### LOADING ###### LOADING ###### LOADING ###### LOADING ######
-
 def Loading(page: ft.Page, params: Params, basket: Basket):
     return ft.View(
         "/",
@@ -313,18 +304,16 @@ def Graphics(page: ft.Page, params: Params, basket: Basket):
                     vertical_alignment=ft.CrossAxisAlignment.CENTER,
                     expand=True,
                 ),
-                width = page.window_width / 2,
+                width = page.window_width / 1.7,
             ),
             alignment=ft.alignment.center,
             width = page.window_width,
-            height = page.window_height-200,
+            height = page.window_height-100,
         ) 
         page.update()
         
-    
     scatter_buttons = []
         
-    
     return ft.View(
         '/graphics',
         scroll=True,
@@ -403,8 +392,9 @@ def Graphics(page: ft.Page, params: Params, basket: Basket):
                                 on_click=lambda _: put_plot(graphics_generator.diag())
                             ),
                             
-                            ft.SubmenuButton(
+                            ft.MenuItemButton(
                                 content=ft.Text("Рассеивание"),
+                                on_click=lambda _: put_plot(graphics_generator.plot_scatter())
                             )
                         ],
                     )

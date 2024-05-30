@@ -11,32 +11,37 @@ from Library import data
 matplotlib.use('agg')
 
 def plot_boxwhiskers(atribute):
-    fig = plt.figure(figsize=(10,6))
+    fig = plt.figure()
     if atribute == 'Курс':
         column = data.dates[atribute]
+        fig.set_size_inches(10, 6)
         plt.ylabel('1$/1P')
         plt.boxplot(column, showmeans=True)
         plt.xticks([])
         path = paths.graphics_dir + "/Box&Whiskers" + "/Курс.png"
     elif atribute == 'Цена':
         column = data.dates[atribute]
+        fig.set_size_inches(10, 6)
         plt.ylabel('Рубли')
         plt.boxplot(column, showmeans=True)
         plt.xticks([])
         path = paths.graphics_dir + "/Box&Whiskers" + "/Цена.png"
     elif atribute == 'Добыча':
         df = data.main[['Дата', 'Страна', 'Добыча']].copy()
-        df['Дата'] = pd.to_datetime(df['Дата'], format='%d.%m.%y').dt.year
+        df['Дата'] = pd.to_datetime(df['Дата'], format='mixed', dayfirst=True).dt.year
         df.groupby(['Страна', 'Дата'])['Добыча'].mean()
-
-        plt.boxplot(df.groupby(['Страна'])['Добыча'].agg(list).reset_index(name='Страна'), showmeans=True)
+        grouped_data = df.groupby(['Страна'])['Добыча'].agg(list)
+        fig.set_size_inches(20, 12)
+        plt.boxplot(grouped_data, showmeans=True)
+        plt.xticks(ticks=range(1, len(grouped_data) + 1), labels=grouped_data.index)
         plt.title('Среднедневная добыча 2006-2022 гг.')
         plt.ylabel('Среднедневная добыча (1000 бар/д)')
-        plt.grid()
+        plt.grid(True)
         plt.suptitle('')
 
         path = paths.graphics_dir + "/Box&Whiskers" + "/Добыча.png"
-    plt.grid()
+        
+    plt.grid(True)
     plt.title(f'{atribute} 2006-2022 гг.')
     if not os.path.exists(path):
         plt.savefig(path)
@@ -87,25 +92,27 @@ def hist():
 
 
 def diag():
+    df = data.main[['Дата', 'Страна', 'Добыча']].copy()
+    df['Дата'] = pd.to_datetime(df['Дата'], format='mixed', dayfirst=True).dt.year
+    df.groupby(['Страна', 'Дата'])['Добыча'].mean()
+    grouped_data = df.groupby(['Страна'])['Добыча'].agg(list)
+    years = df['Дата']
+    countries = df['Страна']
+
     fig = plt.figure(figsize=(30, 6))
     ax = fig.add_subplot()
     ax.set_ylabel('Среднедневная добыча (1000 бар/д)')
     fig.suptitle("Кластеризованная столбчатая диаграмма по среднедневной добыче")
-    x = years
 
-    y1 = production["Congo"]
-    y2 = production["Iraq"]
-    y3 = production["Algeria"]
-    y4 = production["Angola"]
-    y5 = production["Equatorial Guinea"]
-    y6 = production["Gabon"]
-    y7 = production["IR Iran"]
-    y8 = production["Kuwait"]
-    y9 = production["Libya"]
-    y10 = production["Nigeria"]
-    y12 = production["United Arab Emirates"]
-    y13 = production["Venezuela"]
+    y = []
+
+    for c in countries:
+        y += [grouped_data[c]]
+
     bar_width = 0.05
+
+    for y in years:
+        ax.bar[]
 
     ax.bar([i - 6*bar_width for i in x], y1, width=bar_width, align='center', label="Congo")
     ax.bar([i - 5*bar_width for i in x], y2, width=bar_width, align='center', label="Iraq")
@@ -125,32 +132,15 @@ def diag():
     plt.legend(loc='upper right', bbox_to_anchor=(1.13, 1))
     plt.show()
 
-def scatter():
-    plt.figure(figsize=(10, 8))
-    x = price
-
-    for i in countries:
-        y = daily_production[i]
-        plt.scatter(x, y, label=i, s=1)
-        
+def plot_scatter():
+    fig = plt.figure(figsize=(10, 8))
+    price = data.dates['Цена']
+    df = data.main[['Страна', 'Добыча']].copy()
+    grouped_data = df.groupby('Страна')['Добыча'].agg(list)
+    plt.scatter(price, grouped_data['Algeria'], label='Algeria', s=10)
     plt.title('Категоризированная диаграмма рассеивания:')
     plt.xlabel('Цена за баррель')
     plt.ylabel('Добыча дневная (1000 баррелей/день) ')
-    plt.legend(title='название страны')
+    plt.legend(title='Название страны')
     plt.grid(True)
-    plt.show()
-
-    ##### Диаграмма рассеивания
-    x = price
-
-    for i in countries:
-        plt.figure(figsize=(10, 8))
-        y = daily_production[i]
-        plt.scatter(x, y, label=i, s=1)
-        
-        plt.title('Категоризированная диаграмма рассеивания:')
-        plt.xlabel('Цена за баррель')
-        plt.ylabel('Добыча дневная (1000 баррелей/день) ')
-        plt.legend(title='название страны')
-        plt.grid(True)
-        plt.show()
+    return fig
