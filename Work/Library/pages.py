@@ -8,7 +8,6 @@ from flet.matplotlib_chart import MatplotlibChart
 import matplotlib
 from Scripts import graphics_generator
 
-
 def TitleBar(page: ft.page):
     def maximize_win(e):
         page.window_maximized = True
@@ -265,54 +264,73 @@ def Home(page: ft.Page, params: Params, basket: Basket):
     )
 
 def Graphics(page: ft.Page, params: Params, basket: Basket):
-    def put_plot(fig):
+    def open_configure_window(func, atr):
+        #fig = func(0, atr)
+        #put_graph(fig)
+
+        file_picker = ft.FilePicker(on_result=lambda e: graphics_generator.save_graph(fig, e.path))
+        page.overlay.append(file_picker)
+        
         page.views[0].controls[2] = ft.Container(
             content=ft.Row(
-                [
+                [   
                     ft.Column(
                         [
-                            ft.ProgressRing()
+                            ft.Checkbox(label="1", value=True), ft.Checkbox(label="2", value=True)
                         ],
                         alignment=ft.MainAxisAlignment.CENTER,
                         horizontal_alignment=ft.CrossAxisAlignment.CENTER,
-                        expand=True,
-                    )
-                ],
-                alignment=ft.MainAxisAlignment.CENTER,
-                vertical_alignment=ft.CrossAxisAlignment.CENTER,
-                expand=True,
+                        width = page.window_width / 4,
+                    ),
+
+                    ft.Column(
+                        [
+                            
+                        ],
+                        alignment=ft.MainAxisAlignment.CENTER,
+                        horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+                        width = page.window_width / 2,
+                    ),
+
+                    ft.Column(
+                        [
+                            ft.ElevatedButton("Сохранить график",
+                                on_click=lambda _: file_picker.save_file(allowed_extensions=['png']),
+                                disabled=True
+                            )
+                        ],
+                        alignment=ft.MainAxisAlignment.CENTER,
+                        horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+                        width = page.window_width / 4,
+                    ),
+                ]
             ),
             alignment=ft.alignment.center,
             width = page.window_width,
-            height = page.window_height - 200
+            height = page.window_height - 100,
         ) 
         page.update()
-        page.views[0].controls[2] = ft.Container(
-            content=ft.Container(
-                ft.Row(
-                    [
-                        ft.Column(
-                            [
-                                MatplotlibChart(fig)
-                            ],
-                            alignment=ft.MainAxisAlignment.CENTER,
-                            horizontal_alignment=ft.CrossAxisAlignment.CENTER,
-                            expand=True,
-                        )
-                    ],
-                    alignment=ft.MainAxisAlignment.CENTER,
-                    vertical_alignment=ft.CrossAxisAlignment.CENTER,
-                    expand=True,
-                ),
-                width = page.window_width / 2,
-            ),
-            alignment=ft.alignment.center,
-            width = page.window_width,
-            height = page.window_height-100,
-        ) 
+    
+    def put_graph(fig):
+        page.views[0].controls[2].content.controls[1] =  ft.Column(
+            [
+                ft.ProgressRing()
+            ],
+            alignment=ft.MainAxisAlignment.CENTER,
+            horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+            width = page.window_width / 2,
+        ),
         page.update()
-        
-    scatter_buttons = []
+        page.views[0].controls[2].content.contols[1] = ft.Column(
+            [
+                MatplotlibChart(fig)
+            ],
+            alignment=ft.MainAxisAlignment.CENTER,
+            horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+            width = page.window_width / 2,
+        ),
+        page.views[0].controls[2].content.contols[2].controls.disabled=False
+        page.update()
         
     return ft.View(
         '/graphics',
@@ -342,12 +360,12 @@ def Graphics(page: ft.Page, params: Params, basket: Basket):
                                 controls=[
                                     ft.MenuItemButton(
                                         content=ft.Text("Курс рубля"),
-                                        on_click = lambda _: put_plot(graphics_generator.plot_graph('Курс'))
+                                        on_click = lambda _: open_configure_window(graphics_generator.plot_graph, 'Курс')
                                     ),
                         
                                     ft.MenuItemButton(
                                         content=ft.Text("Цена на нефть"),
-                                        on_click = lambda _: put_plot(graphics_generator.plot_graph('Цена'))
+                                        on_click = lambda _: open_configure_window(graphics_generator.plot_graph, 'Цена')
                                     ),
                                 ]
                             ),
@@ -362,17 +380,17 @@ def Graphics(page: ft.Page, params: Params, basket: Basket):
                                 controls=[
                                     ft.MenuItemButton(
                                         content=ft.Text("Курс рубля"),
-                                        on_click = lambda _: put_plot(graphics_generator.plot_boxwhiskers("Курс"))
+                                        on_click = lambda _: open_configure_window(graphics_generator.plot_boxwhiskers, 'Курс')
                                     ),
                         
                                     ft.MenuItemButton(
                                         content=ft.Text("Цена на нефть"),
-                                        on_click = lambda _: put_plot(graphics_generator.plot_boxwhiskers("Цена"))
+                                        on_click = lambda _: open_configure_window(graphics_generator.plot_boxwhiskers, 'Цена')
                                     ),
                             
                                     ft.MenuItemButton(
                                         content=ft.Text("Добыча нефти"),
-                                        on_click = lambda _: put_plot(graphics_generator.plot_boxwhiskers("Добыча"))
+                                        on_click = lambda _: open_configure_window(graphics_generator.plot_boxwhiskers, 'Добыча')
                                     ),
                         
                                 ]
@@ -380,17 +398,17 @@ def Graphics(page: ft.Page, params: Params, basket: Basket):
                             
                             ft.MenuItemButton(
                                 content=ft.Text("Гистограмма"),
-                                on_click=lambda _: put_plot(graphics_generator.hist())
+                                on_click=lambda _: open_configure_window(graphics_generator.hist)
                             ),
                             
                             ft.MenuItemButton(
                                 content=ft.Text("Диаграмма"),
-                                on_click=lambda _: put_plot(graphics_generator.diag())
+                                on_click=lambda _: open_configure_window(graphics_generator.diag)
                             ),
                             
                             ft.MenuItemButton(
                                 content=ft.Text("Рассеивание"),
-                                on_click=lambda _: put_plot(graphics_generator.plot_scatter())
+                                on_click=lambda _: open_configure_window(graphics_generator.plot_scatter, 'Algeria')
                             )
                         ],
                     )

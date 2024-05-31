@@ -10,7 +10,7 @@ from Library import data
 
 matplotlib.use('agg')
 
-def plot_boxwhiskers(atribute):
+def plot_boxwhiskers(period, atribute):
     margins = {                                                                                         
         "left"   : 0.06,
         "bottom" : 0.03,
@@ -53,10 +53,10 @@ def plot_boxwhiskers(atribute):
     plt.grid(True)
     plt.title(f'{atribute} 2006-2022 гг.')
     if not os.path.exists(path):
-        plt.savefig(path)
+        save_graph(fig, path)
     return fig
 
-def plot_graph(atribute):
+def plot_graph(period, atribute):
     margins = {                                                                                         
         "left"   : 0.05,
         "bottom" : 0.05,
@@ -80,15 +80,15 @@ def plot_graph(atribute):
     plt.grid(True)
     
     if not os.path.exists(path):
-        plt.savefig(path)
+        save_graph(fig, path)
     return fig
     
-def hist():
+def hist(period, atribute):
     df = data.main[['Дата', 'Страна', 'Добыча']].copy()
     df['Дата'] = pd.to_datetime(df['Дата'], format='mixed', dayfirst=True).dt.year
     grouped_data = df.groupby(['Страна', 'Дата'], as_index=False)['Добыча'].mean()
 
-    years = grouped_data['Дата'].unique()
+    years = data.get_years()
 
     grouped_data = grouped_data.groupby(['Страна'])['Добыча'].agg(list)
 
@@ -103,18 +103,21 @@ def hist():
             ax[i, j].set_xlabel('Среднедневная добыча')
             ax[i, j].set_ylabel('Частота')
             
-    fig.suptitle('Гистограммы среднедневной добычи по годам', fontsize=16)
+    plt.title('Гистограммы среднедневной добычи по годам', fontsize=18)
     plt.grid(True, axis='y')
     plt.tight_layout()
+    path = paths.graphics_dir + "/Гистограмма" + "/Добыча.png"
+    if not os.path.exists(path):
+        save_graph(fig, path)
     return fig
 
-def diag():
+def diag(period, atribute):
     df = data.main[['Дата', 'Страна', 'Добыча']].copy()
     df['Дата'] = pd.to_datetime(df['Дата'], format='mixed', dayfirst=True).dt.year
     grouped_data = df.groupby(['Страна', 'Дата'], as_index=False)['Добыча'].mean()
 
-    countries = grouped_data['Страна'].unique()
-    years = grouped_data['Дата'].unique()
+    countries = data.get_countries()
+    years = data.get_years()
     
     grouped_data = grouped_data.groupby(['Страна'])['Добыча'].agg(list)
 
@@ -142,9 +145,12 @@ def diag():
     plt.tick_params(axis='both', labelsize=14)
     plt.grid(True, axis='y')
     plt.legend(loc='upper right', bbox_to_anchor=(1.13, 1))
+    path = paths.graphics_dir + "/Диаграмма" + "/Добыча.png"
+    if not os.path.exists(path):
+        save_graph(fig, path)
     return fig
 
-def plot_scatter():
+def plot_scatter(period, atribute):
     margins = {                                                                                         
         "left"   : 0.06,
         "bottom" : 0.06,
@@ -163,4 +169,11 @@ def plot_scatter():
     plt.legend(title='Название страны')
     plt.tick_params(axis='both', labelsize=14)
     plt.grid(True)
+    path = paths.graphics_dir + "/Рассеивание" + "/Algeria.png"
+    if not os.path.exists(path):
+        save_graph(fig, path)
     return fig
+
+def save_graph(fig, path):
+    print(path)
+    fig.savefig(path)

@@ -9,11 +9,19 @@ def read_data(databases_paths):
     dates = pd.read_excel(databases_paths['dates'])
     daily_production = pd.read_excel(databases_paths['daily_production'])
 
+def get_years():
+    df = main[['Дата']].copy()
+    df['Дата'] = pd.to_datetime(df['Дата'], format='mixed', dayfirst=True).dt.year
+    years = df['Дата'].unique()
+    return years
+
+def get_countries():
+    return main[['Страна']].unique()
+
 def collect_to_main(path):
     global main
     main = pd.merge(daily_production, dates, on='date_id')
     main = pd.merge(main, countries, on='country_id')
     main.to_excel(path, index=False)
-
 
 
