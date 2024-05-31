@@ -304,7 +304,7 @@ def Graphics(page: ft.Page, params: Params, basket: Basket):
                     vertical_alignment=ft.CrossAxisAlignment.CENTER,
                     expand=True,
                 ),
-                width = page.window_width / 1.7,
+                width = page.window_width / 2,
             ),
             alignment=ft.alignment.center,
             width = page.window_width,
@@ -330,10 +330,6 @@ def Graphics(page: ft.Page, params: Params, basket: Basket):
                             ft.MenuItemButton(
                                 content=ft.Text("Назад"),
                                 on_click=lambda _: page.go('/home'),
-                                style=ft.ButtonStyle(
-                                    overlay_color=ft.colors.TRANSPARENT,
-                                    animation_duration = 0,
-                                ),
                             ),
                             
                             ft.SubmenuButton(
@@ -346,12 +342,12 @@ def Graphics(page: ft.Page, params: Params, basket: Basket):
                                 controls=[
                                     ft.MenuItemButton(
                                         content=ft.Text("Курс рубля"),
-                                        on_click = lambda _: put_plot(graphics_generator.plot_course())
+                                        on_click = lambda _: put_plot(graphics_generator.plot_graph('Курс'))
                                     ),
                         
                                     ft.MenuItemButton(
                                         content=ft.Text("Цена на нефть"),
-                                        on_click = lambda _: put_plot(graphics_generator.plot_price())
+                                        on_click = lambda _: put_plot(graphics_generator.plot_graph('Цена'))
                                     ),
                                 ]
                             ),
