@@ -104,33 +104,18 @@ def diag():
     ax.set_ylabel('Среднедневная добыча (1000 бар/д)')
     fig.suptitle("Кластеризованная столбчатая диаграмма по среднедневной добыче")
 
-    y = []
-
-    for c in countries:
-        y += [grouped_data[c]]
-
     bar_width = 0.05
+    k = -6
+    for i in range(len(years)):
+        for c in countries:
+            ax.bar([j + k*bar_width for j in years], grouped_data[c], width=bar_width, align='center', label=c)
+            k += 1
 
-    for y in years:
-        ax.bar[]
-
-    ax.bar([i - 6*bar_width for i in x], y1, width=bar_width, align='center', label="Congo")
-    ax.bar([i - 5*bar_width for i in x], y2, width=bar_width, align='center', label="Iraq")
-    ax.bar([i - 4*bar_width for i in x], y3, width=bar_width, align='center', label="Algeria")
-    ax.bar([i - 3*bar_width for i in x], y4, width=bar_width, align='center', label="Angola")
-    ax.bar([i - 2*bar_width for i in x], y5, width=bar_width, align='center', label="Equatorial Guinea")
-    ax.bar([i - bar_width for i in x], y6, width=bar_width, align='center', label="Gabon")
-    ax.bar([i for i in x], y7, width=bar_width, align='center', label="IR Iran")
-    ax.bar([i + bar_width for i in x], y8, width=bar_width, align='center', label="Kuwait")
-    ax.bar([i + 2*bar_width for i in x], y9, width=bar_width, align='center', label="Libya")
-    ax.bar([i + 3*bar_width for i in x], y10, width=bar_width, align='center', label="Nigeria")
-    ax.bar([i + 4*bar_width for i in x], y12, width=bar_width, align='center', label="United Arab Emirates")
-    ax.bar([i + 5*bar_width for i in x], y13, width=bar_width, align='center', label="Venezuela")
-    ax.set_xticks([i for i in x])
-    ax.set_xticklabels(x, rotation=45, ha='right', fontsize=10)
+    ax.set_xticks([y for y in years])
+    ax.set_xticklabels(years, rotation=45, ha='right', fontsize=10)
     plt.grid(True, axis='y')
     plt.legend(loc='upper right', bbox_to_anchor=(1.13, 1))
-    plt.show()
+    return fig
 
 def plot_scatter():
     fig = plt.figure(figsize=(10, 8))
