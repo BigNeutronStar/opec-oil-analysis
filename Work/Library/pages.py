@@ -104,7 +104,7 @@ def TitleBar(page: ft.page):
 ###### REPORTS ###### REPORTS ###### REPORTS ###### REPORTS ###### REPORTS ###### REPORTS ######
 
 def Reports(page: ft.Page, params: Params, basket: Basket):
-    
+
     def run_report_generator():
         subprocess.run(["python3", "/Users/artem/Desktop/University/python-project-1/Work/Scripts/report_generator.py"])
 
@@ -117,20 +117,34 @@ def Reports(page: ft.Page, params: Params, basket: Basket):
         for report in reports:
             with open(os.path.join("/Users/artem/Desktop/University/python-project-1/Work/Output", report), "r") as file:
                 content = file.read()
-                report_contents.append(ft.Text(content))
+                report_contents.append(ft.Text(content, size=14, font_family="Courier New"))
 
-        page.dialog = ft.Dialog(
+        def close_dialog(e):
+            dialog.open = False
+            page.update()
+
+        dialog = ft.AlertDialog(
+            title=ft.Text("Отчеты"),
             content=ft.Container(
                 content=ft.Column(
                     report_contents,
                     scroll=True,
                 ),
-                width=600,
+                width=1000,  # Увеличиваем ширину окна
                 height=400,
                 padding=20
             ),
-            open=True
+            actions=[
+                ft.TextButton("Закрыть", on_click=close_dialog)
+            ],
         )
+
+
+
+
+        
+        page.dialog = dialog
+        dialog.open = True
         page.update()
 
     def on_create_reports_click(e):
@@ -139,9 +153,20 @@ def Reports(page: ft.Page, params: Params, basket: Basket):
 
     def download_report(page: ft.Page, report):
         report_path = os.path.join("/Users/artem/Desktop/University/python-project-1/Work/Output", report)
-        with open(report_path, "rb") as file:
-            file_contents = file.read()
-            page.launch_file(file.name, file_contents)
+        page.add(
+            ft.Row([
+                ft.Text(f"Скачайте файл: {report}"),
+                ft.TextButton(
+                    text="Скачать",
+                    on_click=lambda e: page.launch_url(f"file://{report_path}"),
+                    style=ft.ButtonStyle(
+                        bgcolor=ft.colors.BLUE_200,
+                        color=ft.colors.WHITE
+                    )
+                )
+            ])
+        )
+
 
     def on_download_reports_click(e):
         reports = [f for f in os.listdir("/Users/artem/Desktop/University/python-project-1/Work/Output") if f.endswith(".txt")]
