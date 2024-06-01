@@ -521,6 +521,6 @@ def ViewData(page: ft.Page, params: Params, basket: Basket):
             TitleBar(page),
             ft.ElevatedButton("Домой", on_click= lambda _: page.go("/home"),icon=ft.icons.ARROW_BACK),
         ],
-        padding = 0,
+        padding = 10,
     )
 
