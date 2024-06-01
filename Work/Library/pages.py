@@ -7,8 +7,9 @@ from flet_route import Params, Basket
 from flet.matplotlib_chart import MatplotlibChart
 import matplotlib
 from Scripts import graphics_generator
+from Library import data
 
-def TitleBar(page: ft.page):
+def TitleBar(page: ft.Page):
     def maximize_win(e):
         page.window_maximized = True
         page.update()
@@ -98,9 +99,6 @@ def TitleBar(page: ft.page):
                     )  
         ], 
     )
-
-###### REPORTS ###### REPORTS ###### REPORTS ###### REPORTS ###### REPORTS ###### REPORTS ######
-###### REPORTS ###### REPORTS ###### REPORTS ###### REPORTS ###### REPORTS ###### REPORTS ######
 
 def Reports(page: ft.Page, params: Params, basket: Basket):
     
@@ -264,72 +262,84 @@ def Home(page: ft.Page, params: Params, basket: Basket):
     )
 
 def Graphics(page: ft.Page, params: Params, basket: Basket):
-    def open_configure_window(func, atr):
-        #fig = func(0, atr)
-        #put_graph(fig)
+    def open_configure_window(plot_func, atr='', countries_disabled=False):
+        start = end = 0
+        countries = dict(zip(data.get_countries(), [True] * len(data.get_countries())))
+
+        def change_period(e):
+            nonlocal start, end
+            start = e.control.start_value
+            start = round(float(start))
+            end = e.control.end_value
+            end = round(float(end))
+        
+        def build_new(e):
+            nonlocal start, end, countries
+            if not countries_disabled and atr=='':
+                fig = plot_func(start, end, countries)
+            else:
+                fig = plot_func(atr, start, end)
+            put_graph(fig)
+
+        fig = plot_func(atr)
 
         file_picker = ft.FilePicker(on_result=lambda e: graphics_generator.save_graph(fig, e.path))
         page.overlay.append(file_picker)
-        
-        page.views[0].controls[2] = ft.Container(
-            content=ft.Row(
-                [   
-                    ft.Column(
-                        [
-                            ft.Checkbox(label="1", value=True), ft.Checkbox(label="2", value=True)
-                        ],
-                        alignment=ft.MainAxisAlignment.CENTER,
-                        horizontal_alignment=ft.CrossAxisAlignment.CENTER,
-                        width = page.window_width / 4,
-                    ),
 
-                    ft.Column(
-                        [
-                            
-                        ],
-                        alignment=ft.MainAxisAlignment.CENTER,
-                        horizontal_alignment=ft.CrossAxisAlignment.CENTER,
-                        width = page.window_width / 2,
-                    ),
-
-                    ft.Column(
-                        [
-                            ft.ElevatedButton("Сохранить график",
+        countries_checkboxes = []
+        for c in countries.keys():
+            countries_checkboxes.append(ft.Checkbox(label=c, disabled=countries_disabled, value=True))
+        page.views[0].controls[2].content.controls[0].controls = [
+            ft.Container(
+                content = ft.Column(
+                    [   
+                        ft.Column(
+                            [
+                                ft.Text("Период",  weight=ft.FontWeight.BOLD,),
+                                ft.RangeSlider(
+                                    min=min(data.get_years()),
+                                    max=max(data.get_years()),
+                                    start_value=2006,
+                                    divisions=17,
+                                    end_value=2022,
+                                    inactive_color=ft.colors.BLUE_100,
+                                    active_color=ft.colors.BLUE_500,
+                                    overlay_color=ft.colors.BLUE_200,
+                                    label="{value}",
+                                    on_change=change_period,
+                                ),
+                            ]
+                        ),
+                        ft.Column(
+                            [ft.Text("Страны",  weight=ft.FontWeight.BOLD)] + countries_checkboxes
+                        ),
+                        ft.ElevatedButton(
+                            "Построить",
+                            on_click=build_new
+                        )
+                    ],
+                    alignment = ft.MainAxisAlignment.START,
+                    horizontal_alignment = ft.CrossAxisAlignment.START
+                ),
+                padding = 10,
+            )
+            
+        ]
+        page.views[0].controls[2].content.controls[2].controls = [
+            ft.ElevatedButton("Сохранить график",
                                 on_click=lambda _: file_picker.save_file(allowed_extensions=['png']),
                                 disabled=True
-                            )
-                        ],
-                        alignment=ft.MainAxisAlignment.CENTER,
-                        horizontal_alignment=ft.CrossAxisAlignment.CENTER,
-                        width = page.window_width / 4,
-                    ),
-                ]
-            ),
-            alignment=ft.alignment.center,
-            width = page.window_width,
-            height = page.window_height - 100,
-        ) 
+            )
+        ]
         page.update()
+        put_graph(fig)
     
     def put_graph(fig):
-        page.views[0].controls[2].content.controls[1] =  ft.Column(
-            [
-                ft.ProgressRing()
-            ],
-            alignment=ft.MainAxisAlignment.CENTER,
-            horizontal_alignment=ft.CrossAxisAlignment.CENTER,
-            width = page.window_width / 2,
-        ),
+        page.views[0].controls[2].content.controls[1].controls = [ft.ProgressRing()]
+        page.views[0].controls[2].content.controls[2].controls[0].disabled=True
         page.update()
-        page.views[0].controls[2].content.contols[1] = ft.Column(
-            [
-                MatplotlibChart(fig)
-            ],
-            alignment=ft.MainAxisAlignment.CENTER,
-            horizontal_alignment=ft.CrossAxisAlignment.CENTER,
-            width = page.window_width / 2,
-        ),
-        page.views[0].controls[2].content.contols[2].controls.disabled=False
+        page.views[0].controls[2].content.controls[1].controls = [MatplotlibChart(fig)]
+        page.views[0].controls[2].content.controls[2].controls[0].disabled=False
         page.update()
         
     return ft.View(
@@ -360,12 +370,12 @@ def Graphics(page: ft.Page, params: Params, basket: Basket):
                                 controls=[
                                     ft.MenuItemButton(
                                         content=ft.Text("Курс рубля"),
-                                        on_click = lambda _: open_configure_window(graphics_generator.plot_graph, 'Курс')
+                                        on_click = lambda _: open_configure_window(graphics_generator.plot_graph, 'Курс', countries_disabled=True)
                                     ),
                         
                                     ft.MenuItemButton(
                                         content=ft.Text("Цена на нефть"),
-                                        on_click = lambda _: open_configure_window(graphics_generator.plot_graph, 'Цена')
+                                        on_click = lambda _: open_configure_window(graphics_generator.plot_graph, 'Цена', countries_disabled=True)
                                     ),
                                 ]
                             ),
@@ -380,12 +390,12 @@ def Graphics(page: ft.Page, params: Params, basket: Basket):
                                 controls=[
                                     ft.MenuItemButton(
                                         content=ft.Text("Курс рубля"),
-                                        on_click = lambda _: open_configure_window(graphics_generator.plot_boxwhiskers, 'Курс')
+                                        on_click = lambda _: open_configure_window(graphics_generator.plot_boxwhiskers, 'Курс', countries_disabled=True)
                                     ),
                         
                                     ft.MenuItemButton(
                                         content=ft.Text("Цена на нефть"),
-                                        on_click = lambda _: open_configure_window(graphics_generator.plot_boxwhiskers, 'Цена')
+                                        on_click = lambda _: open_configure_window(graphics_generator.plot_boxwhiskers, 'Цена', countries_disabled=True)
                                     ),
                             
                                     ft.MenuItemButton(
@@ -408,7 +418,7 @@ def Graphics(page: ft.Page, params: Params, basket: Basket):
                             
                             ft.MenuItemButton(
                                 content=ft.Text("Рассеивание"),
-                                on_click=lambda _: open_configure_window(graphics_generator.plot_scatter, 'Algeria')
+                                on_click=lambda _: open_configure_window(graphics_generator.plot_scatter)
                             )
                         ],
                     )
@@ -416,7 +426,39 @@ def Graphics(page: ft.Page, params: Params, basket: Basket):
                 alignment=ft.MainAxisAlignment.CENTER,
             ),
             ft.Container(
-                
+                content=ft.Row(
+                    [   
+                        ft.Column(
+                            [
+
+                            ],
+                            alignment=ft.MainAxisAlignment.CENTER,
+                            horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+                            width = page.window_width / 4,
+                        ),
+
+                        ft.Column(
+                            [
+                                
+                            ],
+                            alignment=ft.MainAxisAlignment.CENTER,
+                            horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+                            width = page.window_width / 2,
+                        ),
+
+                        ft.Column(
+                            [
+
+                            ],
+                            alignment=ft.MainAxisAlignment.END,
+                            horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+                            width = page.window_width / 4,
+                        ),
+                    ]
+                ),
+                alignment=ft.alignment.center,
+                width = page.window_width,
+                height = page.window_height - 100,
             )
            
         ],
@@ -442,7 +484,7 @@ def Info(page: ft.Page, params: Params, basket: Basket):
                                             " Мирумян Артём\n Рахматуллин Айгиз",
                                         )
                                     ],
-                                    color="#00008b", size=20, text_align="CENTER"
+                                    color="white", size=20, text_align="CENTER"
                                 ),
                             ], 
                             alignment=ft.MainAxisAlignment.CENTER,

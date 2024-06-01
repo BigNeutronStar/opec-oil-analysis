@@ -16,7 +16,7 @@ def get_years():
     return years
 
 def get_countries():
-    return main[['Страна']].unique()
+    return main['Страна'].unique()
 
 def collect_to_main(path):
     global main

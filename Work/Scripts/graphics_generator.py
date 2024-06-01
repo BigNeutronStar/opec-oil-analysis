@@ -10,7 +10,7 @@ from Library import data
 
 matplotlib.use('agg')
 
-def plot_boxwhiskers(period, atribute):
+def plot_boxwhiskers(atribute, start=2006, end=2022, countries={}):
     margins = {                                                                                         
         "left"   : 0.06,
         "bottom" : 0.03,
@@ -20,7 +20,10 @@ def plot_boxwhiskers(period, atribute):
     fig = plt.figure()
     fig.subplots_adjust(**margins)  
     if atribute == 'Курс':
-        column = data.dates[atribute]
+        df = data.dates[['Дата', 'Курс']].copy()
+        df['Дата'] = pd.to_datetime(df['Дата'], format='mixed', dayfirst=True).dt.year
+        df = df[df['Дата'] <= end and df['Дата'] >= start]
+        column = df[atribute]
         fig.set_size_inches(10, 10)
         plt.ylabel('1$/1P')
         plt.boxplot(column, showmeans=True)
@@ -28,7 +31,10 @@ def plot_boxwhiskers(period, atribute):
         plt.yticks(np.linspace(min(column), max(column), endpoint=True))
         path = paths.graphics_dir + "/Box&Whiskers" + "/Курс.png"
     elif atribute == 'Цена':
-        column = data.dates[atribute]
+        df = data.dates[['Дата', 'Цена']].copy()
+        df['Дата'] = pd.to_datetime(df['Дата'], format='mixed', dayfirst=True).dt.year
+        df = df[df['Дата'] <= end and df['Дата'] >= start]
+        column = df[atribute]
         fig.set_size_inches(10, 10)
         plt.ylabel('Рубли')
         plt.boxplot(column, showmeans=True)
@@ -38,6 +44,7 @@ def plot_boxwhiskers(period, atribute):
     elif atribute == 'Добыча':
         df = data.main[['Дата', 'Страна', 'Добыча']].copy()
         df['Дата'] = pd.to_datetime(df['Дата'], format='mixed', dayfirst=True).dt.year
+        df = df[df['Дата'] <= end and df['Дата'] >= start]
         df.groupby(['Страна', 'Дата'])['Добыча'].mean()
         grouped_data = df.groupby(['Страна'])['Добыча'].agg(list)
         fig.set_size_inches(15, 10)
@@ -51,12 +58,12 @@ def plot_boxwhiskers(period, atribute):
         path = paths.graphics_dir + "/Box&Whiskers" + "/Добыча.png"
         
     plt.grid(True)
-    plt.title(f'{atribute} 2006-2022 гг.')
+    plt.title(f'{atribute} {start}-{end} гг.')
     if not os.path.exists(path):
         save_graph(fig, path)
     return fig
 
-def plot_graph(period, atribute):
+def plot_graph(atribute, start=2006, end=2022):
     margins = {                                                                                         
         "left"   : 0.05,
         "bottom" : 0.05,
@@ -66,13 +73,18 @@ def plot_graph(period, atribute):
     fig = plt.figure(figsize=(20,15))
     fig.subplots_adjust(**margins)  
     if (atribute == 'Курс'):
-        plt.plot(pd.to_datetime(data.dates['Дата'], format="%d.%m.%Y"), data.dates['Курс'], label='Курс рубля')
-        plt.title('Курс 2006-2022 гг.', fontsize=18)
+        df = data.dates[['Дата', 'Курс']].copy()
+        df['Дата'] = pd.to_datetime(data.dates['Дата'], format="%d.%m.%Y")
+        df = df[(df['Дата'].dt.year <= end) & (df['Дата'].dt.year >= start)]
+        plt.plot(df['Дата'], df['Курс'], label='Курс рубля')
         path = paths.graphics_dir + "/Графики" + "/Курс.png"
     elif (atribute == 'Цена'):
-        plt.plot(pd.to_datetime(data.dates['Дата'], format="%d.%m.%Y"), data.dates['Цена'], label='Цена на нефть')
-        plt.title('Цена на нефть 2006-2022 гг.', fontsize=18)
+        df = data.dates[['Дата', 'Цена']].copy()
+        df['Дата'] = pd.to_datetime(data.dates['Дата'], format="%d.%m.%Y")
+        df = df[(df['Дата'].dt.year <= end) & (df['Дата'].dt.year >= start)]
+        plt.plot(df['Дата'], df['Цена'], label='Цена на нефть')
         path = paths.graphics_dir + "/Графики" + "/Цена.png"
+    plt.title(f'{atribute} {start}-{end} гг.', fontsize=18)
     plt.xlabel('Дата', fontsize=18)
     plt.ylabel('Рубли', fontsize=18)
     plt.xticks(rotation=0)
@@ -83,9 +95,10 @@ def plot_graph(period, atribute):
         save_graph(fig, path)
     return fig
     
-def hist(period, atribute):
+def hist(start=2006, end=2022, countries={}):
     df = data.main[['Дата', 'Страна', 'Добыча']].copy()
     df['Дата'] = pd.to_datetime(df['Дата'], format='mixed', dayfirst=True).dt.year
+    df = df[(df['Дата'] <= end) & (df['Дата'] >= start)]
     grouped_data = df.groupby(['Страна', 'Дата'], as_index=False)['Добыча'].mean()
 
     years = data.get_years()
@@ -99,19 +112,18 @@ def hist(period, atribute):
             ax[i, j].set_title(years[(i + 1) * (j + 1)])
             ax[i, j].yaxis.set_major_locator(MultipleLocator(base = 1))
             ax[i, j].xaxis.set_major_locator(MultipleLocator(base = 500)) 
-            ax[i, j].grid()
+            ax[i, j].grid(True, axis='y')
             ax[i, j].set_xlabel('Среднедневная добыча')
             ax[i, j].set_ylabel('Частота')
             
     plt.title('Гистограммы среднедневной добычи по годам', fontsize=18)
-    plt.grid(True, axis='y')
     plt.tight_layout()
     path = paths.graphics_dir + "/Гистограмма" + "/Добыча.png"
     if not os.path.exists(path):
         save_graph(fig, path)
     return fig
 
-def diag(period, atribute):
+def diag(atribute, start=2006, end=2022, countries={}):
     df = data.main[['Дата', 'Страна', 'Добыча']].copy()
     df['Дата'] = pd.to_datetime(df['Дата'], format='mixed', dayfirst=True).dt.year
     grouped_data = df.groupby(['Страна', 'Дата'], as_index=False)['Добыча'].mean()
@@ -150,7 +162,7 @@ def diag(period, atribute):
         save_graph(fig, path)
     return fig
 
-def plot_scatter(period, atribute):
+def plot_scatter(atribute, start=2006, end=2022, countries={}):
     margins = {                                                                                         
         "left"   : 0.06,
         "bottom" : 0.06,
@@ -162,14 +174,15 @@ def plot_scatter(period, atribute):
     price = data.dates['Цена']
     df = data.main[['Страна', 'Добыча']].copy()
     grouped_data = df.groupby('Страна')['Добыча'].agg(list)
-    plt.scatter(price, grouped_data['Algeria'], label='Algeria', s=10)
+    for c, prod in grouped_data.items():
+        plt.scatter(price, prod, label=c, s=10)
     plt.title('Категоризированная диаграмма рассеивания:', fontsize=18)
     plt.xlabel('Цена за баррель', fontsize=18)
     plt.ylabel('Добыча дневная (1000 баррелей/день)', fontsize=18)
     plt.legend(title='Название страны')
     plt.tick_params(axis='both', labelsize=14)
     plt.grid(True)
-    path = paths.graphics_dir + "/Рассеивание" + "/Algeria.png"
+    path = paths.graphics_dir + "/Рассеивание" + "/Все.png"
     if not os.path.exists(path):
         save_graph(fig, path)
     return fig
