@@ -263,8 +263,8 @@ def Home(page: ft.Page, params: Params, basket: Basket):
 
 def Graphics(page: ft.Page, params: Params, basket: Basket):
     def open_configure_window(plot_func, atr='', countries_disabled=False):
-        start = end = 0
-        countries = dict(zip(data.get_countries(), [True] * len(data.get_countries())))
+        start = min(data.get_years())
+        end = max(data.get_years())
 
         def change_period(e):
             nonlocal start, end
@@ -274,20 +274,19 @@ def Graphics(page: ft.Page, params: Params, basket: Basket):
             end = round(float(end))
         
         def build_new(e):
-            nonlocal start, end, countries
-            if not countries_disabled and atr=='':
-                fig = plot_func(start, end, countries)
+            nonlocal start, end
+            countries = [el.label for el in countries_checkboxes if el.value]
+            if not countries_disabled:
+                if atr == '':
+                    fig = plot_func(start, end, countries)
+                else:
+                    fig = plot_func(atr, start, end, countries)
             else:
                 fig = plot_func(atr, start, end)
             put_graph(fig)
 
-        fig = plot_func(atr)
-
-        file_picker = ft.FilePicker(on_result=lambda e: graphics_generator.save_graph(fig, e.path))
-        page.overlay.append(file_picker)
-
         countries_checkboxes = []
-        for c in countries.keys():
+        for c in data.get_countries():
             countries_checkboxes.append(ft.Checkbox(label=c, disabled=countries_disabled, value=True))
         page.views[0].controls[2].content.controls[0].controls = [
             ft.Container(
@@ -315,7 +314,8 @@ def Graphics(page: ft.Page, params: Params, basket: Basket):
                         ),
                         ft.ElevatedButton(
                             "Построить",
-                            on_click=build_new
+                            on_click=build_new,
+                            disabled=True
                         )
                     ],
                     alignment = ft.MainAxisAlignment.START,
@@ -325,21 +325,27 @@ def Graphics(page: ft.Page, params: Params, basket: Basket):
             )
             
         ]
+
         page.views[0].controls[2].content.controls[2].controls = [
             ft.ElevatedButton("Сохранить график",
-                                on_click=lambda _: file_picker.save_file(allowed_extensions=['png']),
                                 disabled=True
             )
         ]
         page.update()
-        put_graph(fig)
+        build_new(0)
+        
     
     def put_graph(fig):
+        file_picker = ft.FilePicker(on_result=lambda e: graphics_generator.save_graph(fig, e.path))
+        page.overlay.append(file_picker)
+
         page.views[0].controls[2].content.controls[1].controls = [ft.ProgressRing()]
         page.views[0].controls[2].content.controls[2].controls[0].disabled=True
         page.update()
         page.views[0].controls[2].content.controls[1].controls = [MatplotlibChart(fig)]
+        page.views[0].controls[2].content.controls[2].controls[0].on_click = lambda _: file_picker.save_file(allowed_extensions=['png'])
         page.views[0].controls[2].content.controls[2].controls[0].disabled=False
+        page.views[0].controls[2].content.controls[0].controls[0].content.controls[2].disabled=False
         page.update()
         
     return ft.View(
@@ -402,7 +408,6 @@ def Graphics(page: ft.Page, params: Params, basket: Basket):
                                         content=ft.Text("Добыча нефти"),
                                         on_click = lambda _: open_configure_window(graphics_generator.plot_boxwhiskers, 'Добыча')
                                     ),
-                        
                                 ]
                             ),
                             
@@ -416,9 +421,19 @@ def Graphics(page: ft.Page, params: Params, basket: Basket):
                                 on_click=lambda _: open_configure_window(graphics_generator.diag)
                             ),
                             
-                            ft.MenuItemButton(
+                            ft.SubmenuButton(
                                 content=ft.Text("Рассеивание"),
-                                on_click=lambda _: open_configure_window(graphics_generator.plot_scatter)
+                                controls=[
+                                    ft.MenuItemButton(
+                                        content=ft.Text("По цене"),
+                                        on_click=lambda _: open_configure_window(graphics_generator.plot_scatter, 'Цена')
+                                    ),
+                        
+                                    ft.MenuItemButton(
+                                        content=ft.Text("По курсу"),
+                                        on_click=lambda _: open_configure_window(graphics_generator.plot_scatter, 'Курс')
+                                    ),
+                                ]
                             )
                         ],
                     )
@@ -458,9 +473,7 @@ def Graphics(page: ft.Page, params: Params, basket: Basket):
                 ),
                 alignment=ft.alignment.center,
                 width = page.window_width,
-                height = page.window_height - 100,
             )
-           
         ],
         padding = 0,
     )

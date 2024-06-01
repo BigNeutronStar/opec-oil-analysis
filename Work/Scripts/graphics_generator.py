@@ -10,7 +10,7 @@ from Library import data
 
 matplotlib.use('agg')
 
-def plot_boxwhiskers(atribute, start=2006, end=2022, countries={}):
+def plot_boxwhiskers(atribute, start=2006, end=2022, countries=[]):
     margins = {                                                                                         
         "left"   : 0.06,
         "bottom" : 0.03,
@@ -22,7 +22,7 @@ def plot_boxwhiskers(atribute, start=2006, end=2022, countries={}):
     if atribute == 'Курс':
         df = data.dates[['Дата', 'Курс']].copy()
         df['Дата'] = pd.to_datetime(df['Дата'], format='mixed', dayfirst=True).dt.year
-        df = df[df['Дата'] <= end and df['Дата'] >= start]
+        df = df[(df['Дата'] <= end) & (df['Дата'] >= start)]
         column = df[atribute]
         fig.set_size_inches(10, 10)
         plt.ylabel('1$/1P')
@@ -33,7 +33,7 @@ def plot_boxwhiskers(atribute, start=2006, end=2022, countries={}):
     elif atribute == 'Цена':
         df = data.dates[['Дата', 'Цена']].copy()
         df['Дата'] = pd.to_datetime(df['Дата'], format='mixed', dayfirst=True).dt.year
-        df = df[df['Дата'] <= end and df['Дата'] >= start]
+        df = df[(df['Дата'] <= end) & (df['Дата'] >= start)]
         column = df[atribute]
         fig.set_size_inches(10, 10)
         plt.ylabel('Рубли')
@@ -44,7 +44,11 @@ def plot_boxwhiskers(atribute, start=2006, end=2022, countries={}):
     elif atribute == 'Добыча':
         df = data.main[['Дата', 'Страна', 'Добыча']].copy()
         df['Дата'] = pd.to_datetime(df['Дата'], format='mixed', dayfirst=True).dt.year
-        df = df[df['Дата'] <= end and df['Дата'] >= start]
+        df = df[(df['Дата'] <= end) & (df['Дата'] >= start)]
+
+        if len(countries) != 0: 
+            df = df[df['Страна'].isin(countries)]
+
         df.groupby(['Страна', 'Дата'])['Добыча'].mean()
         grouped_data = df.groupby(['Страна'])['Добыча'].agg(list)
         fig.set_size_inches(15, 10)
@@ -95,41 +99,63 @@ def plot_graph(atribute, start=2006, end=2022):
         save_graph(fig, path)
     return fig
     
-def hist(start=2006, end=2022, countries={}):
+def hist(start=2006, end=2022, countries=[]):
     df = data.main[['Дата', 'Страна', 'Добыча']].copy()
     df['Дата'] = pd.to_datetime(df['Дата'], format='mixed', dayfirst=True).dt.year
     df = df[(df['Дата'] <= end) & (df['Дата'] >= start)]
+
+    if len(countries) != 0: 
+            df = df[df['Страна'].isin(countries)]
+
     grouped_data = df.groupby(['Страна', 'Дата'], as_index=False)['Добыча'].mean()
 
-    years = data.get_years()
+    years = sorted(grouped_data['Дата'].unique())
 
     grouped_data = grouped_data.groupby(['Страна'])['Добыча'].agg(list)
 
-    fig, ax = plt.subplots(2, 3, figsize=(20, 15))
-    for i in range(2):
-        for j in range(3):
-            ax[i, j].hist([prod[(i + 1) * (j + 1)] for prod in grouped_data], alpha=0.7, color='skyblue', edgecolor='black', bins=10)
-            ax[i, j].set_title(years[(i + 1) * (j + 1)])
-            ax[i, j].yaxis.set_major_locator(MultipleLocator(base = 1))
-            ax[i, j].xaxis.set_major_locator(MultipleLocator(base = 500)) 
-            ax[i, j].grid(True, axis='y')
-            ax[i, j].set_xlabel('Среднедневная добыча')
-            ax[i, j].set_ylabel('Частота')
+    num_years = len(years)
+    n_cols = min(num_years, 3)  
+    n_rows = (num_years + n_cols - 1) // n_cols
+    
+    fig, axes = plt.subplots(n_rows, n_cols, figsize=(6 * n_cols, 5 * n_rows))  
+
+    if num_years == 1:
+        axes = [axes]
+    else:
+        axes = axes.flatten()
+    
+    for idx, year in enumerate(years):
+        ax = axes[idx]
+        ax.hist([prod[idx] for prod in grouped_data if len(prod) > idx], alpha=0.7, color='skyblue', edgecolor='black', bins=10)
+        ax.set_title(year)
+        ax.yaxis.set_major_locator(MultipleLocator(base=1))
+        ax.xaxis.set_major_locator(MultipleLocator(base=500))
+        ax.grid(True, axis='y')
+        ax.set_xlabel('Среднедневная добыча')
+        ax.set_ylabel('Частота')
+
+    for idx in range(len(years), len(axes)):
+        fig.delaxes(axes[idx])
             
-    plt.title('Гистограммы среднедневной добычи по годам', fontsize=18)
-    plt.tight_layout()
+    plt.suptitle('Гистограммы среднедневной добычи по годам', fontsize=16)
+    plt.tight_layout(rect=[0, 0, 1, 0.98])
     path = paths.graphics_dir + "/Гистограмма" + "/Добыча.png"
     if not os.path.exists(path):
         save_graph(fig, path)
     return fig
 
-def diag(atribute, start=2006, end=2022, countries={}):
+def diag(start=2006, end=2022, countries=[]):
     df = data.main[['Дата', 'Страна', 'Добыча']].copy()
     df['Дата'] = pd.to_datetime(df['Дата'], format='mixed', dayfirst=True).dt.year
+    df = df[(df['Дата'] <= end) & (df['Дата'] >= start)]
+
+    if len(countries) != 0: 
+            df = df[df['Страна'].isin(countries)]
+
     grouped_data = df.groupby(['Страна', 'Дата'], as_index=False)['Добыча'].mean()
 
-    countries = data.get_countries()
-    years = data.get_years()
+    countries = grouped_data['Страна'].unique()
+    years = grouped_data['Дата'].unique()
     
     grouped_data = grouped_data.groupby(['Страна'])['Добыча'].agg(list)
 
@@ -162,7 +188,21 @@ def diag(atribute, start=2006, end=2022, countries={}):
         save_graph(fig, path)
     return fig
 
-def plot_scatter(atribute, start=2006, end=2022, countries={}):
+def plot_scatter(atribute, start=2006, end=2022, countries=[]):
+    atr = data.dates[['Дата', atribute]].copy()
+    atr['Дата'] = pd.to_datetime(atr['Дата'], format='mixed', dayfirst=True).dt.year
+    atr = atr[(atr['Дата'] <= end) & (atr['Дата'] >= start)]
+    atr = atr[atribute]
+
+    df = data.main[['Страна', 'Добыча', 'Дата']].copy()
+    df['Дата'] = pd.to_datetime(df['Дата'], format='mixed', dayfirst=True).dt.year
+    df = df[(df['Дата'] <= end) & (df['Дата'] >= start)]
+    
+    if len(countries) != 0: 
+            df = df[df['Страна'].isin(countries)]
+
+    grouped_data = df.groupby('Страна')['Добыча'].agg(list)
+
     margins = {                                                                                         
         "left"   : 0.06,
         "bottom" : 0.06,
@@ -171,13 +211,11 @@ def plot_scatter(atribute, start=2006, end=2022, countries={}):
     }
     fig = plt.figure(figsize=(20, 20))
     fig.subplots_adjust(**margins)                            
-    price = data.dates['Цена']
-    df = data.main[['Страна', 'Добыча']].copy()
-    grouped_data = df.groupby('Страна')['Добыча'].agg(list)
+    
     for c, prod in grouped_data.items():
-        plt.scatter(price, prod, label=c, s=10)
+        plt.scatter(atr, prod, label=c, s=10)
     plt.title('Категоризированная диаграмма рассеивания:', fontsize=18)
-    plt.xlabel('Цена за баррель', fontsize=18)
+    plt.xlabel(f'{atribute}', fontsize=18)
     plt.ylabel('Добыча дневная (1000 баррелей/день)', fontsize=18)
     plt.legend(title='Название страны')
     plt.tick_params(axis='both', labelsize=14)
