@@ -5,10 +5,6 @@ import flet as ft
 import pandas as pd
 import numpy as np
 
-def generate_main():
-    Workbook().save(databases_paths['main'])
-    data.collect_to_main(databases_paths['main'])
-
 def read_data():
     data.read_data(databases_paths)
 
@@ -19,6 +15,9 @@ def get_countries():
     return data.countries_list
 
 def generate_datatable(df):
+    if df.shape[0] > 12:
+        df = df.iloc[0:100]
+
     headers = [ft.DataColumn(ft.Text(header)) for header in df.columns]
 
     df_array = df.to_numpy()
@@ -33,4 +32,15 @@ def generate_datatable(df):
         rows=rows
     )
     return datatable
+
+def save_data(name, path):
+    if not path.endswith('.xlsx'):
+        path += '.xlsx'
+    Workbook().save(path)
+    dict = {
+        'dates' : data.dates,
+        'countries' : data.countries,
+        'daily_production' : data.daily_production,
+    }
+    dict[name].to_excel(path, index=False)
 

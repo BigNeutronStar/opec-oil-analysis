@@ -10,13 +10,14 @@ from Scripts import graphics_generator
 from Scripts import data_collector
 import pandas as pd
 
-dates = countries = daily_production = ft.DataTable()
+dates = countries = daily_production = ft.ProgressRing()
 
-def setup_table_views(_dates, _countries, _daily_production):
+def setup_table_views(page: ft.Page, _dates, _countries, _daily_production):
     global dates, countries, daily_production
     dates = _dates
     countries = _countries
     daily_production = _daily_production
+    page.update()
 
 
 def TitleBar(page: ft.Page):
@@ -530,6 +531,13 @@ def Info(page: ft.Page, params: Params, basket: Basket):
     )
 
 def ViewData(page: ft.Page, params: Params, basket: Basket):
+    file_picker = ft.FilePicker()
+    page.overlay.append(file_picker)
+
+    def save_data(e):
+        data = e.control.data
+        file_picker.on_result = lambda e: data_collector.save_data(data, e.path)
+        file_picker.save_file(allowed_extensions=['xlsx'])
     return ft.View(
         '/view_data',
         scroll = "auto",
@@ -542,17 +550,17 @@ def ViewData(page: ft.Page, params: Params, basket: Basket):
                         [
                             ft.Text("ДАТА", weight = ft.FontWeight.BOLD),
                             ft.Container(
-                                width=450,
+                                width=420,
                                 height=500,
                                 content=ft.Column(
                                     controls=[
                                         ft.Row(
                                             controls=[
                                                 ft.Container(
-                                                    width=450,
+                                                    width=420,
                                                     content=ft.Column(
                                                         controls=[
-                                                            ft.ProgressRing()
+                                                            dates
                                                         ]
                                                     ),
                                                 )
@@ -563,7 +571,8 @@ def ViewData(page: ft.Page, params: Params, basket: Basket):
                                     scroll="auto",  
                                 ),
                                 border=ft.border.all(1, "blue"),
-                            )
+                            ),
+                            ft.ElevatedButton('Экспортировать данные', data = 'dates', on_click=save_data)
                         ]
                     ),
                     
@@ -571,17 +580,17 @@ def ViewData(page: ft.Page, params: Params, basket: Basket):
                         [
                             ft.Text("СТРАНЫ", weight = ft.FontWeight.BOLD),
                             ft.Container(
-                                width=450,
+                                width=250,
                                 height=500,
                                 content=ft.Column(
                                     controls=[
                                         ft.Row(
                                             controls=[
                                                 ft.Container(
-                                                    width=450,
+                                                    width=250,
                                                     content=ft.Column(
                                                         controls=[
-                                                            ft.ProgressRing()
+                                                            countries
                                                         ]
                                                     ),
                                                 )
@@ -592,7 +601,8 @@ def ViewData(page: ft.Page, params: Params, basket: Basket):
                                     scroll="auto",  
                                 ),
                                 border=ft.border.all(1, "blue"),
-                            )
+                            ),
+                            ft.ElevatedButton('Экспортировать данные', data = 'countries', on_click=save_data)
                         ]
                     ),
 
@@ -600,17 +610,17 @@ def ViewData(page: ft.Page, params: Params, basket: Basket):
                         [
                             ft.Text("ДОБЫЧА", weight = ft.FontWeight.BOLD),
                             ft.Container(
-                                width=450,
+                                width=350,
                                 height=500,
                                 content=ft.Column(
                                     controls=[
                                         ft.Row(
                                             controls=[
                                                 ft.Container(
-                                                    width=450,
+                                                    width=350,
                                                     content=ft.Column(
                                                         controls=[
-                                                            ft.ProgressRing()
+                                                            daily_production
                                                         ]
                                                     ),
                                                 )
@@ -621,12 +631,12 @@ def ViewData(page: ft.Page, params: Params, basket: Basket):
                                     scroll="auto",  
                                 ),
                                 border=ft.border.all(1, "blue"),
-                            )
+                            ),
+                            ft.ElevatedButton('Экспортировать данные', data = 'daily_production', on_click=save_data)
                         ]
                     )
                 ]
             )
-            
         ],
         padding = 10,
     )

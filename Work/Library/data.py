@@ -15,9 +15,3 @@ def read_data(databases_paths):
     years = df['Дата'].unique()
 
     countries_list = countries['Страна']
-
-def collect_to_main(path):
-    global main
-    main = pd.merge(daily_production, dates, on='date_id')
-    main = pd.merge(main, countries, on='country_id')
-    main.to_excel(path, index=False)

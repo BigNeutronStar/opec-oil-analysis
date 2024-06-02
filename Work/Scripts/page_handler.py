@@ -2,7 +2,6 @@ from math import pi
 import flet as ft
 from flet_route import Routing, path
 import os
-from multiprocessing import Process, Queue
 
 from Library.pages import Home
 from Library.pages import Graphics
@@ -11,7 +10,7 @@ from Library.pages import Info
 from Library.pages import Loading
 from Library.pages import ViewData
 from Library.pages import setup_table_views
-import time
+
 from Library import data
 
 from Scripts import data_collector
@@ -51,12 +50,13 @@ def setup_page(page: ft.Page):
     page.update()
 
 def run_app(page: ft.Page):
+    from multiprocessing import Process
     page.go(page.route)
     data_collector.read_data()
     page.go('/home')
-    data_collector.generate_main()
-
-
-    
-     
-    
+    setup_table_views(
+        page, 
+        data_collector.generate_datatable(data.dates), 
+        data_collector.generate_datatable(data.countries), 
+        data_collector.generate_datatable(data.daily_production)
+    )

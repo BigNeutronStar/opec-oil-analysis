@@ -42,7 +42,9 @@ def plot_boxwhiskers(atribute, start=2006, end=2022, countries=[]):
         plt.yticks(np.linspace(min(column), max(column), endpoint=True))
         path = paths.graphics_dir + "/Box&Whiskers" + "/Цена.png"
     elif atribute == 'Добыча':
-        df = data.main[['Дата', 'Страна', 'Добыча']].copy()
+        df = pd.merge(data.daily_production, data.dates, on='date_id')[['Дата', 'Добыча', 'country_id']]
+        df = pd.merge(df, data.countries, on='country_id')[['Дата', 'Добыча', 'Страна']]
+        #df = data.main[['Дата', 'Страна', 'Добыча']].copy()
         df['Дата'] = pd.to_datetime(df['Дата'], format='mixed', dayfirst=True).dt.year
         df = df[(df['Дата'] <= end) & (df['Дата'] >= start)]
 
@@ -100,7 +102,8 @@ def plot_graph(atribute, start=2006, end=2022):
     return fig
     
 def hist(start=2006, end=2022, countries=[]):
-    df = data.main[['Дата', 'Страна', 'Добыча']].copy()
+    df = pd.merge(data.daily_production, data.dates, on='date_id')[['Дата', 'Добыча', 'country_id']]
+    df = pd.merge(df, data.countries, on='country_id')[['Дата', 'Добыча', 'Страна']]
     df['Дата'] = pd.to_datetime(df['Дата'], format='mixed', dayfirst=True).dt.year
     df = df[(df['Дата'] <= end) & (df['Дата'] >= start)]
 
@@ -145,7 +148,8 @@ def hist(start=2006, end=2022, countries=[]):
     return fig
 
 def diag(start=2006, end=2022, countries=[]):
-    df = data.main[['Дата', 'Страна', 'Добыча']].copy()
+    df = pd.merge(data.daily_production, data.dates, on='date_id')[['Дата', 'Добыча', 'country_id']]
+    df = pd.merge(df, data.countries, on='country_id')[['Дата', 'Добыча', 'Страна']]
     df['Дата'] = pd.to_datetime(df['Дата'], format='mixed', dayfirst=True).dt.year
     df = df[(df['Дата'] <= end) & (df['Дата'] >= start)]
 
@@ -194,7 +198,9 @@ def plot_scatter(atribute, start=2006, end=2022, countries=[]):
     atr = atr[(atr['Дата'] <= end) & (atr['Дата'] >= start)]
     atr = atr[atribute]
 
-    df = data.main[['Страна', 'Добыча', 'Дата']].copy()
+    df = pd.merge(data.daily_production, data.dates, on='date_id')[['Дата', 'Добыча', 'country_id']]
+    df = pd.merge(df, data.countries, on='country_id')[['Дата', 'Добыча', 'Страна']]
+    
     df['Дата'] = pd.to_datetime(df['Дата'], format='mixed', dayfirst=True).dt.year
     df = df[(df['Дата'] <= end) & (df['Дата'] >= start)]
     
