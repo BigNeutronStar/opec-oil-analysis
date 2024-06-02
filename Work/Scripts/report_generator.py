@@ -5,14 +5,18 @@ from Library.paths import report_dir
 from Library import data
 
 
-
-def save_reports(output_dir):
+def save_reports(output_dir, save_dir):
+    if not os.path.exists(save_dir):
+        os.makedirs(save_dir)
+        
     for filename in os.listdir(output_dir):
         if filename.endswith(".txt"):
             report_path = os.path.join(output_dir, filename)
             with open(report_path, 'r', encoding='utf-8') as file:
                 content = file.read()
-                print(content)
+                with open(os.path.join(save_dir, filename), 'w', encoding='utf-8') as save_file:
+                    save_file.write(content)
+
 
 def generate_annual_average_report():
     df = data.dates.copy()

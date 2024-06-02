@@ -104,8 +104,13 @@ def TitleBar(page: ft.page):
 ###### REPORTS ###### REPORTS ###### REPORTS ###### REPORTS ###### REPORTS ###### REPORTS ######
 
 def Reports(page: ft.Page, params: Params, basket: Basket):
+    
+    def on_file_picker_result(e):
+        save_dir = e.path
+        output_dir = "/Users/artem/Desktop/University/python-project-1/Work/Output"
+        report_generator.save_reports(output_dir, save_dir)
 
-    file_picker = ft.FilePicker(on_result=lambda e: report_generator.save_reports("/Users/artem/Desktop/University/python-project-1/Work/Output"))
+    file_picker = ft.FilePicker(on_result=on_file_picker_result)
     page.overlay.append(file_picker)
 
     def run_report_generator():
@@ -154,6 +159,8 @@ def Reports(page: ft.Page, params: Params, basket: Basket):
         "/reports",
         [
             TitleBar(page),
+            ft.ElevatedButton("Домой", on_click= lambda _: page.go("/home"),icon=ft.icons.ARROW_BACK),
+            
             ft.Container(
                 content=ft.Column(
                     [
@@ -185,7 +192,6 @@ def Reports(page: ft.Page, params: Params, basket: Basket):
         ],
         padding=0,
     )
-
 
 ###### REPORTS ###### REPORTS ###### REPORTS ###### REPORTS ###### REPORTS ###### REPORTS ######
 ###### REPORTS ###### REPORTS ###### REPORTS ###### REPORTS ###### REPORTS ###### REPORTS ######
