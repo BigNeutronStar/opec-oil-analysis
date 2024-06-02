@@ -18,7 +18,7 @@ def get_years_range():
 def get_countries():
     return data.countries_list
 
-def generate_datatable(df, queue):
+def generate_datatable(df):
     headers = [ft.DataColumn(ft.Text(header)) for header in df.columns]
 
     df_array = df.to_numpy()
@@ -32,5 +32,5 @@ def generate_datatable(df, queue):
         columns=headers,
         rows=rows
     )
-    queue.put(datatable)
+    return datatable
 

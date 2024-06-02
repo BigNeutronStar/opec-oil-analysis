@@ -54,6 +54,7 @@ def run_app(page: ft.Page):
     page.go(page.route)
     data_collector.read_data()
     page.go('/home')
+    data_collector.generate_main()
 
 
     
