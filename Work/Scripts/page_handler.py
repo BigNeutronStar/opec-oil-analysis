@@ -25,18 +25,11 @@ def setup_page(page: ft.Page):
     theme.page_transitions.linux = ft.PageTransitionTheme.NONE
     page.theme = theme
     page.theme_mode = 'dark'
-    
-    page.window_full_screen = True
-    page.window_max_width = page.window_width
-    page.window_full_screen = False
-
-    page.window_maximized = True
-    page.window_width = page.window_max_width
 
     if os.name == 'nt':
         page.window_title_bar_hidden = True
         page.window_title_bar_buttons_hidden = True
-        
+
     page.window_min_height = 800
     page.window_min_width = 700
     page.spacing = 0
@@ -54,6 +47,9 @@ def setup_page(page: ft.Page):
     Routing(page=page,
             app_routes=app_routes)
 
+    page.update()
+
+    page.window_maximized = True
     page.update()
 
 def create_table_views():
