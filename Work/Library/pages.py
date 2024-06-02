@@ -105,6 +105,9 @@ def TitleBar(page: ft.page):
 
 def Reports(page: ft.Page, params: Params, basket: Basket):
 
+    file_picker = ft.FilePicker(on_result=lambda e: graphics_generator.save_graph(fig, e.path))
+    page.overlay.append(file_picker)
+
     def run_report_generator():
         subprocess.run(["python3", "/Users/artem/Desktop/University/python-project-1/Work/Scripts/report_generator.py"])
 
@@ -130,7 +133,7 @@ def Reports(page: ft.Page, params: Params, basket: Basket):
                     report_contents,
                     scroll=True,
                 ),
-                width=1000,  # Увеличиваем ширину окна
+                width=1000,
                 height=400,
                 padding=20
             ),
@@ -140,9 +143,6 @@ def Reports(page: ft.Page, params: Params, basket: Basket):
         )
 
 
-
-
-        
         page.dialog = dialog
         dialog.open = True
         page.update()
@@ -150,28 +150,6 @@ def Reports(page: ft.Page, params: Params, basket: Basket):
     def on_create_reports_click(e):
         reports = run_report_generator()
         open_reports_dialog(e.page, reports)
-
-    def download_report(page: ft.Page, report):
-        report_path = os.path.join("/Users/artem/Desktop/University/python-project-1/Work/Output", report)
-        page.add(
-            ft.Row([
-                ft.Text(f"Скачайте файл: {report}"),
-                ft.TextButton(
-                    text="Скачать",
-                    on_click=lambda e: page.launch_url(f"file://{report_path}"),
-                    style=ft.ButtonStyle(
-                        bgcolor=ft.colors.BLUE_200,
-                        color=ft.colors.WHITE
-                    )
-                )
-            ])
-        )
-
-
-    def on_download_reports_click(e):
-        reports = [f for f in os.listdir("/Users/artem/Desktop/University/python-project-1/Work/Output") if f.endswith(".txt")]
-        for report in reports:
-            download_report(e.page, report)
 
     return ft.View(
         "/reports",
@@ -190,7 +168,7 @@ def Reports(page: ft.Page, params: Params, basket: Basket):
                                 ),
                                 ft.ElevatedButton(
                                     "Скачать отчеты",
-                                    on_click=on_download_reports_click,
+                                    on_click=lambda _: file_picker.save_file(allowed_extensions=['txt']),
                                     width=250,
                                     height=75
                                 )
