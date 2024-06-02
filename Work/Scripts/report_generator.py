@@ -4,6 +4,16 @@ from datetime import datetime
 from Library.paths import report_dir
 from Library import data
 
+
+
+def save_report(report_path, header, rows):
+    with open(report_path, 'w', encoding='utf-8') as file:
+        file.write(header)
+        file.write('-' * len(header) + '\n')
+        for row in rows:
+            file.write(row + '\n')
+        file.write('-' * len(header) + '\n')
+
 def generate_annual_average_report():
     df = data.dates.copy()
     df['Дата'] = pd.to_datetime(data.dates['Дата'], format='%d.%m.%Y').dt.year

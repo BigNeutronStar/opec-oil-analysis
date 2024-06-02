@@ -105,7 +105,7 @@ def TitleBar(page: ft.page):
 
 def Reports(page: ft.Page, params: Params, basket: Basket):
 
-    file_picker = ft.FilePicker(on_result=lambda e: graphics_generator.save_graph(fig, e.path))
+    file_picker = ft.FilePicker(on_result=lambda e: graphics_generator.save_report(fig, e.path))
     page.overlay.append(file_picker)
 
     def run_report_generator():
@@ -141,7 +141,6 @@ def Reports(page: ft.Page, params: Params, basket: Basket):
                 ft.TextButton("Закрыть", on_click=close_dialog)
             ],
         )
-
 
         page.dialog = dialog
         dialog.open = True
@@ -186,6 +185,7 @@ def Reports(page: ft.Page, params: Params, basket: Basket):
         ],
         padding=0,
     )
+
 
 ###### REPORTS ###### REPORTS ###### REPORTS ###### REPORTS ###### REPORTS ###### REPORTS ######
 ###### REPORTS ###### REPORTS ###### REPORTS ###### REPORTS ###### REPORTS ###### REPORTS ######
@@ -260,7 +260,7 @@ def Home(page: ft.Page, params: Params, basket: Basket):
                         ),
                         ft.Row(
                             [
-                                ft.ElevatedButton("Просмотр отчетов", icon=ft.icons.MENU_BOOK_ROUNDED, on_click=lambda _: page.go("/reports"),width=250,height=75)
+                                ft.ElevatedButton("Просмотр отчетов", icon=ft.icons.TEXT_SNIPPET, on_click=lambda _: page.go("/reports"),width=250,height=75)
                             ],
                             alignment=ft.MainAxisAlignment.CENTER
                         ),
