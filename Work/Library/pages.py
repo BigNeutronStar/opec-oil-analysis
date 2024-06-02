@@ -10,14 +10,14 @@ from Scripts import graphics_generator
 from Scripts import data_collector
 import pandas as pd
 
-dates = countries = daily_production = main = ft.DataTable()
+dates = countries = daily_production = ft.DataTable()
 
-def setup_table_views(_dates, _countries, _daily_production, _main):
-    global dates, countries, daily_production, main
+def setup_table_views(_dates, _countries, _daily_production):
+    global dates, countries, daily_production
     dates = _dates
     countries = _countries
     daily_production = _daily_production
-    main = _main
+
 
 def TitleBar(page: ft.Page):
     if os.name == 'posix':
@@ -530,7 +530,6 @@ def Info(page: ft.Page, params: Params, basket: Basket):
     )
 
 def ViewData(page: ft.Page, params: Params, basket: Basket):
-
     return ft.View(
         '/view_data',
         scroll = "auto",
@@ -553,7 +552,7 @@ def ViewData(page: ft.Page, params: Params, basket: Basket):
                                                     width=450,
                                                     content=ft.Column(
                                                         controls=[
-                                                            dates
+                                                            ft.ProgressRing()
                                                         ]
                                                     ),
                                                 )
@@ -582,7 +581,36 @@ def ViewData(page: ft.Page, params: Params, basket: Basket):
                                                     width=450,
                                                     content=ft.Column(
                                                         controls=[
-                                                            countries
+                                                            ft.ProgressRing()
+                                                        ]
+                                                    ),
+                                                )
+                                            ],
+                                            scroll=ft.ScrollMode.ALWAYS,
+                                        )
+                                    ],
+                                    scroll="auto",  
+                                ),
+                                border=ft.border.all(1, "blue"),
+                            )
+                        ]
+                    ),
+
+                    ft.Column(
+                        [
+                            ft.Text("ДОБЫЧА", weight = ft.FontWeight.BOLD),
+                            ft.Container(
+                                width=450,
+                                height=500,
+                                content=ft.Column(
+                                    controls=[
+                                        ft.Row(
+                                            controls=[
+                                                ft.Container(
+                                                    width=450,
+                                                    content=ft.Column(
+                                                        controls=[
+                                                            ft.ProgressRing()
                                                         ]
                                                     ),
                                                 )

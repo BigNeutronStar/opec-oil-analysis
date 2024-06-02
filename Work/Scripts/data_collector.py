@@ -2,7 +2,8 @@ from openpyxl import Workbook
 from Library import data
 from Library.paths import databases_paths
 import flet as ft
-import pandas as pd 
+import pandas as pd
+import numpy as np
 
 def generate_main():
     Workbook().save(databases_paths['main'])
@@ -17,17 +18,19 @@ def get_years_range():
 def get_countries():
     return data.countries_list
 
-def generate_datatable(df):
+def generate_datatable(df, queue):
     headers = [ft.DataColumn(ft.Text(header)) for header in df.columns]
 
-    rows = []
-    for index, row in df.iterrows():
-        rows.append(ft.DataRow(cells = [ft.DataCell(ft.Text(row[header])) for header in df.columns]))
+    df_array = df.to_numpy()
+
+    def create_row(row):
+        return ft.DataRow(cells=[ft.DataCell(ft.Text(cell)) for cell in row])
+
+    rows = np.apply_along_axis(create_row, axis=1, arr=df_array)
     
     datatable = ft.DataTable(
         columns=headers,
         rows=rows
     )
-    return datatable
-
+    queue.put(datatable)
 

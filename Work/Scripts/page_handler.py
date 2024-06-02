@@ -1,8 +1,8 @@
 from math import pi
-import time
 import flet as ft
 from flet_route import Routing, path
 import os
+from multiprocessing import Process, Queue
 
 from Library.pages import Home
 from Library.pages import Graphics
@@ -11,10 +11,8 @@ from Library.pages import Info
 from Library.pages import Loading
 from Library.pages import ViewData
 from Library.pages import setup_table_views
-
+import time
 from Library import data
-
-dates = countries = daily_production = main = ft.DataTable()
 
 from Scripts import data_collector
 
@@ -52,19 +50,11 @@ def setup_page(page: ft.Page):
     page.window_maximized = True
     page.update()
 
-def create_table_views():
-    global dates, countries, daily_production, main
-    dates = data_collector.generate_datatable(data.dates)
-    countries = data_collector.generate_datatable(data.countries)
-    daily_production = data_collector.generate_datatable(data.daily_production)
-    main = data_collector.generate_datatable(data.main)
-
 def run_app(page: ft.Page):
     page.go(page.route)
     data_collector.read_data()
-    create_table_views()
-    setup_table_views(dates, countries, daily_production, main)
     page.go('/home')
+
 
     
      
