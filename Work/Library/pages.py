@@ -7,7 +7,7 @@ from flet_route import Params, Basket
 from flet.matplotlib_chart import MatplotlibChart
 import matplotlib
 from Scripts import graphics_generator
-
+from Scripts import report_generator
 
 def TitleBar(page: ft.page):
     def maximize_win(e):
@@ -105,7 +105,7 @@ def TitleBar(page: ft.page):
 
 def Reports(page: ft.Page, params: Params, basket: Basket):
 
-    file_picker = ft.FilePicker(on_result=lambda e: graphics_generator.save_report(fig, e.path))
+    file_picker = ft.FilePicker(on_result=lambda e: report_generator.save_reports("/Users/artem/Desktop/University/python-project-1/Work/Output"))
     page.overlay.append(file_picker)
 
     def run_report_generator():

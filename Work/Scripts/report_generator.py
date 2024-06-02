@@ -6,13 +6,13 @@ from Library import data
 
 
 
-def save_report(report_path, header, rows):
-    with open(report_path, 'w', encoding='utf-8') as file:
-        file.write(header)
-        file.write('-' * len(header) + '\n')
-        for row in rows:
-            file.write(row + '\n')
-        file.write('-' * len(header) + '\n')
+def save_reports(output_dir):
+    for filename in os.listdir(output_dir):
+        if filename.endswith(".txt"):
+            report_path = os.path.join(output_dir, filename)
+            with open(report_path, 'r', encoding='utf-8') as file:
+                content = file.read()
+                print(content)
 
 def generate_annual_average_report():
     df = data.dates.copy()
