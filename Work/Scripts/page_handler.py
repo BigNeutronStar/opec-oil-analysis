@@ -2,6 +2,7 @@ from math import pi
 import time
 import flet as ft
 from flet_route import Routing, path
+import os
 
 from Library.pages import Home
 from Library.pages import Graphics
@@ -32,8 +33,10 @@ def setup_page(page: ft.Page):
     page.window_maximized = True
     page.window_width = page.window_max_width
 
-    page.window_title_bar_hidden = True
-    page.window_title_bar_buttons_hidden = True
+    if os.name == 'nt':
+        page.window_title_bar_hidden = True
+        page.window_title_bar_buttons_hidden = True
+        
     page.window_min_height = 800
     page.window_min_width = 700
     page.spacing = 0

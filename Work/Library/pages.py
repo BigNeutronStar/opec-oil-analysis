@@ -20,6 +20,9 @@ def setup_table_views(_dates, _countries, _daily_production, _main):
     main = _main
 
 def TitleBar(page: ft.Page):
+    if os.name == 'posix':
+        return
+    
     def maximize_win(e):
         page.window_maximized = True
         page.update()
