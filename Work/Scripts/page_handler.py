@@ -9,6 +9,11 @@ from Library.pages import Reports
 from Library.pages import Info
 from Library.pages import Loading
 from Library.pages import ViewData
+from Library.pages import setup_table_views
+
+from Library import data
+
+dates = countries = daily_production = main = ft.DataTable()
 
 from Scripts import data_collector
 
@@ -33,7 +38,7 @@ def setup_page(page: ft.Page):
     page.window_min_width = 700
     page.spacing = 0
     page.padding = 0
-    print(page.window_max_width)
+
     app_routes = [
         path(url = "/", clear = True, view=Loading),
         path(url = "/home", clear = True, view=Home),
@@ -48,10 +53,20 @@ def setup_page(page: ft.Page):
 
     page.update()
 
+def create_table_views():
+    global dates, countries, daily_production, main
+    dates = data_collector.generate_datatable(data.dates)
+    countries = data_collector.generate_datatable(data.countries)
+    daily_production = data_collector.generate_datatable(data.daily_production)
+    main = data_collector.generate_datatable(data.main)
+
 def run_app(page: ft.Page):
     page.go(page.route)
     data_collector.read_data()
+    create_table_views()
+    setup_table_views(dates, countries, daily_production, main)
     page.go('/home')
+
     
      
     

@@ -7,7 +7,17 @@ from flet_route import Params, Basket
 from flet.matplotlib_chart import MatplotlibChart
 import matplotlib
 from Scripts import graphics_generator
-from Library import data
+from Scripts import data_collector
+import pandas as pd
+
+dates = countries = daily_production = main = ft.DataTable()
+
+def setup_table_views(_dates, _countries, _daily_production, _main):
+    global dates, countries, daily_production, main
+    dates = _dates
+    countries = _countries
+    daily_production = _daily_production
+    main = _main
 
 def TitleBar(page: ft.Page):
     def maximize_win(e):
@@ -263,8 +273,10 @@ def Home(page: ft.Page, params: Params, basket: Basket):
 
 def Graphics(page: ft.Page, params: Params, basket: Basket):
     def open_configure_window(plot_func, atr='', countries_disabled=False):
-        start = min(data.get_years())
-        end = max(data.get_years())
+        min_year, max_year = data_collector.get_years_range()
+        countries = data_collector.get_countries()
+
+        start, end = min_year, max_year
 
         def change_period(e):
             nonlocal start, end
@@ -274,7 +286,7 @@ def Graphics(page: ft.Page, params: Params, basket: Basket):
             end = round(float(end))
         
         def build_new(e):
-            nonlocal start, end
+            graphics_generator.clear()
             countries = [el.label for el in countries_checkboxes if el.value]
             if not countries_disabled:
                 if atr == '':
@@ -286,7 +298,7 @@ def Graphics(page: ft.Page, params: Params, basket: Basket):
             put_graph(fig)
 
         countries_checkboxes = []
-        for c in data.get_countries():
+        for c in countries:
             countries_checkboxes.append(ft.Checkbox(label=c, disabled=countries_disabled, value=True))
         page.views[0].controls[2].content.controls[0].controls = [
             ft.Container(
@@ -296,8 +308,8 @@ def Graphics(page: ft.Page, params: Params, basket: Basket):
                             [
                                 ft.Text("Период",  weight=ft.FontWeight.BOLD,),
                                 ft.RangeSlider(
-                                    min=min(data.get_years()),
-                                    max=max(data.get_years()),
+                                    min=min_year,
+                                    max=max_year,
                                     start_value=2006,
                                     divisions=17,
                                     end_value=2022,
@@ -515,11 +527,75 @@ def Info(page: ft.Page, params: Params, basket: Basket):
     )
 
 def ViewData(page: ft.Page, params: Params, basket: Basket):
+
     return ft.View(
         '/view_data',
+        scroll = "auto",
         controls = [   
             TitleBar(page),
             ft.ElevatedButton("Домой", on_click= lambda _: page.go("/home"),icon=ft.icons.ARROW_BACK),
+            ft.Row(
+                [
+                    ft.Column(
+                        [
+                            ft.Text("ДАТА", weight = ft.FontWeight.BOLD),
+                            ft.Container(
+                                width=450,
+                                height=500,
+                                content=ft.Column(
+                                    controls=[
+                                        ft.Row(
+                                            controls=[
+                                                ft.Container(
+                                                    width=450,
+                                                    content=ft.Column(
+                                                        controls=[
+                                                            dates
+                                                        ]
+                                                    ),
+                                                )
+                                            ],
+                                            scroll=ft.ScrollMode.ALWAYS,
+                                        )
+                                    ],
+                                    scroll="auto",  
+                                ),
+                                border=ft.border.all(1, "blue"),
+                            )
+                        ]
+                    ),
+                    
+                    ft.Column(
+                        [
+                            ft.Text("СТРАНЫ", weight = ft.FontWeight.BOLD),
+                            ft.Container(
+                                width=450,
+                                height=500,
+                                content=ft.Column(
+                                    controls=[
+                                        ft.Row(
+                                            controls=[
+                                                ft.Container(
+                                                    width=450,
+                                                    content=ft.Column(
+                                                        controls=[
+                                                            countries
+                                                        ]
+                                                    ),
+                                                )
+                                            ],
+                                            scroll=ft.ScrollMode.ALWAYS,
+                                        )
+                                    ],
+                                    scroll="auto",  
+                                ),
+                                border=ft.border.all(1, "blue"),
+                            )
+                        ]
+                    )
+                ]
+            )
+            
         ],
         padding = 10,
     )

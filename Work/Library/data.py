@@ -1,22 +1,20 @@
 import pandas as pd
 
 countries = dates = daily_production = main = pd.DataFrame()
+year = countries_list = list()
 
 def read_data(databases_paths):
-    global countries, dates, daily_production, main
+    global countries, dates, daily_production, main, years, countries_list
     main = pd.read_excel(databases_paths['main'])
     countries = pd.read_excel(databases_paths['countries'])
     dates = pd.read_excel(databases_paths['dates'])
     daily_production = pd.read_excel(databases_paths['daily_production'])
 
-def get_years():
-    df = main[['Дата']].copy()
+    df = dates[['Дата']].copy()
     df['Дата'] = pd.to_datetime(df['Дата'], format='mixed', dayfirst=True).dt.year
     years = df['Дата'].unique()
-    return years
 
-def get_countries():
-    return main['Страна'].unique()
+    countries_list = countries['Страна']
 
 def collect_to_main(path):
     global main

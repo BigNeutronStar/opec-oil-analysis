@@ -228,3 +228,6 @@ def plot_scatter(atribute, start=2006, end=2022, countries=[]):
 def save_graph(fig, path):
     print(path)
     fig.savefig(path)
+
+def clear():
+    plt.close('all')
