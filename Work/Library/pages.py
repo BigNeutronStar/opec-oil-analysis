@@ -119,8 +119,11 @@ def Reports(page: ft.Page, params: Params, basket: Basket):
     file_picker = ft.FilePicker(on_result=on_file_picker_result)
     page.overlay.append(file_picker)
 
-    def run_report_generator():
-        subprocess.run(["python3", "/Users/artem/Desktop/University/python-project-1/Work/Scripts/report_generator.py"])
+    def run_report_generator(country_name):
+        report_generator.generate_annual_average_report()
+        report_generator.generate_annual_minmax_report()
+        report_generator.generate_pivot_table()
+        report_generator.generate_pivot_table_for_country(country_name)
 
         reports_dir = "/Users/artem/Desktop/University/python-project-1/Work/Output"
         reports = [f for f in os.listdir(reports_dir) if f.endswith(".txt")]
@@ -157,19 +160,56 @@ def Reports(page: ft.Page, params: Params, basket: Basket):
         dialog.open = True
         page.update()
 
+    def show_error_dialog():
+        def close_error_dialog(e):
+            error_dialog.open = False
+            page.update()
+
+        error_dialog = ft.AlertDialog(
+            title=ft.Text("Ошибка"),
+            content=ft.Text("Пожалуйста, выберите страну."),
+            actions=[
+                ft.TextButton("ОК", on_click=close_error_dialog)
+            ]
+        )
+        page.dialog = error_dialog
+        error_dialog.open = True
+        page.update()
+
     def on_create_reports_click(e):
-        reports = run_report_generator()
-        open_reports_dialog(e.page, reports)
+        country_name = country_combobox.value
+        if not country_name:
+            show_error_dialog()
+        else:
+            reports = run_report_generator(country_name)
+            open_reports_dialog(e.page, reports)
+
+    countries = [
+        "Algeria", "Angola", "Congo", "Equatorial Guinea", "Gabon",
+        "IR Iran", "Iraq", "Kuwait", "Libya", "Nigeria",
+        "United Arab Emirates", "Venezuela"
+    ]
+
+    country_combobox = ft.Dropdown(
+        options=[ft.dropdown.Option(text=country) for country in countries],
+    )
 
     return ft.View(
         "/reports",
         [
             TitleBar(page),
-            ft.ElevatedButton("Домой", on_click= lambda _: page.go("/home"),icon=ft.icons.ARROW_BACK),
+            ft.ElevatedButton("Домой", on_click=lambda _: page.go("/home"), icon=ft.icons.ARROW_BACK),
             
             ft.Container(
                 content=ft.Column(
                     [
+                        ft.Row(
+                            [
+                                ft.Text("Выберите страну:", size=20),
+                                country_combobox
+                            ],
+                            alignment=ft.MainAxisAlignment.CENTER,
+                        ),
                         ft.Row(
                             [
                                 ft.ElevatedButton(
