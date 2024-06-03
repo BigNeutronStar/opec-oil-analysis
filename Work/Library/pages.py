@@ -9,6 +9,9 @@ import matplotlib
 from Scripts import graphics_generator
 from Scripts import report_generator
 
+
+###### TITLEBAR ###### TITLEBAR ###### TITLEBAR ###### TITLEBAR ###### TITLEBAR ###### TITLEBAR ######
+###### TITLEBAR ###### TITLEBAR ###### TITLEBAR ###### TITLEBAR ###### TITLEBAR ###### TITLEBAR ######
 def TitleBar(page: ft.page):
     def maximize_win(e):
         page.window_maximized = True
@@ -99,6 +102,9 @@ def TitleBar(page: ft.page):
                     )  
         ], 
     )
+###### TITLEBAR ###### TITLEBAR ###### TITLEBAR ###### TITLEBAR ###### TITLEBAR ###### TITLEBAR ######
+###### TITLEBAR ###### TITLEBAR ###### TITLEBAR ###### TITLEBAR ###### TITLEBAR ###### TITLEBAR ######
+
 
 ###### REPORTS ###### REPORTS ###### REPORTS ###### REPORTS ###### REPORTS ###### REPORTS ######
 ###### REPORTS ###### REPORTS ###### REPORTS ###### REPORTS ###### REPORTS ###### REPORTS ######
@@ -230,7 +236,11 @@ def Loading(page: ft.Page, params: Params, basket: Basket):
         ],
         padding = 0,
     )
+###### LOADING ###### LOADING ###### LOADING ###### LOADING ###### LOADING ###### LOADING ######
+###### LOADING ###### LOADING ###### LOADING ###### LOADING ###### LOADING ###### LOADING ######
 
+###### HOME ###### HOME ###### HOME ###### HOME ###### HOME ###### HOME ######
+###### HOME ###### HOME ###### HOME ###### HOME ###### HOME ###### HOME ######
 def Home(page: ft.Page, params: Params, basket: Basket):
     return ft.View(
         "/home",
@@ -281,7 +291,11 @@ def Home(page: ft.Page, params: Params, basket: Basket):
         ],
         padding = 0,
     )
+###### HOME ###### HOME ###### HOME ###### HOME ###### HOME ###### HOME ######
+###### HOME ###### HOME ###### HOME ###### HOME ###### HOME ###### HOME ######
 
+###### GRAPHICS ###### GRAPHICS ###### GRAPHICS ###### GRAPHICS ###### GRAPHICS ###### GRAPHICS ######
+###### GRAPHICS ###### GRAPHICS ###### GRAPHICS ###### GRAPHICS ###### GRAPHICS ###### GRAPHICS ######
 def Graphics(page: ft.Page, params: Params, basket: Basket):
     def put_plot(fig):
         page.views[0].controls[2] = ft.Container(
@@ -427,7 +441,11 @@ def Graphics(page: ft.Page, params: Params, basket: Basket):
         ],
         padding = 0,
     )
+###### GRAPHICS ###### GRAPHICS ###### GRAPHICS ###### GRAPHICS ###### GRAPHICS ###### GRAPHICS ######
+###### GRAPHICS ###### GRAPHICS ###### GRAPHICS ###### GRAPHICS ###### GRAPHICS ###### GRAPHICS ######
 
+###### INFO ###### INFO ###### INFO ###### INFO ###### INFO ###### INFO ######
+###### INFO ###### INFO ###### INFO ###### INFO ###### INFO ###### INFO ######
 def Info(page: ft.Page, params: Params, basket: Basket):
     return ft.View(
         '/info',
@@ -463,7 +481,11 @@ def Info(page: ft.Page, params: Params, basket: Basket):
         ],
         padding = 0,
     )
+###### INFO ###### INFO ###### INFO ###### INFO ###### INFO ###### INFO ######
+###### INFO ###### INFO ###### INFO ###### INFO ###### INFO ###### INFO ######
 
+###### VIEWDATA ###### VIEWDATA ###### VIEWDATA ###### VIEWDATA ###### VIEWDATA ###### VIEWDATA ######
+###### VIEWDATA ###### VIEWDATA ###### VIEWDATA ###### VIEWDATA ###### VIEWDATA ###### VIEWDATA ######
 def ViewData(page: ft.Page, params: Params, basket: Basket):
     return ft.View(
         '/view_data',
@@ -473,4 +495,5 @@ def ViewData(page: ft.Page, params: Params, basket: Basket):
         ],
         padding = 0,
     )
-
+###### VIEWDATA ###### VIEWDATA ###### VIEWDATA ###### VIEWDATA ###### VIEWDATA ###### VIEWDATA ######
+###### VIEWDATA ###### VIEWDATA ###### VIEWDATA ###### VIEWDATA ###### VIEWDATA ###### VIEWDATA ######
