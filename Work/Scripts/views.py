@@ -92,6 +92,8 @@ class Graphics(Page):
         super().__init__(page, scroll=True)
         self.page = page
         self.graphGenerator = generator
+        
+        self.graphGenerator.setup_data()
 
         self.dashboard_slider = ft.Container()
         self.dashboard_boxes = ft.Container()
@@ -99,22 +101,12 @@ class Graphics(Page):
         self.graph = ft.Container()
         self.save_button = ft.Container()
 
-        self.is_personal_data = not self.graphGenerator.personal_data.is_empty
-
-        self.data_switch = ft.Switch(label="Использовать пользовательские данные", on_change=self.switch_data, disabled = not self.is_personal_data)
-
         self.controls = [
             TitleBar(page),
             self.get_navbar(),
             ft.Container()
         ]
-    
-    def switch_data(self, e):
-        self.graphGenerator.switch_data()
-        self.is_personal_data ^= True
-        print(self.is_personal_data)
-        self.page.update()
-    
+
     def update_body(self):
         self.controls[-1] = ft.Container(
             content=ft.Row(
@@ -123,8 +115,7 @@ class Graphics(Page):
                         [
                             ft.Container(
                                 content = ft.Column(
-                                    [   
-                                        self.data_switch,
+                                    [ 
                                         self.dashboard_slider,
                                         self.dashboard_boxes,
                                         self.dashboard_button
@@ -246,7 +237,7 @@ class Graphics(Page):
     def open_configure_window(self, plot_func, atr='', countries_disabled=False):
         years = self.graphGenerator.current_data.years
         min_year, max_year = min(years), max(years)
-        countries = self.graphGenerator.current_data.countries_list
+        
 
         start, end = min_year, max_year
 
@@ -256,20 +247,21 @@ class Graphics(Page):
             start = round(float(start))
             end = e.control.end_value
             end = round(float(end))
-        
+
         def build_new(e):
             self.graphGenerator.clear()
-            countries = [el.label for el in countries_checkboxes if el.value]
+            true_countries = [el.label for el in countries_checkboxes if el.value]
             if not countries_disabled:
                 if atr == '':
-                    fig = plot_func(start, end, countries)
+                    fig = plot_func(start, end, true_countries)
                 else:
-                    fig = plot_func(atr, start, end, countries)
+                    fig = plot_func(atr, start, end, true_countries)
             else:
                 fig = plot_func(atr, start, end)
             self.put_graph(fig)
 
         countries_checkboxes = []
+        countries = self.graphGenerator.current_data.countries_list
         for c in countries:
             countries_checkboxes.append(ft.Checkbox(label=c, disabled=countries_disabled, value=True))
 
@@ -352,20 +344,34 @@ class DataTables(Page):
             ),
             ft.Row(
                 [
-                    ft.ElevatedButton('Очистить данные', on_click=self.clear_data)
+                    
+                    #ft.ElevatedButton('Очистить данные', on_click=self.clear_data)
                 ],
-                alignment=ft.MainAxisAlignment.END,
+                alignment=ft.MainAxisAlignment.CENTER,
                 visible = False,
             )
         ]
 
         self.update_personal_table()
 
+    def switch_data(self, e):
+        if self.data.is_in_priority:
+            self.data.remove_priority()
+            self.personal_data.set_priority()
+            print('personal')
+        else:
+            self.personal_data.remove_priority()
+            self.data.set_priority()
+            print('data')
+    
     def update_personal_table(self):
         self.controls[-2].controls =  [
             self.get_table('ДАТА', 420, 500, self.personal_data.generate_datatable(self.personal_data.dates), self.get_upload_button('dates')),
             self.get_table('СТРАНЫ', 250, 500, self.personal_data.generate_datatable(self.personal_data.countries), self.get_upload_button('countries')),
             self.get_table('ДОБЫЧА', 350, 500, self.personal_data.generate_datatable(self.personal_data.daily_production), self.get_upload_button('daily_production'))
+        ]
+        self.controls[-1].controls = [
+            ft.Switch(label="Использовать пользовательские данные", on_change=self.switch_data, disabled = self.personal_data.is_empty, value = self.personal_data.is_in_priority),
         ]
         self.page.update()
     

@@ -16,11 +16,11 @@ class GraphGenerator():
 
         self.current_data = self.data
     
-    def switch_data(self):
-        if self.current_data == self.data:
-            self.current_data = self.personal_data
-        else:
+    def setup_data(self):
+        if self.data.is_in_priority:
             self.current_data = self.data
+        else:
+            self.current_data = self.personal_data
 
     def plot_boxwhiskers(self, atribute, start=2006, end=2022, countries=[]):
         margins = {                                                                                         

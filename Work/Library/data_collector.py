@@ -13,6 +13,13 @@ class Data:
         self.years = []
         self.countries_list = []
         self.is_empty = True
+        self.is_in_priority = False
+    
+    def set_priority(self):
+        self.is_in_priority = True
+
+    def remove_priority(self):
+        self.is_in_priority = False
 
     def read_data(self, databases_paths):
         self.source = databases_paths
