@@ -22,7 +22,6 @@ class Data:
         self.is_in_priority = False
 
     def read_data(self, databases_paths):
-        self.source = databases_paths
         if 'countries' in databases_paths:
             self.countries = pd.read_excel(databases_paths['countries'])
             self.set_countries()
@@ -34,7 +33,7 @@ class Data:
         if 'daily_production' in databases_paths:
             self.daily_production = pd.read_excel(databases_paths['daily_production'])
 
-        self.is_empty = False
+        self.is_empty = self.countries.empty or self.dates.empty or self.daily_production.empty
 
     def set_years(self):
         df = self.dates[['Дата']].copy()
