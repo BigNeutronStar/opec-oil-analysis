@@ -2,11 +2,11 @@ import os
 import pandas as pd
 from datetime import datetime
 from Library.paths import report_dir
-from Library import data
+from Work.Library import data_collector
 
 def generate_annual_average_report():
-    df = data.dates.copy()
-    df['Дата'] = pd.to_datetime(data.dates['Дата'], format='%d.%m.%Y').dt.year
+    df = data_collector.dates.copy()
+    df['Дата'] = pd.to_datetime(data_collector.dates['Дата'], format='%d.%m.%Y').dt.year
     annual_summary = df.groupby('Дата').agg({
         'Цена': 'mean',
         'Курс': 'mean'
@@ -29,8 +29,8 @@ def generate_annual_average_report():
         file.write(separator)
 
 def generate_annual_minmax_report():
-    df = data.dates.copy()
-    df['Дата'] = pd.to_datetime(data.dates['Дата'], format='%d.%m.%Y').dt.year
+    df = data_collector.dates.copy()
+    df['Дата'] = pd.to_datetime(data_collector.dates['Дата'], format='%d.%m.%Y').dt.year
     annual_summary = df.groupby('Дата').agg({
         'Цена': ['min', 'max'],
         'Курс': ['max', 'min']
@@ -56,7 +56,7 @@ def generate_annual_minmax_report():
         file.write(separator)
 
 def generate_pivot_table():
-    pivot_table = pd.pivot_table(data.main, index=['Страна'], values=['Добыча'], aggfunc='sum')
+    pivot_table = pd.pivot_table(data_collector.main, index=['Страна'], values=['Добыча'], aggfunc='sum')
     report_path = os.path.join(report_dir, 'total_production.txt')
     with open(report_path, 'w', encoding='utf-8') as f:
         header = f"{'Страна':<20} | {'Суммарная добыча':<10}"
