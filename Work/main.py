@@ -1,7 +1,4 @@
 import flet as ft
-from flet_route import Routing, path
-
-import os
 
 from Scripts import config
 from Library import data_collector, graphics_generator, report_generator
