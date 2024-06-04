@@ -533,7 +533,8 @@ class Reports(Page):
 
     def on_file_picker_result(self, e):
         save_dir = e.path
-        self.reportGenerator.save_reports(save_dir)
+        if e.path != None:
+            self.reportGenerator.save_reports(save_dir)
     
     def on_create_reports_click(self, e):
         country_name = self.country_combobox.value
