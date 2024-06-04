@@ -4,9 +4,9 @@ from flet_route import Routing, path
 import os
 
 from Scripts import config
-from Library import data_collector, graphics_generator
+from Library import data_collector, graphics_generator, report_generator
 
-from Scripts.views import Home, Loading, Graphics, DataTables, Info
+from Scripts.views import Home, Loading, Graphics, DataTables, Reports, Info
 
 def main(page: ft.Page):
     def route_change(e):
@@ -22,6 +22,9 @@ def main(page: ft.Page):
         elif page.route == '/datatables':
             page.views.clear()
             page.views.append(DataTables(page, data, personal_data, uploader))
+        elif page.route == '/reports':
+            page.views.clear()
+            page.views.append(Reports(page, reportGenerator))
         elif page.route == "/info":
             page.views.clear()
             page.views.append(Info(page))
@@ -43,7 +46,7 @@ def main(page: ft.Page):
 
 
     graphGenerator = graphics_generator.GraphGenerator(data, personal_data, cfg.graphics_dir)
-    #reportGenerator = report_generator.ReportGenerator(data, personal_data, cfg.report_dir)
+    reportGenerator = report_generator.ReportGenerator(data, personal_data, cfg.report_dir)
 
     page.go('/home')
     

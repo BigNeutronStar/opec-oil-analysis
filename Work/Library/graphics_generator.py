@@ -238,7 +238,7 @@ class GraphGenerator():
         plt.legend(title='Название страны')
         plt.tick_params(axis='both', labelsize=14)
         plt.grid(True)
-        path = self.path + "/Рассеивание" + "/Все.png"
+        path = self.path + "/Рассеивание" + "/Рассеивание.png"
         if not os.path.exists(path):
             self.save_graph(fig, path)
         return fig

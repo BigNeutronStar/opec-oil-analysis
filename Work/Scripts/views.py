@@ -358,11 +358,9 @@ class DataTables(Page):
         if self.data.is_in_priority:
             self.data.remove_priority()
             self.personal_data.set_priority()
-            print('personal')
         else:
             self.personal_data.remove_priority()
             self.data.set_priority()
-            print('data')
     
     def update_personal_table(self):
         self.controls[-2].controls =  [
@@ -474,6 +472,130 @@ class DataTables(Page):
         self.controls[-1].visible = True
         self.page.update()
     
+class Reports(Page):
+    def __init__(self, page: ft.Page, generator):
+        super().__init__(page)
+        self.page = page
+        self.reportGenerator = generator
+
+        self.reportGenerator.setup_data()
+
+        self.file_picker = ft.FilePicker(on_result=self.on_file_picker_result)
+        self.page.overlay.append(self.file_picker)
+
+        self.country_combobox = self.get_combobox()
+
+        self.controls = [
+            TitleBar(page),
+            ft.ElevatedButton("Домой", on_click=lambda _: page.go("/home"), icon=ft.icons.ARROW_BACK),
+            ft.Container(
+                content=ft.Column(
+                    [
+                        ft.Row(
+                            [
+                                ft.Text("Выберите страну:", size=20),
+                                self.country_combobox
+                            ],
+                            alignment=ft.MainAxisAlignment.CENTER,
+                        ),
+                        ft.Row(
+                            [
+                                ft.ElevatedButton(
+                                    "Создать отчеты",
+                                    on_click=self.on_create_reports_click,
+                                    width=250,
+                                    height=75
+                                ),
+                                ft.ElevatedButton(
+                                    "Скачать отчеты",
+                                    on_click=lambda _: self.file_picker.save_file(allowed_extensions=['txt']),
+                                    width=250,
+                                    height=75
+                                )
+                            ],
+                            alignment=ft.MainAxisAlignment.CENTER,
+                        )
+                    ],
+                    alignment=ft.MainAxisAlignment.CENTER,
+                    horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+                    expand=True,
+                ),
+                alignment=ft.alignment.center,
+                expand=True
+            )
+        ]
+        
+    def get_combobox(self):
+        countries = self.reportGenerator.current_data.countries_list
+        return ft.Dropdown(
+            options=[ft.dropdown.Option(text=country) for country in countries]
+        )
+
+    def on_file_picker_result(self, e):
+        save_dir = e.path
+        self.reportGenerator.save_reports(save_dir)
+    
+    def on_create_reports_click(self, e):
+        country_name = self.country_combobox.value
+        if not country_name:
+            self.show_error_dialog()
+        else:
+            reports = self.reportGenerator.run_generator(country_name)
+            self.open_reports_dialog(e.page, reports)
+    
+    def show_error_dialog(self):
+        def close_error_dialog(e):
+            error_dialog.open = False
+            self.page.update()
+
+        error_dialog = ft.AlertDialog(
+            title=ft.Text("Ошибка"),
+            content=ft.Text("Пожалуйста, выберите страну."),
+            actions=[
+                ft.TextButton("ОК", on_click=close_error_dialog)
+            ]
+        )
+        self.page.dialog = error_dialog
+        error_dialog.open = True
+        self.page.update()
+
+    def open_reports_dialog(self, page: ft.Page, reports):
+        report_contents = []
+        for report in reports:
+            with open(report, "r") as file:
+                content = file.read()
+                report_contents.append(ft.Text(content, size=14, font_family="Courier New"))
+
+        def close_dialog(e):
+            dialog.open = False
+            page.update()
+
+        dialog = ft.AlertDialog(
+            title=ft.Text("Отчеты"),
+            content=ft.Container(
+                content=ft.Column(
+                    report_contents,
+                    scroll=True,
+                ),
+                width=1000,
+                height=400,
+                padding=20
+            ),
+            actions=[
+                ft.TextButton("Закрыть", on_click=close_dialog)
+            ],
+        )
+
+        page.dialog = dialog
+        dialog.open = True
+        page.update()
+    
+
+
+
+
+
+
 
 class Info(Page):    
     def __init__(self, page: ft.Page):
