@@ -10,6 +10,12 @@ class ReportGenerator():
         self.path = path
 
         self.current_data = self.data
+
+        self.check_dir()
+    
+    def check_dir(self):
+        if not os.path.exists(self.path):
+            os.makedirs(self.path)
     
     def setup_data(self):
         if self.data.is_in_priority:

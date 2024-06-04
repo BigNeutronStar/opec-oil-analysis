@@ -8,14 +8,21 @@ import pandas as pd
 matplotlib.use('agg')
 
 class GraphGenerator():
-    def __init__(self, data, personal_data, path):
+    def __init__(self, data, personal_data, paths):
         self.data = data
         self.personal_data = personal_data
 
-        self.path = path
+        self.paths = paths
 
         self.current_data = self.data
+
+        self.check_dirs()
     
+    def check_dirs(self):
+        for folder in self.paths.values():
+            if not os.path.exists(folder):
+                os.makedirs(folder)
+        
     def setup_data(self):
         if self.data.is_in_priority:
             self.current_data = self.data
@@ -23,6 +30,8 @@ class GraphGenerator():
             self.current_data = self.personal_data
 
     def plot_boxwhiskers(self, atribute, start=2006, end=2022, countries=[]):
+        path = self.paths['BoxWhiskers']
+
         margins = {                                                                                         
             "left"   : 0.06,
             "bottom" : 0.03,
@@ -41,7 +50,7 @@ class GraphGenerator():
             plt.boxplot(column, showmeans=True)
             plt.xticks([])
             plt.yticks(np.linspace(min(column), max(column), endpoint=True))
-            path = self.path + "/Box&Whiskers" + "/Курс.png"
+            path += "/Курс.png"
         elif atribute == 'Цена':
             df = self.current_data.dates[['Дата', 'Цена']].copy()
             df['Дата'] = pd.to_datetime(df['Дата'], format='mixed', dayfirst=True).dt.year
@@ -52,7 +61,7 @@ class GraphGenerator():
             plt.boxplot(column, showmeans=True)
             plt.xticks([])
             plt.yticks(np.linspace(min(column), max(column), endpoint=True))
-            path = self.path + "/Box&Whiskers" + "/Цена.png"
+            path += "/Цена.png"
 
         elif atribute == 'Добыча':
             df = pd.merge(self.current_data.daily_production, self.current_data.dates, on='date_id')[['Дата', 'Добыча', 'country_id']]
@@ -73,7 +82,7 @@ class GraphGenerator():
             plt.grid(True)
             plt.suptitle('')
 
-            path = self.path + "/Box&Whiskers" + "/Добыча.png"
+            path += "/Добыча.png"
             
         plt.grid(True)
         plt.title(f'{atribute} {start}-{end} гг.')
@@ -82,6 +91,7 @@ class GraphGenerator():
         return fig
 
     def plot_graph(self, atribute, start=2006, end=2022):
+        path = self.paths['graphics']
         margins = {                                                                                         
             "left"   : 0.05,
             "bottom" : 0.05,
@@ -95,13 +105,13 @@ class GraphGenerator():
             df['Дата'] = pd.to_datetime(self.current_data.dates['Дата'], format="%d.%m.%Y")
             df = df[(df['Дата'].dt.year <= end) & (df['Дата'].dt.year >= start)]
             plt.plot(df['Дата'], df['Курс'], label='Курс рубля')
-            path = self.path + "/Графики" + "/Курс.png"
+            path += "/Курс.png"
         elif (atribute == 'Цена'):
             df = self.current_data.dates[['Дата', 'Цена']].copy()
             df['Дата'] = pd.to_datetime(self.current_data.dates['Дата'], format="%d.%m.%Y")
             df = df[(df['Дата'].dt.year <= end) & (df['Дата'].dt.year >= start)]
             plt.plot(df['Дата'], df['Цена'], label='Цена на нефть')
-            path = self.path + "/Графики" + "/Цена.png"
+            path += "/Цена.png"
         plt.title(f'{atribute} {start}-{end} гг.', fontsize=18)
         plt.xlabel('Дата', fontsize=18)
         plt.ylabel('Рубли', fontsize=18)
@@ -154,7 +164,7 @@ class GraphGenerator():
                 
         plt.suptitle('Гистограммы среднедневной добычи по годам', fontsize=16)
         plt.tight_layout(rect=[0, 0, 1, 0.98])
-        path = self.path + "/Гистограмма" + "/Добыча.png"
+        path = self.paths['hist'] + "/Добыча.png"
         if not os.path.exists(path):
             self.save_graph(fig, path)
         return fig
@@ -199,7 +209,7 @@ class GraphGenerator():
         plt.tick_params(axis='both', labelsize=14)
         plt.grid(True, axis='y')
         plt.legend(loc='upper right', bbox_to_anchor=(1.13, 1))
-        path = self.path + "/Диаграмма" + "/Добыча.png"
+        path = self.paths['diag'] + "/Добыча.png"
         if not os.path.exists(path):
             self.save_graph(fig, path)
         return fig
@@ -238,7 +248,7 @@ class GraphGenerator():
         plt.legend(title='Название страны')
         plt.tick_params(axis='both', labelsize=14)
         plt.grid(True)
-        path = self.path + "/Рассеивание" + "/Рассеивание.png"
+        path = self.paths['scatter'] + "/Рассеивание.png"
         if not os.path.exists(path):
             self.save_graph(fig, path)
         return fig

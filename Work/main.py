@@ -45,7 +45,7 @@ def main(page: ft.Page):
     uploader=data_collector.Uploader(cfg.personal_dir)
 
 
-    graphGenerator = graphics_generator.GraphGenerator(data, personal_data, cfg.graphics_dir)
+    graphGenerator = graphics_generator.GraphGenerator(data, personal_data, cfg.graphics)
     reportGenerator = report_generator.ReportGenerator(data, personal_data, cfg.report_dir)
 
     page.go('/home')
