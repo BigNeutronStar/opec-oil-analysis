@@ -5,8 +5,8 @@
 # Запуск приложения
 ```
 cd ./Work
-conda create --name "env"
-conda activate "env"
+conda create -n <ENV_NAME> python=<VERSION>
+conda activate <ENV_NAME>
 conda config --add channels conda-forge
 conda config --set channel_priority strict
 conda install --file requirements.txt

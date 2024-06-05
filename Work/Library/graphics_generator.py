@@ -1,4 +1,4 @@
-from os import path, makedirs
+import os
 import matplotlib
 import matplotlib.pyplot as plt
 from matplotlib.ticker import MultipleLocator
@@ -20,8 +20,8 @@ class GraphGenerator():
     
     def check_dirs(self):
         for folder in self.paths.values():
-            if not path.exists(folder):
-                makedirs(folder)
+            if not os.path.exists(folder):
+                os.makedirs(folder)
         
     def setup_data(self):
         if self.data.is_in_priority:
@@ -86,7 +86,7 @@ class GraphGenerator():
             
         plt.grid(True)
         plt.title(f'{atribute} {start}-{end} гг.')
-        if not path.exists(path):
+        if not os.path.exists(path):
             self.save_graph(fig, path)
         return fig
 
@@ -119,7 +119,7 @@ class GraphGenerator():
         plt.tick_params(axis='both', labelsize=14)
         plt.grid(True)
         
-        if not path.exists(path):
+        if not os.path.exists(path):
             self.save_graph(fig, path)
         return fig
         
@@ -165,7 +165,7 @@ class GraphGenerator():
         plt.suptitle('Гистограммы среднедневной добычи по годам', fontsize=16)
         plt.tight_layout(rect=[0, 0, 1, 0.98])
         path = self.paths['hist'] + "/Добыча.png"
-        if not path.exists(path):
+        if not os.path.exists(path):
             self.save_graph(fig, path)
         return fig
 
@@ -210,7 +210,7 @@ class GraphGenerator():
         plt.grid(True, axis='y')
         plt.legend(loc='upper right', bbox_to_anchor=(1.13, 1))
         path = self.paths['diag'] + "/Добыча.png"
-        if not path.exists(path):
+        if not os.path.exists(path):
             self.save_graph(fig, path)
         return fig
 
@@ -249,7 +249,7 @@ class GraphGenerator():
         plt.tick_params(axis='both', labelsize=14)
         plt.grid(True)
         path = self.paths['scatter'] + "/Рассеивание.png"
-        if not path.exists(path):
+        if not os.path.exists(path):
             self.save_graph(fig, path)
         return fig
 
