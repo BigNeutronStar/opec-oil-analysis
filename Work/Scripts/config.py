@@ -1,4 +1,4 @@
-import configparser
+from configparser import ConfigParser
 
 class Config:
     def __init__(self, config):
@@ -10,7 +10,7 @@ class Config:
         self.graphics = config['graphics']
 
 def Load():
-    config = configparser.ConfigParser()
+    config = ConfigParser()
     config.read('Scripts/config.ini')
 
     return Config(config)

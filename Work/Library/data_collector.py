@@ -1,8 +1,10 @@
 from openpyxl import Workbook
+from shutil import copy
+from os import path, makedirs
 
 import flet as ft
 import numpy as np
-import shutil, os
+
 import pandas as pd
 
 class Data:
@@ -88,13 +90,13 @@ class Data:
 class Uploader():
     def __init__(self, path):
         self.upload_path = path
-        if not os.path.exists(self.upload_path):
-            os.makedirs(self.upload_path)
+        if not path.exists(self.upload_path):
+            makedirs(self.upload_path)
 
     def upload_data(self, name, path):
-        new_path = os.path.join(self.upload_path, name + "_personal.xlsx")
+        new_path = path.join(self.upload_path, name + "_personal.xlsx")
         Workbook().save(new_path)
-        shutil.copy(path, new_path)
+        copy(path, new_path)
         return new_path
 
 
