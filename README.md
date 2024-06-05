@@ -14,7 +14,7 @@ python main.py
 ```
 
 # Команда проекта 
-- [Артем Мирумян]{https://github.com/BigNeutronStar}
-- [Наумов Виталий]{https://github.com/chudik63}
-- [Рахматуллин Айгиз]{https://github.com/Rakhm-cyber}
-- [Куров Егор]{https://github.com/Qur1ck}
+- [Артем Мирумян](https://github.com/BigNeutronStar)
+- [Наумов Виталий](https://github.com/chudik63)
+- [Рахматуллин Айгиз](https://github.com/Rakhm-cyber)
+- [Куров Егор](https://github.com/Qur1ck)
