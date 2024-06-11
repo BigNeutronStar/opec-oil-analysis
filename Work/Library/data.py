@@ -61,11 +61,14 @@ def form_dailyproduction(path):
         res = []
         for mean, count in zip(values, dates_count):
             
-            randoms = np.round(np.random.normal(mean, 50, count), 1)
-            res = np.append(res, randoms)
-            
+            if (id != 4):
+                randoms = np.round(np.random.normal(mean, 50, count), 1)
+                res = np.append(res, randoms)
+            else:
+                randoms = np.round(np.random.normal(mean, 20, count), 1)
+                res = np.append(res, randoms)
+
         column = np.append(column, res)
     data['Добыча'] = column
     daily_production = pd.DataFrame(data)
     daily_production.to_excel(path, index=False)
-
