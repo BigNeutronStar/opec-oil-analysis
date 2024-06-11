@@ -14,6 +14,8 @@ class Data:
         self.countries_list = []
         self.is_empty = True
         self.is_in_priority = False
+
+        self.paths = {}
     
     def set_priority(self):
         self.is_in_priority = True
@@ -22,6 +24,13 @@ class Data:
         self.is_in_priority = False
 
     def read_data(self, databases_paths):
+        for key, path in databases_paths.items():
+            self.paths[key] = path
+
+        if any(not os.path.exists(path) for path in databases_paths.values()):
+            self.destroy()
+            return
+        
         if 'countries' in databases_paths:
             self.countries = pd.read_excel(databases_paths['countries'])
             self.set_countries()
@@ -84,18 +93,26 @@ class Data:
             rows=rows
         )
         return datatable
+
+    def destroy(self):
+        self.countries = pd.DataFrame()
+        self.dates = pd.DataFrame()
+        self.daily_production = pd.DataFrame()
+        dir = os.path.dirname(list(self.paths.values())[0])
+        print(dir)
+        shutil.rmtree(dir, ignore_errors=True)
+        self.is_empty = True
+
     
 class Uploader():
     def __init__(self, path):
         self.upload_path = path
+        
+    def upload_data(self, name, path):
         if not os.path.exists(self.upload_path):
             os.makedirs(self.upload_path)
-
-    def upload_data(self, name, path):
         new_path = os.path.join(self.upload_path, name + "_personal.xlsx")
         Workbook().save(new_path)
         shutil.copy(path, new_path)
         return new_path
-
-
 

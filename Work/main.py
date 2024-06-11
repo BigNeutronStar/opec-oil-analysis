@@ -38,6 +38,7 @@ def main(page: ft.Page):
     data.set_priority()
     
     personal_data = data_collector.Data()
+    personal_data.read_data(cfg.personal_databases)
     
     uploader=data_collector.Uploader(cfg.personal_dir)
 

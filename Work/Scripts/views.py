@@ -337,20 +337,19 @@ class DataTables(Page):
             ),
             ft.Row(
                 [
-                   
+                    
                 ],
                 alignment=ft.MainAxisAlignment.CENTER,
                 visible = False,
             ),
             ft.Row(
                 [
-                    ft.ElevatedButton('Очистить данные', on_click=self.clear_data)
+                    
                 ],
                 alignment=ft.MainAxisAlignment.CENTER,
                 visible = False,
             )
         ]
-
         self.update_personal_table()
 
     def switch_data(self, e):
@@ -368,6 +367,7 @@ class DataTables(Page):
             self.get_table('ДОБЫЧА', 350, 500, self.personal_data.generate_datatable(self.personal_data.daily_production), self.get_upload_button('daily_production'))
         ]
         self.controls[-1].controls = [
+            ft.ElevatedButton('Очистить данные', on_click=self.clear_data, disabled=self.personal_data.is_empty),
             ft.Switch(label="Использовать пользовательские данные", on_change=self.switch_data, disabled = self.personal_data.is_empty, value = self.personal_data.is_in_priority),
         ]
         self.page.update()
@@ -452,12 +452,11 @@ class DataTables(Page):
     def upload_data(self, e):
         self.file_name = e.control.data
         self.file_uploader.pick_files(allow_multiple=False)
-
         self.update_personal_table()
 
     def clear_data(self, e):
         self.personal_data.destroy()
-        self.update_personal_table(self)
+        self.update_personal_table()
     
     def open_main_page(self):
         self.controls[-1].visible = False
@@ -476,13 +475,20 @@ class Reports(Page):
         super().__init__(page)
         self.page = page
         self.reportGenerator = generator
-        self.reports_gerenated = False
         self.reportGenerator.setup_data()
 
         self.file_picker = ft.FilePicker(on_result=self.on_file_picker_result)
         self.page.overlay.append(self.file_picker)
 
         self.country_combobox = self.get_combobox()
+
+        self.save_button = ft.ElevatedButton(
+            "Скачать отчеты",
+            on_click=lambda _: self.file_picker.get_directory_path(),
+            width=250,
+            height=75,
+            disabled=True
+        )
 
         self.controls = [
             TitleBar(page),
@@ -505,13 +511,7 @@ class Reports(Page):
                                     width=250,
                                     height=75
                                 ),
-                                ft.ElevatedButton(
-                                    "Скачать отчеты",
-                                    on_click=lambda _: self.file_picker.get_directory_path(),
-                                    width=250,
-                                    height=75,
-                                    disabled=self.reports_gerenated
-                                )
+                                self.save_button
                             ],
                             alignment=ft.MainAxisAlignment.CENTER,
                         )
@@ -537,6 +537,9 @@ class Reports(Page):
             self.reportGenerator.save_reports(save_dir)
     
     def on_create_reports_click(self, e):
+        self.save_button.disabled = False
+        self.page.update()
+
         country_name = self.country_combobox.value
         if not country_name:
             self.show_error_dialog()
@@ -591,13 +594,6 @@ class Reports(Page):
         dialog.open = True
         page.update()
     
-
-
-
-
-
-
-
 class Info(Page):    
     def __init__(self, page: ft.Page):
         super().__init__(page)

@@ -17,6 +17,7 @@ class GraphGenerator():
         self.current_data = self.data
 
         self.check_dirs()
+
     
     def check_dirs(self):
         for folder in self.paths.values():
@@ -86,8 +87,8 @@ class GraphGenerator():
             
         plt.grid(True)
         plt.title(f'{atribute} {start}-{end} гг.')
-        if not os.path.exists(path):
-            self.save_graph(fig, path)
+
+        self.save_graph(fig, path)
         return fig
 
     def plot_graph(self, atribute, start=2006, end=2022):
@@ -119,8 +120,7 @@ class GraphGenerator():
         plt.tick_params(axis='both', labelsize=14)
         plt.grid(True)
         
-        if not os.path.exists(path):
-            self.save_graph(fig, path)
+        self.save_graph(fig, path)
         return fig
         
     def hist(self, start=2006, end=2022, countries=[]):
@@ -165,8 +165,8 @@ class GraphGenerator():
         plt.suptitle('Гистограммы среднедневной добычи по годам', fontsize=16)
         plt.tight_layout(rect=[0, 0, 1, 0.98])
         path = self.paths['hist'] + "/Добыча.png"
-        if not os.path.exists(path):
-            self.save_graph(fig, path)
+
+        self.save_graph(fig, path)
         return fig
 
     def diag(self, start=2006, end=2022, countries=[]):
@@ -210,8 +210,8 @@ class GraphGenerator():
         plt.grid(True, axis='y')
         plt.legend(loc='upper right', bbox_to_anchor=(1.13, 1))
         path = self.paths['diag'] + "/Добыча.png"
-        if not os.path.exists(path):
-            self.save_graph(fig, path)
+
+        self.save_graph(fig, path)
         return fig
 
     def plot_scatter(self, atribute, start=2006, end=2022, countries=[]):
@@ -249,8 +249,8 @@ class GraphGenerator():
         plt.tick_params(axis='both', labelsize=14)
         plt.grid(True)
         path = self.paths['scatter'] + "/Рассеивание.png"
-        if not os.path.exists(path):
-            self.save_graph(fig, path)
+
+        self.save_graph(fig, path)
         return fig
 
     def save_graph(self, fig, path):
