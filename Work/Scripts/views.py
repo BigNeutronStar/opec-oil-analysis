@@ -344,8 +344,7 @@ class DataTables(Page):
             ),
             ft.Row(
                 [
-                    
-                    #ft.ElevatedButton('Очистить данные', on_click=self.clear_data)
+                    ft.ElevatedButton('Очистить данные', on_click=self.clear_data)
                 ],
                 alignment=ft.MainAxisAlignment.CENTER,
                 visible = False,
@@ -477,7 +476,7 @@ class Reports(Page):
         super().__init__(page)
         self.page = page
         self.reportGenerator = generator
-
+        self.reports_gerenated = False
         self.reportGenerator.setup_data()
 
         self.file_picker = ft.FilePicker(on_result=self.on_file_picker_result)
@@ -508,9 +507,10 @@ class Reports(Page):
                                 ),
                                 ft.ElevatedButton(
                                     "Скачать отчеты",
-                                    on_click=lambda _: self.file_picker.save_file(allowed_extensions=['txt']),
+                                    on_click=lambda _: self.file_picker.get_directory_path(),
                                     width=250,
-                                    height=75
+                                    height=75,
+                                    disabled=self.reports_gerenated
                                 )
                             ],
                             alignment=ft.MainAxisAlignment.CENTER,

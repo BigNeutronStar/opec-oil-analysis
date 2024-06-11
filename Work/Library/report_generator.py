@@ -30,9 +30,9 @@ class ReportGenerator():
         for filename in os.listdir(self.path):
             if filename.endswith(".txt"):
                 report_path = os.path.join(self.path, filename)
-                with open(report_path, 'r', encoding='utf-8') as file:
+                with open(report_path, 'r') as file:
                     content = file.read()
-                    with open(os.path.join(save_dir, filename), 'w', encoding='utf-8') as save_file:
+                    with open(os.path.join(save_dir, filename), 'w') as save_file:
                         save_file.write(content)
     
     def run_generator(self, country_name):
