@@ -396,7 +396,8 @@ class GraphGenerator():
         Наумов Виталий
         """
         print(path)
-        fig.savefig(path)
+        if path is not None:
+            fig.savefig(path)
 
     def clear(self):
         """

@@ -60,11 +60,11 @@ class TitleBar(ft.ResponsiveRow):
                     content=ft.Row(
                         [
                             self.get_bar_button(lambda _:
-                                self.minimize_window(), ft.icons.MINIMIZE_OUTLINED),
+                                                self.minimize_window(), ft.icons.MINIMIZE_OUTLINED),
                             self.get_bar_button(lambda _:
-                                self.maximize_window(), ft.icons.CHECK_BOX_OUTLINE_BLANK),
+                                                self.maximize_window(), ft.icons.CHECK_BOX_OUTLINE_BLANK),
                             self.get_bar_button(lambda _:
-                                self.window_close(), ft.icons.CLOSE, ft.colors.RED),
+                                                self.window_close(), ft.icons.CLOSE, ft.colors.RED),
                         ],
                         alignment=ft.MainAxisAlignment.END
                     ),
