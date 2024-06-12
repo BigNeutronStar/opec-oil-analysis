@@ -16,7 +16,8 @@ class TitleBar(ft.ResponsiveRow):
         Вход:
         page (ft.Page): Объект страницы, представляющий окно приложения.
 
-        Автор: Куров Егор
+        Автор: 
+        Куров Егор
         """
         super().__init__()
         self.page = page
@@ -26,9 +27,10 @@ class TitleBar(ft.ResponsiveRow):
         """
         Инициализация элементов управления для строки заголовка.
 
-        Добавляет кнопки свернуть, развернуть и закрыть в строку заголовка, если система не posix.
+        Добавляет кнопки свернуть, развернуть и закрыть в строку заголовка для Windows
 
-        Автор: Куров Егор
+        Автор: 
+        Куров Егор
         """
         if os.name == 'posix':
             return
@@ -59,7 +61,8 @@ class TitleBar(ft.ResponsiveRow):
         Вход:
         e (Event): Объект события.
 
-        Автор: Куров Егор
+        Автор: 
+        Куров Егор
         """
         self.page.window_maximized = True
         self.page.update()
@@ -71,7 +74,8 @@ class TitleBar(ft.ResponsiveRow):
         Вход:
         e (Event): Объект события.
 
-        Автор: Куров Егор
+        Автор: 
+        Куров Егор
         """
         self.page.window_minimized = True
         self.page.update()
@@ -83,7 +87,8 @@ class TitleBar(ft.ResponsiveRow):
         Вход:
         e (Event): Объект события.
 
-        Автор: Куров Егор
+        Автор: 
+        Куров Егор
         """
         self.page.window_close()
 
@@ -99,7 +104,8 @@ class TitleBar(ft.ResponsiveRow):
         Выход:
         ft.FilledButton: Созданная кнопка.
 
-        Автор: Куров Егор
+        Автор: 
+        Куров Егор
         """
         return ft.FilledButton(
             content=ft.Row(
@@ -138,7 +144,8 @@ class Page(ft.View):
         padding (int): Отступ для страницы. По умолчанию 0.
         scroll (bool): Включение или отключение прокрутки. По умолчанию False.
 
-        Автор: Мирумян Артем
+        Автор: 
+        Мирумян Артем
         """
         super().__init__(scroll=scroll, padding=padding)
         self.page = page
@@ -156,7 +163,8 @@ class Page(ft.View):
 
         Конфигурирует тему и переходы для различных операционных систем.
 
-        Автор: Мирумян Артем
+        Автор: 
+        Мирумян Артем
         """
         theme = ft.Theme()
         theme.page_transitions.windows = ft.PageTransitionTheme.NONE
@@ -176,7 +184,8 @@ class Page(ft.View):
 
         Устанавливает минимальные размеры окна и отступы.
 
-        Автор: Мирумян Артем
+        Автор: 
+        Мирумян Артем
         """
         self.page.window_min_height = 800
         self.page.window_min_width = 700

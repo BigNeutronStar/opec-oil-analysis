@@ -16,7 +16,8 @@ class ReportGenerator():
         personal_data (Data): Персональные данные.
         path (str): Путь для сохранения отчетов.
 
-        Автор: Рахматуллин Айгиз
+        Автор: 
+        Рахматуллин Айгиз
         """
         self.data = data
         self.personal_data = personal_data
@@ -28,10 +29,8 @@ class ReportGenerator():
         """
         Проверка существования директории и создание её при необходимости.
 
-        Вход:
-        self (ReportGenerator): Экземпляр класса ReportGenerator.
-
-        Автор: Рахматуллин Айгиз
+        Автор: 
+        Рахматуллин Айгиз
         """
         if not os.path.exists(self.path):
             os.makedirs(self.path)
@@ -40,10 +39,8 @@ class ReportGenerator():
         """
         Настройка текущих данных на основе приоритета.
 
-        Вход:
-        self (ReportGenerator): Экземпляр класса ReportGenerator.
-
-        Автор: Рахматуллин Айгиз
+        Автор: 
+        Рахматуллин Айгиз
         """
         if self.data.is_in_priority:
             self.current_data = self.data
@@ -55,10 +52,10 @@ class ReportGenerator():
         Сохранение отчетов в указанную директорию.
 
         Вход:
-        self (ReportGenerator): Экземпляр класса ReportGenerator.
         save_dir (str): Путь для сохранения отчетов.
 
-        Автор: Мирумян Артем
+        Автор: 
+        Мирумян Артем
         """
         if not os.path.exists(save_dir):
             os.makedirs(save_dir)
@@ -76,13 +73,13 @@ class ReportGenerator():
         Запуск генерации всех отчетов и возврат их путей.
 
         Вход:
-        self (ReportGenerator): Экземпляр класса ReportGenerator.
         country_name (str): Название страны для фильтрации данных.
 
         Выход:
         reports (list): Список путей к сгенерированным отчетам.
 
-        Автор: Мирумян Артем
+        Автор: 
+        Мирумян Артем
         """
         reports = [
             self.generate_annual_average_report(),
@@ -97,13 +94,11 @@ class ReportGenerator():
         """
         Генерация отчета о средних значениях по годам.
 
-        Вход:
-        self (ReportGenerator): Экземпляр класса ReportGenerator.
-
         Выход:
         report_path (str): Путь к сгенерированному отчету.
 
-        Автор: Рахматуллин Айгиз
+        Автор: 
+        Рахматуллин Айгиз
         """
         df = self.current_data.dates.copy()
         df['Дата'] = pd.to_datetime(df['Дата'], format='%d.%m.%Y').dt.year
@@ -129,13 +124,11 @@ class ReportGenerator():
         """
         Генерация отчета о минимальных и максимальных значениях по годам.
 
-        Вход:
-        self (ReportGenerator): Экземпляр класса ReportGenerator.
-
         Выход:
         report_path (str): Путь к сгенерированному отчету.
 
-        Автор: Рахматуллин Айгиз
+        Автор: 
+        Рахматуллин Айгиз
         """
         df = self.current_data.dates.copy()
         df['Дата'] = pd.to_datetime(df['Дата'], format='%d.%m.%Y').dt.year
@@ -169,13 +162,11 @@ class ReportGenerator():
         """
         Генерация сводной таблицы по суммарной добыче.
 
-        Вход:
-        self (ReportGenerator): Экземпляр класса ReportGenerator.
-
         Выход:
         report_path (str): Путь к сгенерированному отчету.
 
-        Автор: Рахматуллин Айгиз
+        Автор: 
+        Рахматуллин Айгиз
         """
         df = pd.merge(self.current_data.daily_production, self.current_data.countries, on='country_id')[['Добыча', 'Страна']]
         pivot_table = pd.pivot_table(df, index=['Страна'], values=['Добыча'], aggfunc='sum')
@@ -197,13 +188,13 @@ class ReportGenerator():
         Генерация сводной таблицы по суммарной добыче для заданной страны.
 
         Вход:
-        self (ReportGenerator): Экземпляр класса ReportGenerator.
         country_name (str): Название страны для фильтрации данных.
 
         Выход:
         report_path (str): Путь к сгенерированному отчету.
 
-        Автор: Рахматуллин Айгиз
+        Автор: 
+        Рахматуллин Айгиз
         """
         df = pd.merge(self.current_data.daily_production, self.current_data.dates, on='date_id')[['Дата', 'Добыча', 'country_id']]
         df = pd.merge(df, self.current_data.countries, on='country_id')[['Дата', 'Добыча', 'Страна']]

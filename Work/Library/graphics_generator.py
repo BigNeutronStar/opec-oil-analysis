@@ -21,7 +21,8 @@ class GraphGenerator():
         personal_data (Data): Персональные данные.
         paths (dict): Словарь путей для сохранения графиков.
 
-        Автор: Наумов Виталий
+        Автор: 
+        Наумов Виталий
         """
         self.data = data
         self.personal_data = personal_data
@@ -33,10 +34,8 @@ class GraphGenerator():
         """
         Проверка существования директорий и создание их при необходимости.
 
-        Вход:
-        self (GraphGenerator): Экземпляр класса GraphGenerator.
-
-        Автор: Наумов Виталий
+        Автор: 
+        Наумов Виталий
         """
         for folder in self.paths.values():
             if not os.path.exists(folder):
@@ -46,10 +45,8 @@ class GraphGenerator():
         """
         Настройка текущих данных на основе приоритета.
 
-        Вход:
-        self (GraphGenerator): Экземпляр класса GraphGenerator.
-
-        Автор: Наумов Виталий
+        Автор: 
+        Наумов Виталий
         """
         if self.data.is_in_priority:
             self.current_data = self.data
@@ -61,7 +58,6 @@ class GraphGenerator():
         Построение графика Box-Whisker для указанного атрибута.
 
         Вход:
-        self (GraphGenerator): Экземпляр класса GraphGenerator.
         atribute (str): Атрибут для построения графика.
         start (int): Начальный год.
         end (int): Конечный год.
@@ -70,7 +66,8 @@ class GraphGenerator():
         Выход:
         fig (matplotlib.figure.Figure): Построенный график.
 
-        Автор: Рахматуллин Айгиз
+        Автор: 
+        Рахматуллин Айгиз
         """
         path = self.paths['BoxWhiskers']
 
@@ -137,7 +134,6 @@ class GraphGenerator():
         Построение линейного графика для указанного атрибута.
 
         Вход:
-        self (GraphGenerator): Экземпляр класса GraphGenerator.
         atribute (str): Атрибут для построения графика.
         start (int): Начальный год.
         end (int): Конечный год.
@@ -145,7 +141,8 @@ class GraphGenerator():
         Выход:
         fig (matplotlib.figure.Figure): Построенный график.
 
-        Автор: Рахматуллин Айгиз
+        Автор: 
+        Рахматуллин Айгиз
         """
         path = self.paths['graphics']
         margins = {                                                                                         
@@ -183,7 +180,6 @@ class GraphGenerator():
         Построение гистограмм для среднедневной добычи по годам.
 
         Вход:
-        self (GraphGenerator): Экземпляр класса GraphGenerator.
         start (int): Начальный год.
         end (int): Конечный год.
         countries (list): Список стран для фильтрации.
@@ -191,7 +187,8 @@ class GraphGenerator():
         Выход:
         fig (matplotlib.figure.Figure): Построенный график.
 
-        Автор: Рахматуллин Айгиз
+        Автор: 
+        Рахматуллин Айгиз
         """
         df = pd.merge(self.current_data.daily_production, self.current_data.dates, on='date_id')[['Дата', 'Добыча', 'country_id']]
         df = pd.merge(df, self.current_data.countries, on='country_id')[['Дата', 'Добыча', 'Страна']]
@@ -243,7 +240,6 @@ class GraphGenerator():
         Построение кластеризованной столбчатой диаграммы для среднедневной добычи.
 
         Вход:
-        self (GraphGenerator): Экземпляр класса GraphGenerator.
         start (int): Начальный год.
         end (int): Конечный год.
         countries (list): Список стран для фильтрации.
@@ -251,7 +247,8 @@ class GraphGenerator():
         Выход:
         fig (matplotlib.figure.Figure): Построенный график.
 
-        Автор: Рахматуллин Айгиз
+        Автор: 
+        Рахматуллин Айгиз
         """
         df = pd.merge(self.current_data.daily_production, self.current_data.dates, on='date_id')[['Дата', 'Добыча', 'country_id']]
         df = pd.merge(df, self.current_data.countries, on='country_id')[['Дата', 'Добыча', 'Страна']]
@@ -302,7 +299,6 @@ class GraphGenerator():
         Построение диаграммы рассеивания для указанного атрибута и добычи.
 
         Вход:
-        self (GraphGenerator): Экземпляр класса GraphGenerator.
         atribute (str): Атрибут для построения графика.
         start (int): Начальный год.
         end (int): Конечный год.
@@ -311,7 +307,8 @@ class GraphGenerator():
         Выход:
         fig (matplotlib.figure.Figure): Построенный график.
 
-        Автор: Рахматуллин Айгиз
+        Автор: 
+        Рахматуллин Айгиз
         """
         atr = self.current_data.dates[['Дата', atribute]].copy()
         atr['Дата'] = pd.to_datetime(atr['Дата'], format='mixed', dayfirst=True).dt.year
@@ -356,11 +353,11 @@ class GraphGenerator():
         Сохранение графика в указанный путь.
 
         Вход:
-        self (GraphGenerator): Экземпляр класса GraphGenerator.
         fig (matplotlib.figure.Figure): График для сохранения.
         path (str): Путь для сохранения графика.
 
-        Автор: Наумов Виталий
+        Автор: 
+        Наумов Виталий
         """
         print(path)
         fig.savefig(path)
@@ -369,9 +366,7 @@ class GraphGenerator():
         """
         Очистка всех открытых графиков.
 
-        Вход:
-        self (GraphGenerator): Экземпляр класса GraphGenerator.
-
-        Автор: Наумов Виталий
+        Автор: 
+        Наумов Виталий
         """
         plt.close('all')

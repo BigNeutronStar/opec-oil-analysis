@@ -13,7 +13,8 @@ def main(page: ft.Page):
     Выход:
     нет.
 
-    Автор: Наумов Виталий
+    Автор: 
+    Наумов Виталий
     """
     
     def route_change(e):
@@ -26,7 +27,8 @@ def main(page: ft.Page):
         Выход:
         нет.
 
-        Автор: Наумов Виталий
+        Автор: 
+        Наумов Виталий
         """
         if page.route == "/":
             page.views.clear()

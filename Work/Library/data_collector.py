@@ -12,10 +12,8 @@ class Data:
         """
         Инициализация класса Data.
 
-        Вход:
-        self (Data): Экземпляр класса Data.
-
-        Автор: Наумов Виталий
+        Автор: 
+        Наумов Виталий
         """
         self.countries = pd.DataFrame()
         self.dates = pd.DataFrame()
@@ -31,10 +29,8 @@ class Data:
         """
         Установить приоритет для данных.
 
-        Вход:
-        self (Data): Экземпляр класса Data.
-
-        Автор: Наумов Виталий
+        Автор: 
+        Наумов Виталий
         """
         self.is_in_priority = True
 
@@ -42,10 +38,8 @@ class Data:
         """
         Снять приоритет с данных.
 
-        Вход:
-        self (Data): Экземпляр класса Data.
-
-        Автор: Наумов Виталий
+        Автор: 
+        Наумов Виталий
         """
         self.is_in_priority = False
 
@@ -54,10 +48,10 @@ class Data:
         Прочитать данные из файлов.
 
         Вход:
-        self (Data): Экземпляр класса Data.
         databases_paths (dict): Словарь путей к файлам данных.
 
-        Автор: Наумов Виталий
+        Автор: 
+        Наумов Виталий
         """
         for key, path in databases_paths.items():
             self.paths[key] = path
@@ -83,10 +77,8 @@ class Data:
         """
         Установить годы на основе данных.
 
-        Вход:
-        self (Data): Экземпляр класса Data.
-
-        Автор: Наумов Виталий
+        Автор: 
+        Наумов Виталий
         """
         df = self.dates[['Дата']].copy()
         df['Дата'] = pd.to_datetime(df['Дата'], format='mixed', dayfirst=True).dt.year
@@ -96,10 +88,8 @@ class Data:
         """
         Установить список стран на основе данных.
 
-        Вход:
-        self (Data): Экземпляр класса Data.
-
-        Автор: Наумов Виталий
+        Автор: 
+        Наумов Виталий
         """
         self.countries_list = self.countries['Страна']
     
@@ -108,11 +98,11 @@ class Data:
         Сохранить данные в файл Excel.
 
         Вход:
-        self (Data): Экземпляр класса Data.
         name (str): Имя набора данных для сохранения.
         path (str): Путь к файлу для сохранения.
 
-        Автор: Наумов Виталий
+        Автор: 
+        Наумов Виталий
         """
         if path is None:
             return
@@ -131,13 +121,13 @@ class Data:
         Создать таблицу данных из DataFrame.
 
         Вход:
-        self (Data): Экземпляр класса Data.
         df (pd.DataFrame): DataFrame с данными для отображения.
 
         Выход:
         ft.DataTable: Таблица данных для отображения.
 
-        Автор: Наумов Виталий
+        Автор: 
+        Наумов Виталий
         """
         if df.size == 0:
             return ft.Column()
@@ -171,10 +161,8 @@ class Data:
         """
         Уничтожить данные и удалить файлы.
 
-        Вход:
-        self (Data): Экземпляр класса Data.
-
-        Автор: Наумов Виталий
+        Автор: 
+        Наумов Виталий
         """
         self.countries = pd.DataFrame()
         self.dates = pd.DataFrame()
@@ -189,15 +177,18 @@ class Uploader():
     """
     Класс для загрузки данных в указанное место.
 
-    Автор: Наумов Виталий
+    Автор: 
+    Наумов Виталий
     """
     def __init__(self, path):
         """
         Инициализация класса Uploader.
 
         Вход:
-        self (Uploader): Экземпляр класса Uploader.
         path (str): Путь для загрузки данных.
+
+        Автор: 
+        Наумов Виталий
         """
         self.upload_path = path
         
@@ -206,12 +197,14 @@ class Uploader():
         Загрузить данные в указанное место.
 
         Вход:
-        self (Uploader): Экземпляр класса Uploader.
         name (str): Имя загружаемых данных.
         path (str): Путь к файлу для загрузки.
 
         Выход:
         str: Новый путь к загруженному файлу.
+
+        Автор: 
+        Наумов Виталий
         """
         if not os.path.exists(self.upload_path):
             os.makedirs(self.upload_path)

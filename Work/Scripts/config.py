@@ -4,14 +4,14 @@ class Config:
     """
     Класс для загрузки и хранения конфигурационных параметров.
 
-    Автор: Рахматуллин Айгиз
+    Автор: 
+    Рахматуллин Айгиз
     """
     def __init__(self, config):
         """
         Инициализация класса Config.
 
         Вход:
-        self (Config): Экземпляр класса Config.
         config (configparser.ConfigParser): Объект ConfigParser с загруженной конфигурацией.
         """
         self.report_dir = config['directories']['report_dir']
@@ -31,7 +31,8 @@ def Load():
     Выход:
     config (Config): Экземпляр класса Config с загруженной конфигурацией.
 
-    Автор: Рахматуллин Айгиз
+    Автор: 
+    Рахматуллин Айгиз
     """
     config = configparser.ConfigParser()
     config.read('Scripts/config.ini')

@@ -13,10 +13,10 @@ class Home(Page):
         Инициализация класса Home.
 
         Вход:
-        self (Home): Экземпляр класса Home.
         page (ft.Page): Экземпляр текущей страницы.
 
-        Автор: Куров Егор
+        Автор: 
+        Куров Егор
         """
         super().__init__(page)
         self.page = page
@@ -33,13 +33,13 @@ class Home(Page):
         Создает основной контейнер с элементами управления на главной странице.
 
         Вход:
-        self (Home): Экземпляр класса Home.
         page (ft.Page): Экземпляр текущей страницы.
 
         Выход:
         ft.Container: Контейнер с элементами управления.
 
-        Автор: Куров Егор
+        Автор: 
+        Куров Егор
         """
         return ft.Container(
                 content=ft.Column(
@@ -93,10 +93,10 @@ class Loading(Page):
         Инициализация класса Loading.
 
         Вход:
-        self (Loading): Экземпляр класса Loading.
         page (ft.Page): Экземпляр текущей страницы.
 
-        Автор: Рахматуллин Айгиз
+        Автор: 
+        Рахматуллин Айгиз
         """
         super().__init__(page)
         self.page = page
@@ -132,11 +132,11 @@ class Graphics(Page):
         Инициализация класса Graphics.
 
         Вход:
-        self (Graphics): Экземпляр класса Graphics.
         page (ft.Page): Экземпляр текущей страницы.
         generator (object): Объект генератора графиков.
 
-        Автор: Куров Егор
+        Автор: 
+        Куров Егор
         """
         super().__init__(page, scroll=True)
         self.page = page
@@ -160,13 +160,8 @@ class Graphics(Page):
         """
         Обновляет содержимое основной части страницы.
 
-        Вход:
-        self (Graphics): Экземпляр класса Graphics.
-
-        Выход:
-        None
-
-        Автор: Куров Егор
+        Автор: 
+        Куров Егор
         """
         self.controls[-1] = ft.Container(
             content=ft.Row(
@@ -219,13 +214,11 @@ class Graphics(Page):
         """
         Создает и возвращает навигационную панель.
 
-        Вход:
-        self (Graphics): Экземпляр класса Graphics.
-
         Выход:
         ft.Row: Навигационная панель.
 
-        Автор: Куров Егор
+        Автор: 
+        Куров Егор
         """
         return ft.Row(
             [
@@ -310,15 +303,12 @@ class Graphics(Page):
         Открывает окно настройки графика.
 
         Вход:
-        self (Graphics): Экземпляр класса Graphics.
         plot_func (function): Функция построения графика.
         atr (str, optional): Атрибут для построения графика.
         countries_disabled (bool, optional): Флаг отключения выбора стран.
 
-        Выход:
-        None
-
-        Автор: Куров Егор
+        Автор: 
+        Мирумян Артем
         """
         years = self.graphGenerator.current_data.years
         min_year, max_year = min(years), max(years)
@@ -385,13 +375,10 @@ class Graphics(Page):
         Отображает график на странице и добавляет кнопку для сохранения графика.
 
         Вход:
-        self (Graphics): Экземпляр класса Graphics.
         fig (matplotlib.figure.Figure): Объект фигуры графика.
 
-        Выход:
-        None
-
-        Автор: Куров Егор
+        Автор: 
+        Мирумян Артем
         """
         file_picker = ft.FilePicker(on_result=lambda e: self.graphGenerator.save_graph(fig, e.path))
         self.page.overlay.append(file_picker)
@@ -414,13 +401,13 @@ class DataTables(Page):
         Инициализация класса DataTables.
 
         Вход:
-        self (DataTables): Экземпляр класса DataTables.
         page (ft.Page): Экземпляр текущей страницы.
         data (object): Объект данных.
         personal_data (object): Объект пользовательских данных.
         uploader (object): Объект загрузчика данных.
 
-        Автор: Куров Егор
+        Автор: 
+        Куров Егор
         """
         super().__init__(page)
         self.page = page
@@ -464,13 +451,10 @@ class DataTables(Page):
         Переключает использование данных между основными и пользовательскими.
 
         Вход:
-        self (DataTables): Экземпляр класса DataTables.
         e (Event): Событие переключения.
 
-        Выход:
-        None
-
-        Автор: Куров Егор
+        Автор: 
+        Наумов Виталий
         """
         if self.data.is_in_priority:
             self.data.remove_priority()
@@ -483,13 +467,8 @@ class DataTables(Page):
         """
         Обновляет таблицу с пользовательскими данными.
 
-        Вход:
-        self (DataTables): Экземпляр класса DataTables.
-
-        Выход:
-        None
-
-        Автор: Куров Егор
+        Автор: 
+        Наумов Виталий
         """
         self.controls[-2].controls = [
             self.get_table('ДАТА', 420, 500, self.personal_data.generate_datatable(self.personal_data.dates), self.get_upload_button('dates')),
@@ -507,13 +486,13 @@ class DataTables(Page):
         Создает кнопку для сохранения данных.
 
         Вход:
-        self (DataTables): Экземпляр класса DataTables.
         name (str): Имя данных для сохранения.
 
         Выход:
         ft.ElevatedButton: Кнопка сохранения данных.
 
-        Автор: Куров Егор
+        Автор: 
+        Наумов Виталий
         """
         return ft.ElevatedButton('Экспортировать данные', data=name, on_click=self.save_data)
     
@@ -522,13 +501,13 @@ class DataTables(Page):
         Создает кнопку для загрузки данных.
 
         Вход:
-        self (DataTables): Экземпляр класса DataTables.
         name (str): Имя данных для загрузки.
 
         Выход:
         ft.ElevatedButton: Кнопка загрузки данных.
 
-        Автор: Куров Егор
+        Автор: 
+        Наумов Виталий
         """
         return ft.ElevatedButton('Загрузить данные', data=name, on_click=self.upload_data)
     
@@ -537,7 +516,6 @@ class DataTables(Page):
         Создает таблицу данных.
 
         Вход:
-        self (DataTables): Экземпляр класса DataTables.
         name (str): Имя таблицы.
         width (int): Ширина таблицы.
         height (int): Высота таблицы.
@@ -547,7 +525,8 @@ class DataTables(Page):
         Выход:
         ft.Column: Колонка с таблицей и кнопкой.
 
-        Автор: Куров Егор
+        Автор: 
+        Наумов Виталий
         """
         return ft.Column(
             [
@@ -578,13 +557,11 @@ class DataTables(Page):
         """
         Создает навигационную панель.
 
-        Вход:
-        self (DataTables): Экземпляр класса DataTables.
-
         Выход:
         ft.Row: Навигационная панель.
 
-        Автор: Куров Егор
+        Автор: 
+        Куров Егор
         """
         return ft.Row(
             [
@@ -619,13 +596,13 @@ class DataTables(Page):
         Обрабатывает результат сохранения файла.
 
         Вход:
-        self (DataTables): Экземпляр класса DataTables.
         e (Event): Событие сохранения файла.
 
         Выход:
         None
 
-        Автор: Мирумян Артем
+        Автор: 
+        Мирумян Артем
         """
         if self.file_name:
             self.data.save_data(self.file_name, e.path)
@@ -636,13 +613,10 @@ class DataTables(Page):
         Обрабатывает результат загрузки файла.
 
         Вход:
-        self (DataTables): Экземпляр класса DataTables.
         e (Event): Событие загрузки файла.
 
-        Выход:
-        None
-
-        Автор: Мирумян Артем
+        Автор: 
+        Мирумян Артем
         """
         if self.file_name:
             personal_path = self.uploader.upload_data(self.file_name, e.files[0].path)
@@ -655,13 +629,10 @@ class DataTables(Page):
         Запускает процесс сохранения данных.
 
         Вход:
-        self (DataTables): Экземпляр класса DataTables.
         e (Event): Событие нажатия на кнопку сохранения.
 
-        Выход:
-        None
-
-        Автор: Мирумян Артем
+        Автор: 
+        Мирумян Артем
         """
         self.file_name = e.control.data
         self.file_saver.save_file(allowed_extensions=['xlsx'])
@@ -671,13 +642,10 @@ class DataTables(Page):
         Запускает процесс загрузки данных.
 
         Вход:
-        self (DataTables): Экземпляр класса DataTables.
         e (Event): Событие нажатия на кнопку загрузки.
 
-        Выход:
-        None
-
-        Автор: Мирумян Артем
+        Автор: 
+        Мирумян Артем
         """
         self.file_name = e.control.data
         self.file_uploader.pick_files(allow_multiple=False)
@@ -688,13 +656,10 @@ class DataTables(Page):
         Очищает пользовательские данные.
 
         Вход:
-        self (DataTables): Экземпляр класса DataTables.
         e (Event): Событие нажатия на кнопку очистки данных.
 
-        Выход:
-        None
-
-        Автор: Мирумян Артем
+        Автор: 
+        Мирумян Артем
         """
         self.personal_data.destroy()
         self.update_personal_table()
@@ -703,13 +668,8 @@ class DataTables(Page):
         """
         Открывает страницу с основными данными.
 
-        Вход:
-        self (DataTables): Экземпляр класса DataTables.
-
-        Выход:
-        None
-
-        Автор: Мирумян Артем
+        Автор: 
+        Мирумян Артем
         """
         self.controls[-1].visible = False
         self.controls[-2].visible = False
@@ -720,13 +680,8 @@ class DataTables(Page):
         """
         Открывает страницу с пользовательскими данными.
 
-        Вход:
-        self (DataTables): Экземпляр класса DataTables.
-
-        Выход:
-        None
-
-        Автор: Мирумян Артем
+        Автор:
+        Мирумян Артем
         """
         self.controls[-3].visible = False
         self.controls[-2].visible = True
@@ -742,11 +697,11 @@ class Reports(Page):
         Инициализация класса Reports.
 
         Вход:
-        self (Reports): Экземпляр класса Reports.
         page (ft.Page): Экземпляр текущей страницы.
         generator (object): Объект генератора отчетов.
 
-        Автор: Мирумян Артем
+        Автор: 
+        Мирумян Артем
         """
         super().__init__(page)
         self.page = page
@@ -805,13 +760,11 @@ class Reports(Page):
         """
         Создает выпадающий список стран.
 
-        Вход:
-        self (Reports): Экземпляр класса Reports.
-
         Выход:
         ft.Dropdown: Выпадающий список стран.
 
-        Автор: Мирумян Артем
+        Автор: 
+        Мирумян Артем
         """
         countries = self.reportGenerator.current_data.countries_list
         return ft.Dropdown(
@@ -823,13 +776,10 @@ class Reports(Page):
         Обрабатывает результат выбора файла.
 
         Вход:
-        self (Reports): Экземпляр класса Reports.
         e (Event): Событие выбора файла.
 
-        Выход:
-        None
-
-        Автор: Мирумян Артем
+        Автор: 
+        Мирумян Артем
         """
         save_dir = e.path
         if e.path is not None:
@@ -840,13 +790,10 @@ class Reports(Page):
         Создает отчеты для выбранной страны.
 
         Вход:
-        self (Reports): Экземпляр класса Reports.
         e (Event): Событие нажатия на кнопку создания отчетов.
 
-        Выход:
-        None
-
-        Автор: Мирумян Артем
+        Автор: 
+        Мирумян Артем
         """
         self.save_button.disabled = False
         self.page.update()
@@ -862,13 +809,8 @@ class Reports(Page):
         """
         Показывает диалоговое окно ошибки.
 
-        Вход:
-        self (Reports): Экземпляр класса Reports.
-
-        Выход:
-        None
-
-        Автор: Мирумян Артем
+        Автор: 
+        Мирумян Артем
         """
         def close_error_dialog(e):
             error_dialog.open = False
@@ -890,14 +832,11 @@ class Reports(Page):
         Открывает диалоговое окно с отчетами.
 
         Вход:
-        self (Reports): Экземпляр класса Reports.
         page (ft.Page): Экземпляр текущей страницы.
         reports (list): Список отчетов.
 
-        Выход:
-        None
-
-        Автор: Мирумян Артем
+        Автор: 
+        Мирумян Артем
         """
         report_contents = []
         for report in reports:
@@ -938,10 +877,10 @@ class Info(Page):
         Инициализация класса Info.
 
         Вход:
-        self (Info): Экземпляр класса Info.
         page (ft.Page): Экземпляр текущей страницы.
 
-        Автор: Рахматуллин Айгиз
+        Автор: 
+        Рахматуллин Айгиз
         """
         super().__init__(page)
         self.page = page
