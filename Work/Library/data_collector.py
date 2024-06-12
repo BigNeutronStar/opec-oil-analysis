@@ -1,13 +1,30 @@
+"""
+Модуль для работы с данными, включает классы Data, DataFiles и Uploader для чтения, 
+сохранения, генерации таблицы и загрузки данных.
+
+Классы:
+    Data: Класс для работы с данными, включает методы чтения, сохранения, 
+          генерации таблицы и удаления данных.
+    DataFiles: Класс для управления файлами данных.
+    Uploader: Класс для загрузки данных в указанное место.
+
+Автор:
+    Наумов Виталий
+"""
+import shutil
+import os
 from openpyxl import Workbook
 import flet as ft
 import numpy as np
-import shutil, os
 import pandas as pd
+
 
 class Data:
     """
-    Класс для работы с данными, включает методы чтения, сохранения, генерации таблицы и удаления данных.
+    Класс для работы с данными, включает методы чтения, сохранения, генерации
+    таблицы и удаления данных.
     """
+
     def __init__(self):
         """
         Инициализация класса Data.
@@ -24,7 +41,7 @@ class Data:
         self.is_in_priority = False
 
         self.paths = {}
-    
+
     def set_priority(self):
         """
         Установить приоритет для данных.
@@ -59,17 +76,19 @@ class Data:
         if any(not os.path.exists(path) for path in databases_paths.values()):
             self.destroy()
             return
-        
+
         if 'countries' in databases_paths:
             self.countries = pd.read_excel(databases_paths['countries'])
             self.set_countries()
         if 'dates' in databases_paths:
             self.dates = pd.read_excel(databases_paths['dates'])
-            self.dates['Дата'] = pd.to_datetime(self.dates['Дата'], format='%d.%m.%Y')
+            self.dates['Дата'] = pd.to_datetime(
+                self.dates['Дата'], format='%d.%m.%Y')
             self.dates['Дата'] = self.dates['Дата'].dt.strftime('%d.%m.%Y')
             self.set_years()
         if 'daily_production' in databases_paths:
-            self.daily_production = pd.read_excel(databases_paths['daily_production'])
+            self.daily_production = pd.read_excel(
+                databases_paths['daily_production'])
 
         self.is_empty = self.countries.empty or self.dates.empty or self.daily_production.empty
 
@@ -81,7 +100,8 @@ class Data:
         Наумов Виталий
         """
         df = self.dates[['Дата']].copy()
-        df['Дата'] = pd.to_datetime(df['Дата'], format='mixed', dayfirst=True).dt.year
+        df['Дата'] = pd.to_datetime(
+            df['Дата'], format='mixed', dayfirst=True).dt.year
         self.years = df['Дата'].unique()
 
     def set_countries(self):
@@ -92,7 +112,7 @@ class Data:
         Наумов Виталий
         """
         self.countries_list = self.countries['Страна']
-    
+
     def save_data(self, name, path):
         """
         Сохранить данные в файл Excel.
@@ -115,7 +135,7 @@ class Data:
             'daily_production': self.daily_production,
         }
         data_dict[name].to_excel(path, index=False)
-    
+
     def generate_datatable(self, df):
         """
         Создать таблицу данных из DataFrame.
@@ -131,7 +151,7 @@ class Data:
         """
         if df.size == 0:
             return ft.Column()
-        
+
         if df.shape[0] > 12:
             df = df.iloc[0:100]
 
@@ -146,7 +166,8 @@ class Data:
 
         if df.shape[0] > 12:
             last_row = ft.DataRow(
-                cells=[ft.DataCell(ft.Text("...")) if i == 0 else ft.DataCell(ft.Text("")) for i in range(len(headers))]
+                cells=[ft.DataCell(ft.Text("...")) if i == 0 else ft.DataCell(
+                    ft.Text("")) for i in range(len(headers))]
             )
 
             rows = np.append(rows, [last_row])
@@ -167,12 +188,12 @@ class Data:
         self.countries = pd.DataFrame()
         self.dates = pd.DataFrame()
         self.daily_production = pd.DataFrame()
-        dir = os.path.dirname(list(self.paths.values())[0])
-        print(dir)
-        shutil.rmtree(dir, ignore_errors=True)
+        directory = os.path.dirname(list(self.paths.values())[0])
+        print(directory)
+        shutil.rmtree(directory, ignore_errors=True)
         self.is_empty = True
 
-    
+
 class Uploader():
     """
     Класс для загрузки данных в указанное место.
@@ -180,6 +201,7 @@ class Uploader():
     Автор: 
     Наумов Виталий
     """
+
     def __init__(self, path):
         """
         Инициализация класса Uploader.
@@ -191,7 +213,7 @@ class Uploader():
         Наумов Виталий
         """
         self.upload_path = path
-        
+
     def upload_data(self, name, path):
         """
         Загрузить данные в указанное место.

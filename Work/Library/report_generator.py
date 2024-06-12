@@ -1,11 +1,28 @@
+"""
+Модуль для генерации различных отчетов на основе данных.
+
+Авторы: 
+Рахматуллин Айгиз
+Мирумян Артем
+
+Классы:
+- ReportGenerator: Класс для генерации различных отчетов на основе данных.
+
+Модуль содержит класс ReportGenerator, который предоставляет функциональность для генерации различных отчетов на основе предоставленных данных. Класс позволяет генерировать отчеты о средних, минимальных и максимальных значениях по годам, создавать сводные таблицы по суммарной добыче для различных стран, а также сохранять отчеты в указанные директории.
+
+Для использования модуля необходимо создать экземпляр класса ReportGenerator, передав основные данные, персональные данные и путь для сохранения отчетов. Затем можно использовать методы класса для генерации отчетов и сохранения их в указанные директории.
+
+"""
 import os
 import pandas as pd
 from datetime import datetime
+
 
 class ReportGenerator():
     """
     Класс для генерации различных отчетов на основе данных.
     """
+
     def __init__(self, data, personal_data, path):
         """
         Инициализация класса ReportGenerator.
@@ -24,7 +41,7 @@ class ReportGenerator():
         self.path = path
         self.current_data = self.data
         self.check_dir()
-    
+
     def check_dir(self):
         """
         Проверка существования директории и создание её при необходимости.
@@ -34,7 +51,7 @@ class ReportGenerator():
         """
         if not os.path.exists(self.path):
             os.makedirs(self.path)
-    
+
     def setup_data(self):
         """
         Настройка текущих данных на основе приоритета.
@@ -59,7 +76,7 @@ class ReportGenerator():
         """
         if not os.path.exists(save_dir):
             os.makedirs(save_dir)
-            
+
         for filename in os.listdir(self.path):
             if filename.endswith(".txt"):
                 report_path = os.path.join(self.path, filename)
@@ -67,7 +84,7 @@ class ReportGenerator():
                     content = file.read()
                     with open(os.path.join(save_dir, filename), 'w') as save_file:
                         save_file.write(content)
-    
+
     def run_generator(self, country_name):
         """
         Запуск генерации всех отчетов и возврат их путей.
@@ -103,18 +120,21 @@ class ReportGenerator():
         df = self.current_data.dates.copy()
         df['Дата'] = pd.to_datetime(df['Дата'], format='%d.%m.%Y').dt.year
 
-        pivot_table = pd.pivot_table(df, index=['Дата'], values=['Цена', 'Курс'], aggfunc='mean')
+        pivot_table = pd.pivot_table(df, index=['Дата'], values=[
+                                     'Цена', 'Курс'], aggfunc='mean')
         report_path = os.path.join(self.path, 'annual_average_report.txt')
 
         with open(report_path, 'w') as f:
-            header = f"{'Год':<5} | {'Цена за баррель (средняя)':<30} | {'Курс доллара (средний)':<20}\n"
+            header = f"{'Год':<5} | {'Цена за баррель (средняя)':<30} | {
+                'Курс доллара (средний)':<20}\n"
             f.write(header)
             f.write('-' * len(header) + '\n')
 
             for year, row in pivot_table.iterrows():
                 avg_price = f"{row['Цена']:.2f}"
                 avg_exchange_rate = f"{row['Курс']:.2f}"
-                line = f"{year:<5} | {avg_price:<30} | {avg_exchange_rate:<20}\n"
+                line = f"{year:<5} | {avg_price:<30} | {
+                    avg_exchange_rate:<20}\n"
                 f.write(line)
 
             f.write('-' * len(header) + '\n')
@@ -133,14 +153,16 @@ class ReportGenerator():
         df = self.current_data.dates.copy()
         df['Дата'] = pd.to_datetime(df['Дата'], format='%d.%m.%Y').dt.year
 
-        pivot_table = pd.pivot_table(df, index=['Дата'], values=['Цена', 'Курс'], aggfunc={'Цена': ['min', 'max', 'mean'], 'Курс': ['min', 'max','mean']})
+        pivot_table = pd.pivot_table(df, index=['Дата'], values=['Цена', 'Курс'], aggfunc={
+                                     'Цена': ['min', 'max', 'mean'], 'Курс': ['min', 'max', 'mean']})
         pivot_table.columns = ['Максимальный курс доллара', 'Средний курс доллара', 'Минимальный курс доллара', 'Максимальная цена за баррель',
-                           'Средняя цена за баррель','Минимальная цена за баррель']
+                               'Средняя цена за баррель', 'Минимальная цена за баррель']
 
         report_path = os.path.join(self.path, 'annual_minmax_report.txt')
 
         with open(report_path, 'w') as f:
-            header = f"{'Год':<5} | {'Мин. цена за баррель':<20} | {'Макс. цена за баррель':<20} | {'Ср. цена за баррель':<20} | {'Мин. курс доллара':<20} | {'Макс. курс доллара':<20}| {'Ср. курс доллара':<20}\n"
+            header = f"{'Год':<5} | {'Мин. цена за баррель':<20} | {'Макс. цена за баррель':<20} | {
+                'Ср. цена за баррель':<20} | {'Мин. курс доллара':<20} | {'Макс. курс доллара':<20}| {'Ср. курс доллара':<20}\n"
             f.write(header)
             f.write('-' * len(header) + '\n')
 
@@ -151,7 +173,8 @@ class ReportGenerator():
                 min_rate = f"{row['Минимальный курс доллара']:.2f}"
                 max_rate = f"{row['Максимальный курс доллара']:.2f}"
                 sr_rate = f"{row['Средний курс доллара']:.2f}"
-                line = f"{year:<5} | {min_price:<20} | {max_price:<20} | {sr_price:<20} | {min_rate:<20} | {max_rate:<20} | {sr_rate:<20}\n"
+                line = f"{year:<5} | {min_price:<20} | {max_price:<20} | {
+                    sr_price:<20} | {min_rate:<20} | {max_rate:<20} | {sr_rate:<20}\n"
                 f.write(line)
 
             f.write('-' * len(header) + '\n')
@@ -168,8 +191,10 @@ class ReportGenerator():
         Автор: 
         Рахматуллин Айгиз
         """
-        df = pd.merge(self.current_data.daily_production, self.current_data.countries, on='country_id')[['Добыча', 'Страна']]
-        pivot_table = pd.pivot_table(df, index=['Страна'], values=['Добыча'], aggfunc='sum')
+        df = pd.merge(self.current_data.daily_production,
+                      self.current_data.countries, on='country_id')[['Добыча', 'Страна']]
+        pivot_table = pd.pivot_table(df, index=['Страна'], values=[
+                                     'Добыча'], aggfunc='sum')
         report_path = os.path.join(self.path, 'total_production.txt')
         with open(report_path, 'w') as f:
             header = f"{'Страна':<20} | {'Суммарная добыча':<10}"
@@ -196,13 +221,17 @@ class ReportGenerator():
         Автор: 
         Рахматуллин Айгиз
         """
-        df = pd.merge(self.current_data.daily_production, self.current_data.dates, on='date_id')[['Дата', 'Добыча', 'country_id']]
-        df = pd.merge(df, self.current_data.countries, on='country_id')[['Дата', 'Добыча', 'Страна']]
+        df = pd.merge(self.current_data.daily_production, self.current_data.dates, on='date_id')[
+            ['Дата', 'Добыча', 'country_id']]
+        df = pd.merge(df, self.current_data.countries, on='country_id')[
+            ['Дата', 'Добыча', 'Страна']]
 
         df['Дата'] = pd.to_datetime(df['Дата'], format='%d.%m.%Y').dt.year
 
-        pivot_table = pd.pivot_table(df[df['Страна'] == country_name], index=['Дата'], values=['Добыча'], aggfunc='sum')
-        report_path = os.path.join(self.path, f'total_production_{country_name}.txt')
+        pivot_table = pd.pivot_table(df[df['Страна'] == country_name], index=[
+                                     'Дата'], values=['Добыча'], aggfunc='sum')
+        report_path = os.path.join(
+            self.path, f'total_production_{country_name}.txt')
 
         with open(report_path, 'w') as f:
             header = f"{'Год':<5} | {'Суммарная добыча':<10}\n"

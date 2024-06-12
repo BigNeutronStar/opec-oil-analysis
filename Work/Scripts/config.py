@@ -1,4 +1,7 @@
+"""Модуль для загрузки и хранения конфигурационных параметров из файла
+config.ini и работы с ними."""
 import configparser
+
 
 class Config:
     """
@@ -7,6 +10,7 @@ class Config:
     Автор: 
     Рахматуллин Айгиз
     """
+
     def __init__(self, config):
         """
         Инициализация класса Config.
@@ -17,12 +21,13 @@ class Config:
         self.report_dir = config['directories']['report_dir']
         self.personal_dir = config['directories']['personal_dir']
 
-        self.databases = config['databases'] 
+        self.databases = config['databases']
         self.personal_databases = config['personal_databases']
         self.graphics = config['graphics']
         self.loading_gif = config['loading_gif']['custom_loading']
 
-def Load():
+
+def load():
     """
     Функция для загрузки конфигурации из файла.
 

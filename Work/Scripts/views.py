@@ -1,13 +1,27 @@
+"""
+Модуль представляет собой набор классов, реализующих графический интерфейс
+страниц приложения. Каждый класс страницы предоставляет функционал для 
+визуализации данных, взаимодействия с пользователем и обработки событий.
+
+Классы:
+Home, Loading, Graphics, DataTables, Reports, Info
+
+Авторы:
+Куров Егор, Рахматуллин Айгиз, Мирумян Артем, Наумов Виталий
+"""
+
 import flet as ft
 
 from flet.matplotlib_chart import MatplotlibChart
 
 from Library.components import Page, TitleBar
 
+
 class Home(Page):
     """
     Класс Home представляет главную страницу приложения.
     """
+
     def __init__(self, page: ft.Page):
         """
         Инициализация класса Home.
@@ -27,7 +41,7 @@ class Home(Page):
             TitleBar(page),
             self.initialize_body(page)
         ]
-    
+
     def initialize_body(self, page):
         """
         Создает основной контейнер с элементами управления на главной странице.
@@ -42,52 +56,66 @@ class Home(Page):
         Куров Егор
         """
         return ft.Container(
-                content=ft.Column(
-                    [
-                        ft.Row(
-                            [
-                                ft.Text("Навигация", size=30), 
-                                ft.Icon(name=ft.icons.HOME, size=30),
-                            ], 
-                            alignment=ft.MainAxisAlignment.CENTER,
-                        ),
-                        ft.Row(
-                            [
-                                ft.ElevatedButton("Графики", icon=ft.icons.STACKED_LINE_CHART, on_click=lambda _: page.go("/graphics"), width=250, height=75)
-                            ],
-                            alignment=ft.MainAxisAlignment.CENTER,
-                        ),
-                        ft.Row(
-                            [
-                                ft.ElevatedButton("Просмотр данных", icon=ft.icons.FILE_UPLOAD, on_click=lambda _: page.go("/datatables"), width=250, height=75)
-                            ],
-                            alignment=ft.MainAxisAlignment.CENTER
-                        ),
-                        ft.Row(
-                            [
-                                ft.ElevatedButton("Просмотр отчетов", icon=ft.icons.MENU_BOOK_ROUNDED, on_click=lambda _: page.go("/reports"), width=250, height=75)
-                            ],
-                            alignment=ft.MainAxisAlignment.CENTER
-                        ),
-                        ft.Row(
-                            [
-                                ft.ElevatedButton("О проекте", icon=ft.icons.MENU_BOOK_ROUNDED, on_click=lambda _: page.go("/info"), width=250, height=75)
-                            ],
-                            alignment=ft.MainAxisAlignment.CENTER
-                        ),
-                    ],
-                    alignment=ft.MainAxisAlignment.CENTER,
-                    horizontal_alignment=ft.CrossAxisAlignment.CENTER,
-                    expand=True,
-                ),
-                alignment=ft.alignment.center,
-                expand=True
-            )
+            content=ft.Column(
+                [
+                    ft.Row(
+                        [
+                            ft.Text("Навигация", size=30),
+                            ft.Icon(name=ft.icons.HOME, size=30),
+                        ],
+                        alignment=ft.MainAxisAlignment.CENTER,
+                    ),
+                    ft.Row(
+                        [
+                            ft.ElevatedButton("Графики",
+                                              icon=ft.icons.STACKED_LINE_CHART,
+                                              on_click=lambda _: page.go(
+                                                  "/graphics"), width=250, height=75)
+                        ],
+                        alignment=ft.MainAxisAlignment.CENTER,
+                    ),
+                    ft.Row(
+                        [
+                            ft.ElevatedButton("Просмотр данных",
+                                              icon=ft.icons.FILE_UPLOAD,
+                                              on_click=lambda _: page.go(
+                                                  "/datatables"), width=250, height=75)
+                        ],
+                        alignment=ft.MainAxisAlignment.CENTER
+                    ),
+                    ft.Row(
+                        [
+                            ft.ElevatedButton("Просмотр отчетов",
+                                              icon=ft.icons.MENU_BOOK_ROUNDED,
+                                              on_click=lambda _: page.go(
+                                                  "/reports"), width=250, height=75)
+                        ],
+                        alignment=ft.MainAxisAlignment.CENTER
+                    ),
+                    ft.Row(
+                        [
+                            ft.ElevatedButton("О проекте",
+                                              icon=ft.icons.MENU_BOOK_ROUNDED,
+                                              on_click=lambda _: page.go(
+                                                  "/info"), width=250, height=75)
+                        ],
+                        alignment=ft.MainAxisAlignment.CENTER
+                    ),
+                ],
+                alignment=ft.MainAxisAlignment.CENTER,
+                horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+                expand=True,
+            ),
+            alignment=ft.alignment.center,
+            expand=True
+        )
+
 
 class Loading(Page):
     """
     Класс Loading представляет страницу загрузки данных.
     """
+
     def __init__(self, page: ft.Page, loading_gif):
         """
         Инициализация класса Loading.
@@ -134,6 +162,7 @@ class Graphics(Page):
     """
     Класс Graphics представляет страницу с графиками.
     """
+
     def __init__(self, page: ft.Page, generator):
         """
         Инициализация класса Graphics.
@@ -147,9 +176,9 @@ class Graphics(Page):
         """
         super().__init__(page, scroll=True)
         self.page = page
-        self.graphGenerator = generator
-        
-        self.graphGenerator.setup_data()
+        self.graph_generator = generator
+
+        self.graph_generator.setup_data()
 
         self.dashboard_slider = ft.Container()
         self.dashboard_boxes = ft.Container()
@@ -172,12 +201,12 @@ class Graphics(Page):
         """
         self.controls[-1] = ft.Container(
             content=ft.Row(
-                [   
+                [
                     ft.Column(
                         [
                             ft.Container(
                                 content=ft.Column(
-                                    [ 
+                                    [
                                         self.dashboard_slider,
                                         self.dashboard_boxes,
                                         self.dashboard_button
@@ -203,7 +232,7 @@ class Graphics(Page):
                     ),
 
                     ft.Column(
-                        [   
+                        [
                             self.save_button
                         ],
                         alignment=ft.MainAxisAlignment.CENTER,
@@ -216,7 +245,7 @@ class Graphics(Page):
             width=self.page.window_max_width,
         )
         self.page.update()
-        
+
     def get_navbar(self):
         """
         Создает и возвращает навигационную панель.
@@ -239,63 +268,76 @@ class Graphics(Page):
                             content=ft.Text("Назад"),
                             on_click=lambda _: self.page.go('/home'),
                         ),
-                        
+
                         ft.SubmenuButton(
                             content=ft.Text("Графики изменения"),
                             controls=[
                                 ft.MenuItemButton(
                                     content=ft.Text("Курс рубля"),
-                                    on_click=lambda _: self.open_configure_window(self.graphGenerator.plot_graph, 'Курс', countries_disabled=True)
+                                    on_click=lambda _: self.open_configure_window(
+                                        self.graph_generator.plot_graph,
+                                        'Курс', countries_disabled=True)
                                 ),
-                    
+
                                 ft.MenuItemButton(
                                     content=ft.Text("Цена на нефть"),
-                                    on_click=lambda _: self.open_configure_window(self.graphGenerator.plot_graph, 'Цена', countries_disabled=True)
+                                    on_click=lambda _: self.open_configure_window(
+                                        self.graph_generator.plot_graph,
+                                        'Цена', countries_disabled=True)
                                 ),
                             ]
                         ),
-                        
+
                         ft.SubmenuButton(
                             content=ft.Text("Box & Whiskers"),
                             controls=[
                                 ft.MenuItemButton(
                                     content=ft.Text("Курс рубля"),
-                                    on_click=lambda _: self.open_configure_window(self.graphGenerator.plot_boxwhiskers, 'Курс', countries_disabled=True)
+                                    on_click=lambda _: self.open_configure_window(
+                                        self.graph_generator.plot_boxwhiskers,
+                                        'Курс', countries_disabled=True)
                                 ),
-                    
+
                                 ft.MenuItemButton(
                                     content=ft.Text("Цена на нефть"),
-                                    on_click=lambda _: self.open_configure_window(self.graphGenerator.plot_boxwhiskers, 'Цена', countries_disabled=True)
+                                    on_click=lambda _: self.open_configure_window(
+                                        self.graph_generator.plot_boxwhiskers,
+                                        'Цена', countries_disabled=True)
                                 ),
-                        
+
                                 ft.MenuItemButton(
                                     content=ft.Text("Добыча нефти"),
-                                    on_click=lambda _: self.open_configure_window(self.graphGenerator.plot_boxwhiskers, 'Добыча')
+                                    on_click=lambda _: self.open_configure_window(
+                                        self.graph_generator.plot_boxwhiskers, 'Добыча')
                                 ),
                             ]
                         ),
-                        
+
                         ft.MenuItemButton(
                             content=ft.Text("Гистограмма"),
-                            on_click=lambda _: self.open_configure_window(self.graphGenerator.hist)
+                            on_click=lambda _: self.open_configure_window(
+                                self.graph_generator.hist)
                         ),
-                        
+
                         ft.MenuItemButton(
                             content=ft.Text("Диаграмма"),
-                            on_click=lambda _: self.open_configure_window(self.graphGenerator.diag)
+                            on_click=lambda _: self.open_configure_window(
+                                self.graph_generator.diag)
                         ),
-                        
+
                         ft.SubmenuButton(
                             content=ft.Text("Рассеивание"),
                             controls=[
                                 ft.MenuItemButton(
                                     content=ft.Text("По цене"),
-                                    on_click=lambda _: self.open_configure_window(self.graphGenerator.plot_scatter, 'Цена')
+                                    on_click=lambda _: self.open_configure_window(
+                                        self.graph_generator.plot_scatter, 'Цена')
                                 ),
-                    
+
                                 ft.MenuItemButton(
                                     content=ft.Text("По курсу"),
-                                    on_click=lambda _: self.open_configure_window(self.graphGenerator.plot_scatter, 'Курс')
+                                    on_click=lambda _: self.open_configure_window(
+                                        self.graph_generator.plot_scatter, 'Курс')
                                 ),
                             ]
                         )
@@ -304,7 +346,7 @@ class Graphics(Page):
             ],
             alignment=ft.MainAxisAlignment.CENTER,
         )
-    
+
     def open_configure_window(self, plot_func, atr='', countries_disabled=False):
         """
         Открывает окно настройки графика.
@@ -317,9 +359,9 @@ class Graphics(Page):
         Автор: 
         Мирумян Артем
         """
-        years = self.graphGenerator.current_data.years
+        years = self.graph_generator.current_data.years
         min_year, max_year = min(years), max(years)
-        
+
         start, end = min_year, max_year
 
         def change_period(e):
@@ -329,9 +371,10 @@ class Graphics(Page):
             end = e.control.end_value
             end = round(float(end))
 
-        def build_new(e):
-            self.graphGenerator.clear()
-            true_countries = [el.label for el in countries_checkboxes if el.value]
+        def build_new():
+            self.graph_generator.clear()
+            true_countries = [
+                el.label for el in countries_checkboxes if el.value]
             if not countries_disabled:
                 if atr == '':
                     fig = plot_func(start, end, true_countries)
@@ -342,9 +385,10 @@ class Graphics(Page):
             self.put_graph(fig)
 
         countries_checkboxes = []
-        countries = self.graphGenerator.current_data.countries_list
+        countries = self.graph_generator.current_data.countries_list
         for c in countries:
-            countries_checkboxes.append(ft.Checkbox(label=c, disabled=countries_disabled, value=True))
+            countries_checkboxes.append(ft.Checkbox(
+                label=c, disabled=countries_disabled, value=True))
 
         self.dashboard_slider = ft.Column(
             [
@@ -365,18 +409,19 @@ class Graphics(Page):
         )
 
         self.dashboard_boxes = ft.Column(
-            [ft.Text("Страны",  weight=ft.FontWeight.BOLD)] + countries_checkboxes
+            [ft.Text("Страны",  weight=ft.FontWeight.BOLD)] +
+            countries_checkboxes
         )
 
         self.dashboard_button = ft.ElevatedButton(
             "Построить",
-            on_click=build_new,
+            on_click=lambda _: build_new(),
             disabled=True
         )
-        
+
         self.save_button = ft.ElevatedButton("Сохранить график", disabled=True)
-        build_new(None)
-    
+        build_new()
+
     def put_graph(self, fig):
         """
         Отображает график на странице и добавляет кнопку для сохранения графика.
@@ -387,22 +432,26 @@ class Graphics(Page):
         Автор: 
         Мирумян Артем
         """
-        file_picker = ft.FilePicker(on_result=lambda e: self.graphGenerator.save_graph(fig, e.path))
+        file_picker = ft.FilePicker(
+            on_result=lambda e: self.graph_generator.save_graph(fig, e.path))
         self.page.overlay.append(file_picker)
 
         self.graph = ft.ProgressRing()
         self.update_body()
 
         self.graph = MatplotlibChart(fig)
-        self.save_button.on_click = lambda _: file_picker.save_file(allowed_extensions=['png'])
-        self.save_button.disabled=False
-        self.dashboard_button.disabled=False
+        self.save_button.on_click = lambda _: file_picker.save_file(
+            allowed_extensions=['png'])
+        self.save_button.disabled = False
+        self.dashboard_button.disabled = False
         self.update_body()
+
 
 class DataTables(Page):
     """
     Класс DataTables представляет страницу с таблицами данных.
     """
+
     def __init__(self, page: ft.Page, data, personal_data, uploader):
         """
         Инициализация класса DataTables.
@@ -433,9 +482,12 @@ class DataTables(Page):
             self.get_navbar(),
             ft.Row(
                 [
-                    self.get_table('ДАТА', 420, 500, self.data.generate_datatable(self.data.dates), self.get_save_button('dates')),
-                    self.get_table('СТРАНЫ', 250, 500, self.data.generate_datatable(self.data.countries), self.get_save_button('countries')),
-                    self.get_table('ДОБЫЧА', 350, 500, self.data.generate_datatable(self.data.daily_production), self.get_save_button('daily_production'))
+                    self.get_table('ДАТА', 420, 500, self.data.generate_datatable(
+                        self.data.dates), self.get_save_button('dates')),
+                    self.get_table('СТРАНЫ', 250, 500, self.data.generate_datatable(
+                        self.data.countries), self.get_save_button('countries')),
+                    self.get_table('ДОБЫЧА', 350, 500, self.data.generate_datatable(
+                        self.data.daily_production), self.get_save_button('daily_production'))
                 ],
                 alignment=ft.MainAxisAlignment.CENTER,
                 visible=True,
@@ -453,7 +505,7 @@ class DataTables(Page):
         ]
         self.update_personal_table()
 
-    def switch_data(self, e):
+    def switch_data(self):
         """
         Переключает использование данных между основными и пользовательскими.
 
@@ -469,7 +521,7 @@ class DataTables(Page):
         else:
             self.personal_data.remove_priority()
             self.data.set_priority()
-    
+
     def update_personal_table(self):
         """
         Обновляет таблицу с пользовательскими данными.
@@ -478,16 +530,23 @@ class DataTables(Page):
         Наумов Виталий
         """
         self.controls[-2].controls = [
-            self.get_table('ДАТА', 420, 500, self.personal_data.generate_datatable(self.personal_data.dates), self.get_upload_button('dates')),
-            self.get_table('СТРАНЫ', 250, 500, self.personal_data.generate_datatable(self.personal_data.countries), self.get_upload_button('countries')),
-            self.get_table('ДОБЫЧА', 350, 500, self.personal_data.generate_datatable(self.personal_data.daily_production), self.get_upload_button('daily_production'))
+            self.get_table('ДАТА', 420, 500, self.personal_data.generate_datatable(
+                self.personal_data.dates), self.get_upload_button('dates')),
+            self.get_table('СТРАНЫ', 250, 500, self.personal_data.generate_datatable(
+                self.personal_data.countries), self.get_upload_button('countries')),
+            self.get_table('ДОБЫЧА', 350, 500, self.personal_data.generate_datatable(
+                self.personal_data.daily_production), self.get_upload_button('daily_production'))
         ]
         self.controls[-1].controls = [
-            ft.ElevatedButton('Очистить данные', on_click=self.clear_data, disabled=self.personal_data.is_empty),
-            ft.Switch(label="Использовать пользовательские данные", on_change=self.switch_data, disabled=self.personal_data.is_empty, value=self.personal_data.is_in_priority),
+            ft.ElevatedButton('Очистить данные', on_click=lambda _: self.clear_data(),
+                              disabled=self.personal_data.is_empty),
+            ft.Switch(label="Использовать пользовательские данные",
+                      on_change=lambda _: self.switch_data(),
+                      disabled=self.personal_data.is_empty,
+                      value=self.personal_data.is_in_priority),
         ]
         self.page.update()
-    
+
     def get_save_button(self, name):
         """
         Создает кнопку для сохранения данных.
@@ -502,7 +561,7 @@ class DataTables(Page):
         Наумов Виталий
         """
         return ft.ElevatedButton('Экспортировать данные', data=name, on_click=self.save_data)
-    
+
     def get_upload_button(self, name):
         """
         Создает кнопку для загрузки данных.
@@ -517,7 +576,7 @@ class DataTables(Page):
         Наумов Виталий
         """
         return ft.ElevatedButton('Загрузить данные', data=name, on_click=self.upload_data)
-    
+
     def get_table(self, name, width, height, table, button):
         """
         Создает таблицу данных.
@@ -559,7 +618,7 @@ class DataTables(Page):
                 button
             ]
         )
-    
+
     def get_navbar(self):
         """
         Создает навигационную панель.
@@ -582,7 +641,7 @@ class DataTables(Page):
                             content=ft.Text("Назад"),
                             on_click=lambda _: self.page.go('/home'),
                         ),
-                        
+
                         ft.MenuItemButton(
                             content=ft.Text("Мировые данные"),
                             on_click=lambda _: self.open_main_page(),
@@ -614,7 +673,7 @@ class DataTables(Page):
         if self.file_name:
             self.data.save_data(self.file_name, e.path)
             self.file_name = None
-    
+
     def on_upload_result(self, e):
         """
         Обрабатывает результат загрузки файла.
@@ -626,7 +685,8 @@ class DataTables(Page):
         Мирумян Артем
         """
         if self.file_name:
-            personal_path = self.uploader.upload_data(self.file_name, e.files[0].path)
+            personal_path = self.uploader.upload_data(
+                self.file_name, e.files[0].path)
             self.personal_data.read_data({self.file_name: personal_path})
             self.file_name = None
             self.update_personal_table()
@@ -658,7 +718,7 @@ class DataTables(Page):
         self.file_uploader.pick_files(allow_multiple=False)
         self.update_personal_table()
 
-    def clear_data(self, e):
+    def clear_data(self):
         """
         Очищает пользовательские данные.
 
@@ -670,7 +730,7 @@ class DataTables(Page):
         """
         self.personal_data.destroy()
         self.update_personal_table()
-    
+
     def open_main_page(self):
         """
         Открывает страницу с основными данными.
@@ -682,7 +742,7 @@ class DataTables(Page):
         self.controls[-2].visible = False
         self.controls[-3].visible = True
         self.page.update()
-    
+
     def open_personal_page(self):
         """
         Открывает страницу с пользовательскими данными.
@@ -694,11 +754,13 @@ class DataTables(Page):
         self.controls[-2].visible = True
         self.controls[-1].visible = True
         self.page.update()
-    
+
+
 class Reports(Page):
     """
     Класс Reports представляет страницу с отчетами.
     """
+
     def __init__(self, page: ft.Page, generator):
         """
         Инициализация класса Reports.
@@ -712,8 +774,8 @@ class Reports(Page):
         """
         super().__init__(page)
         self.page = page
-        self.reportGenerator = generator
-        self.reportGenerator.setup_data()
+        self.report_generator = generator
+        self.report_generator.setup_data()
 
         self.file_picker = ft.FilePicker(on_result=self.on_file_picker_result)
         self.page.overlay.append(self.file_picker)
@@ -730,7 +792,8 @@ class Reports(Page):
 
         self.controls = [
             TitleBar(page),
-            ft.ElevatedButton("Домой", on_click=lambda _: page.go("/home"), icon=ft.icons.ARROW_BACK),
+            ft.ElevatedButton("Домой", on_click=lambda _: page.go(
+                "/home"), icon=ft.icons.ARROW_BACK),
             ft.Container(
                 content=ft.Column(
                     [
@@ -762,7 +825,7 @@ class Reports(Page):
                 expand=True
             )
         ]
-        
+
     def get_combobox(self):
         """
         Создает выпадающий список стран.
@@ -773,7 +836,7 @@ class Reports(Page):
         Автор: 
         Мирумян Артем
         """
-        countries = self.reportGenerator.current_data.countries_list
+        countries = self.report_generator.current_data.countries_list
         return ft.Dropdown(
             options=[ft.dropdown.Option(text=country) for country in countries]
         )
@@ -790,8 +853,8 @@ class Reports(Page):
         """
         save_dir = e.path
         if e.path is not None:
-            self.reportGenerator.save_reports(save_dir)
-    
+            self.report_generator.save_reports(save_dir)
+
     def on_create_reports_click(self, e):
         """
         Создает отчеты для выбранной страны.
@@ -809,9 +872,9 @@ class Reports(Page):
         if not country_name:
             self.show_error_dialog()
         else:
-            reports = self.reportGenerator.run_generator(country_name)
+            reports = self.report_generator.run_generator(country_name)
             self.open_reports_dialog(e.page, reports)
-    
+
     def show_error_dialog(self):
         """
         Показывает диалоговое окно ошибки.
@@ -819,7 +882,7 @@ class Reports(Page):
         Автор: 
         Мирумян Артем
         """
-        def close_error_dialog(e):
+        def close_error_dialog():
             error_dialog.open = False
             self.page.update()
 
@@ -827,7 +890,7 @@ class Reports(Page):
             title=ft.Text("Ошибка"),
             content=ft.Text("Пожалуйста, выберите страну."),
             actions=[
-                ft.TextButton("ОК", on_click=close_error_dialog)
+                ft.TextButton("ОК", on_click=lambda _: close_error_dialog())
             ]
         )
         self.page.dialog = error_dialog
@@ -849,9 +912,10 @@ class Reports(Page):
         for report in reports:
             with open(report, "r") as file:
                 content = file.read()
-                report_contents.append(ft.Text(content, size=14, font_family="Courier New"))
+                report_contents.append(
+                    ft.Text(content, size=14, font_family="Courier New"))
 
-        def close_dialog(e):
+        def close_dialog():
             dialog.open = False
             page.update()
 
@@ -862,23 +926,25 @@ class Reports(Page):
                     report_contents,
                     scroll=True,
                 ),
-                width=1000,
+                width=1400,
                 height=400,
                 padding=20
             ),
             actions=[
-                ft.TextButton("Закрыть", on_click=close_dialog)
+                ft.TextButton("Закрыть", on_click=lambda _: close_dialog())
             ],
         )
 
         page.dialog = dialog
         dialog.open = True
         page.update()
-    
+
+
 class Info(Page):
     """
     Класс Info представляет информационную страницу приложения.
     """
+
     def __init__(self, page: ft.Page):
         """
         Инициализация класса Info.
@@ -893,7 +959,8 @@ class Info(Page):
         self.page = page
         self.controls = [
             TitleBar(page),
-            ft.ElevatedButton("Домой", on_click=lambda _: page.go("/home"), icon=ft.icons.ARROW_BACK),
+            ft.ElevatedButton("Домой", on_click=lambda _: page.go(
+                "/home"), icon=ft.icons.ARROW_BACK),
             ft.Container(
                 content=ft.Column(
                     [
@@ -902,9 +969,9 @@ class Info(Page):
                                 ft.Text(
                                     spans=[
                                         ft.TextSpan(
-                                            "В данном приложении вы можете создать собственные графики,\n"
-                                            "используя удобный интерфейс, а также просмотреть графики, уже созданные нами.\n"
-                                            "Авторы приложения:\n Наумов Виталий\n Куров Егор\n Мирумян Артём\n Рахматуллин Айгиз"
+        "В данном приложении вы можете создать собственные графики,\n"
+        "используя удобный интерфейс, а также просмотреть графики, уже созданные нами.\n"
+        "Авторы приложения:\n Наумов Виталий\n Куров Егор\n Мирумян Артём\n Рахматуллин Айгиз"
                                         )
                                     ],
                                     color="white",

@@ -1,6 +1,21 @@
-import flet as ft
-from flet_route import Params, Basket
+"""
+Модуль Components
+
+Этот модуль предоставляет компоненты для создания пользовательского интерфейса
+в приложении на базе Flet.
+
+Классы:
+    TitleBar: Кастомная строка заголовка для окна приложения.
+    Page: Кастомное представление страницы для приложения.
+
+Автор:
+    Куров Егор
+    Мирумян Артем
+"""
+
 import os
+import flet as ft
+
 
 class TitleBar(ft.ResponsiveRow):
     """
@@ -9,6 +24,7 @@ class TitleBar(ft.ResponsiveRow):
     Этот класс создает строку заголовка с кнопками свернуть, развернуть и закрыть 
     для систем, отличных от posix.
     """
+
     def __init__(self, page: ft.Page):
         """
         Инициализация TitleBar.
@@ -43,9 +59,12 @@ class TitleBar(ft.ResponsiveRow):
                     margin=0,
                     content=ft.Row(
                         [
-                            self.get_bar_button(self.minimize_window, ft.icons.MINIMIZE_OUTLINED),
-                            self.get_bar_button(self.maximize_window, ft.icons.CHECK_BOX_OUTLINE_BLANK),
-                            self.get_bar_button(self.window_close, ft.icons.CLOSE, ft.colors.RED),
+                            self.get_bar_button(lambda _:
+                                self.minimize_window(), ft.icons.MINIMIZE_OUTLINED),
+                            self.get_bar_button(lambda _:
+                                self.maximize_window(), ft.icons.CHECK_BOX_OUTLINE_BLANK),
+                            self.get_bar_button(lambda _:
+                                self.window_close(), ft.icons.CLOSE, ft.colors.RED),
                         ],
                         alignment=ft.MainAxisAlignment.END
                     ),
@@ -54,12 +73,10 @@ class TitleBar(ft.ResponsiveRow):
             )
         ]
 
-    def maximize_window(self, e):
+    def maximize_window(self):
         """
         Развернуть окно приложения.
 
-        Вход:
-        e (Event): Объект события.
 
         Автор: 
         Куров Егор
@@ -67,25 +84,20 @@ class TitleBar(ft.ResponsiveRow):
         self.page.window_maximized = True
         self.page.update()
 
-    def minimize_window(self, e):
+    def minimize_window(self):
         """
         Свернуть окно приложения.
 
-        Вход:
-        e (Event): Объект события.
 
         Автор: 
         Куров Егор
         """
         self.page.window_minimized = True
         self.page.update()
-    
-    def window_close(self, e):
+
+    def window_close(self):
         """
         Закрыть окно приложения.
-
-        Вход:
-        e (Event): Объект события.
 
         Автор: 
         Куров Егор
@@ -129,12 +141,14 @@ class TitleBar(ft.ResponsiveRow):
             on_click=on_click_func
         )
 
+
 class Page(ft.View):
     """
     Кастомное представление страницы для приложения.
 
     Этот класс настраивает тему и размеры окна приложения.
     """
+
     def __init__(self, page, padding=0, scroll=False):
         """
         Инициализация Page.
@@ -156,7 +170,7 @@ class Page(ft.View):
 
         self.page.window_maximized = True
         self.page.update()
-    
+
     def setup_theme(self):
         """
         Настройка темы для окна приложения.
@@ -177,7 +191,7 @@ class Page(ft.View):
         if os.name == 'nt':
             self.page.window_title_bar_hidden = True
             self.page.window_title_bar_buttons_hidden = True
-    
+
     def setup_sizes(self):
         """
         Настройка размеров окна приложения.
