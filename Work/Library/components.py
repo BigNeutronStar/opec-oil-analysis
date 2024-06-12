@@ -1,15 +1,35 @@
 import flet as ft
 from flet_route import Params, Basket
-
 import os
 
 class TitleBar(ft.ResponsiveRow):
+    """
+    Кастомная строка заголовка для окна приложения.
+
+    Этот класс создает строку заголовка с кнопками свернуть, развернуть и закрыть 
+    для систем, отличных от posix.
+    """
     def __init__(self, page: ft.Page):
+        """
+        Инициализация TitleBar.
+
+        Вход:
+        page (ft.Page): Объект страницы, представляющий окно приложения.
+
+        Автор: Куров Егор
+        """
         super().__init__()
         self.page = page
         self.initialize_controls()
 
     def initialize_controls(self):
+        """
+        Инициализация элементов управления для строки заголовка.
+
+        Добавляет кнопки свернуть, развернуть и закрыть в строку заголовка, если система не posix.
+
+        Автор: Куров Егор
+        """
         if os.name == 'posix':
             return
 
@@ -33,17 +53,54 @@ class TitleBar(ft.ResponsiveRow):
         ]
 
     def maximize_window(self, e):
+        """
+        Развернуть окно приложения.
+
+        Вход:
+        e (Event): Объект события.
+
+        Автор: Куров Егор
+        """
         self.page.window_maximized = True
         self.page.update()
 
     def minimize_window(self, e):
+        """
+        Свернуть окно приложения.
+
+        Вход:
+        e (Event): Объект события.
+
+        Автор: Куров Егор
+        """
         self.page.window_minimized = True
         self.page.update()
     
     def window_close(self, e):
+        """
+        Закрыть окно приложения.
+
+        Вход:
+        e (Event): Объект события.
+
+        Автор: Куров Егор
+        """
         self.page.window_close()
 
     def get_bar_button(self, on_click_func, icon, hovered_color=ft.colors.BLUE_200):
+        """
+        Создать кнопку для строки заголовка.
+
+        Вход:
+        on_click_func (function): Функция, вызываемая при нажатии на кнопку.
+        icon (ft.icons): Иконка, отображаемая на кнопке.
+        hovered_color (ft.colors): Цвет кнопки при наведении. По умолчанию BLUE_200.
+
+        Выход:
+        ft.FilledButton: Созданная кнопка.
+
+        Автор: Куров Егор
+        """
         return ft.FilledButton(
             content=ft.Row(
                 [
@@ -67,8 +124,23 @@ class TitleBar(ft.ResponsiveRow):
         )
 
 class Page(ft.View):
+    """
+    Кастомное представление страницы для приложения.
+
+    Этот класс настраивает тему и размеры окна приложения.
+    """
     def __init__(self, page, padding=0, scroll=False):
-        super().__init__(scroll = scroll, padding=padding)
+        """
+        Инициализация Page.
+
+        Вход:
+        page (ft.Page): Объект страницы, представляющий окно приложения.
+        padding (int): Отступ для страницы. По умолчанию 0.
+        scroll (bool): Включение или отключение прокрутки. По умолчанию False.
+
+        Автор: Мирумян Артем
+        """
+        super().__init__(scroll=scroll, padding=padding)
         self.page = page
 
         self.setup_theme()
@@ -79,6 +151,13 @@ class Page(ft.View):
         self.page.update()
     
     def setup_theme(self):
+        """
+        Настройка темы для окна приложения.
+
+        Конфигурирует тему и переходы для различных операционных систем.
+
+        Автор: Мирумян Артем
+        """
         theme = ft.Theme()
         theme.page_transitions.windows = ft.PageTransitionTheme.NONE
         theme.page_transitions.macos = ft.PageTransitionTheme.NONE
@@ -92,6 +171,13 @@ class Page(ft.View):
             self.page.window_title_bar_buttons_hidden = True
     
     def setup_sizes(self):
+        """
+        Настройка размеров окна приложения.
+
+        Устанавливает минимальные размеры окна и отступы.
+
+        Автор: Мирумян Артем
+        """
         self.page.window_min_height = 800
         self.page.window_min_width = 700
         self.page.spacing = 0

@@ -3,27 +3,63 @@ import pandas as pd
 from datetime import datetime
 
 class ReportGenerator():
+    """
+    Класс для генерации различных отчетов на основе данных.
+    """
     def __init__(self, data, personal_data, path):
+        """
+        Инициализация класса ReportGenerator.
+
+        Вход:
+        self (ReportGenerator): Экземпляр класса ReportGenerator.
+        data (Data): Основные данные.
+        personal_data (Data): Персональные данные.
+        path (str): Путь для сохранения отчетов.
+
+        Автор: Рахматуллин Айгиз
+        """
         self.data = data
         self.personal_data = personal_data
-
         self.path = path
-
         self.current_data = self.data
-
         self.check_dir()
     
     def check_dir(self):
+        """
+        Проверка существования директории и создание её при необходимости.
+
+        Вход:
+        self (ReportGenerator): Экземпляр класса ReportGenerator.
+
+        Автор: Рахматуллин Айгиз
+        """
         if not os.path.exists(self.path):
             os.makedirs(self.path)
     
     def setup_data(self):
+        """
+        Настройка текущих данных на основе приоритета.
+
+        Вход:
+        self (ReportGenerator): Экземпляр класса ReportGenerator.
+
+        Автор: Рахматуллин Айгиз
+        """
         if self.data.is_in_priority:
             self.current_data = self.data
         else:
             self.current_data = self.personal_data
 
     def save_reports(self, save_dir):
+        """
+        Сохранение отчетов в указанную директорию.
+
+        Вход:
+        self (ReportGenerator): Экземпляр класса ReportGenerator.
+        save_dir (str): Путь для сохранения отчетов.
+
+        Автор: Мирумян Артем
+        """
         if not os.path.exists(save_dir):
             os.makedirs(save_dir)
             
@@ -36,6 +72,18 @@ class ReportGenerator():
                         save_file.write(content)
     
     def run_generator(self, country_name):
+        """
+        Запуск генерации всех отчетов и возврат их путей.
+
+        Вход:
+        self (ReportGenerator): Экземпляр класса ReportGenerator.
+        country_name (str): Название страны для фильтрации данных.
+
+        Выход:
+        reports (list): Список путей к сгенерированным отчетам.
+
+        Автор: Мирумян Артем
+        """
         reports = [
             self.generate_annual_average_report(),
             self.generate_annual_minmax_report(),
@@ -46,6 +94,17 @@ class ReportGenerator():
         return reports
 
     def generate_annual_average_report(self):
+        """
+        Генерация отчета о средних значениях по годам.
+
+        Вход:
+        self (ReportGenerator): Экземпляр класса ReportGenerator.
+
+        Выход:
+        report_path (str): Путь к сгенерированному отчету.
+
+        Автор: Рахматуллин Айгиз
+        """
         df = self.current_data.dates.copy()
         df['Дата'] = pd.to_datetime(df['Дата'], format='%d.%m.%Y').dt.year
 
@@ -67,6 +126,17 @@ class ReportGenerator():
         return report_path
 
     def generate_annual_minmax_report(self):
+        """
+        Генерация отчета о минимальных и максимальных значениях по годам.
+
+        Вход:
+        self (ReportGenerator): Экземпляр класса ReportGenerator.
+
+        Выход:
+        report_path (str): Путь к сгенерированному отчету.
+
+        Автор: Рахматуллин Айгиз
+        """
         df = self.current_data.dates.copy()
         df['Дата'] = pd.to_datetime(df['Дата'], format='%d.%m.%Y').dt.year
 
@@ -91,6 +161,17 @@ class ReportGenerator():
         return report_path
 
     def generate_pivot_table(self):
+        """
+        Генерация сводной таблицы по суммарной добыче.
+
+        Вход:
+        self (ReportGenerator): Экземпляр класса ReportGenerator.
+
+        Выход:
+        report_path (str): Путь к сгенерированному отчету.
+
+        Автор: Рахматуллин Айгиз
+        """
         df = pd.merge(self.current_data.daily_production, self.current_data.countries, on='country_id')[['Добыча', 'Страна']]
         pivot_table = pd.pivot_table(df, index=['Страна'], values=['Добыча'], aggfunc='sum')
         report_path = os.path.join(self.path, 'total_production.txt')
@@ -107,6 +188,18 @@ class ReportGenerator():
         return report_path
 
     def generate_pivot_table_for_country(self, country_name):
+        """
+        Генерация сводной таблицы по суммарной добыче для заданной страны.
+
+        Вход:
+        self (ReportGenerator): Экземпляр класса ReportGenerator.
+        country_name (str): Название страны для фильтрации данных.
+
+        Выход:
+        report_path (str): Путь к сгенерированному отчету.
+
+        Автор: Рахматуллин Айгиз
+        """
         df = pd.merge(self.current_data.daily_production, self.current_data.dates, on='date_id')[['Дата', 'Добыча', 'country_id']]
         df = pd.merge(df, self.current_data.countries, on='country_id')[['Дата', 'Добыча', 'Страна']]
 

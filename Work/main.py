@@ -1,12 +1,33 @@
 import flet as ft
-
 from Scripts import config
 from Library import data_collector, graphics_generator, report_generator
-
 from Scripts.views import Home, Loading, Graphics, DataTables, Reports, Info
 
 def main(page: ft.Page):
+    """
+    Главная функция для инициализации и управления приложением Flet.
+
+    Вход:
+    page (ft.Page): Экземпляр страницы Flet.
+
+    Выход:
+    нет.
+
+    Автор: Наумов Виталий
+    """
+    
     def route_change(e):
+        """
+        Обработчик изменения маршрута.
+
+        Вход:
+        e (Event): Событие изменения маршрута.
+
+        Выход:
+        нет.
+
+        Автор: Наумов Виталий
+        """
         if page.route == "/":
             page.views.clear()
             page.views.append(Loading(page))
@@ -40,15 +61,12 @@ def main(page: ft.Page):
     personal_data = data_collector.Data()
     personal_data.read_data(cfg.personal_databases)
     
-    uploader=data_collector.Uploader(cfg.personal_dir)
-
+    uploader = data_collector.Uploader(cfg.personal_dir)
 
     graphGenerator = graphics_generator.GraphGenerator(data, personal_data, cfg.graphics)
     reportGenerator = report_generator.ReportGenerator(data, personal_data, cfg.report_dir)
 
     page.go('/home')
-    
+
 if __name__ == "__main__":
     ft.app(target=main)
-
-

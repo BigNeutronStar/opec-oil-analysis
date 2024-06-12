@@ -1,12 +1,22 @@
 from openpyxl import Workbook
-
 import flet as ft
 import numpy as np
 import shutil, os
 import pandas as pd
 
 class Data:
+    """
+    Класс для работы с данными, включает методы чтения, сохранения, генерации таблицы и удаления данных.
+    """
     def __init__(self):
+        """
+        Инициализация класса Data.
+
+        Вход:
+        self (Data): Экземпляр класса Data.
+
+        Автор: Наумов Виталий
+        """
         self.countries = pd.DataFrame()
         self.dates = pd.DataFrame()
         self.daily_production = pd.DataFrame()
@@ -18,12 +28,37 @@ class Data:
         self.paths = {}
     
     def set_priority(self):
+        """
+        Установить приоритет для данных.
+
+        Вход:
+        self (Data): Экземпляр класса Data.
+
+        Автор: Наумов Виталий
+        """
         self.is_in_priority = True
 
     def remove_priority(self):
+        """
+        Снять приоритет с данных.
+
+        Вход:
+        self (Data): Экземпляр класса Data.
+
+        Автор: Наумов Виталий
+        """
         self.is_in_priority = False
 
     def read_data(self, databases_paths):
+        """
+        Прочитать данные из файлов.
+
+        Вход:
+        self (Data): Экземпляр класса Data.
+        databases_paths (dict): Словарь путей к файлам данных.
+
+        Автор: Наумов Виталий
+        """
         for key, path in databases_paths.items():
             self.paths[key] = path
 
@@ -37,7 +72,7 @@ class Data:
         if 'dates' in databases_paths:
             self.dates = pd.read_excel(databases_paths['dates'])
             self.dates['Дата'] = pd.to_datetime(self.dates['Дата'], format='%d.%m.%Y')
-            self.dates['Дата'] = self.dates['Дата'].dt.strftime('%d.%m.%Y')
+            self.dates['Дата'] = self.dates['Дата'].dt.strftime('%d.%м.%Y')
             self.set_years()
         if 'daily_production' in databases_paths:
             self.daily_production = pd.read_excel(databases_paths['daily_production'])
@@ -45,27 +80,65 @@ class Data:
         self.is_empty = self.countries.empty or self.dates.empty or self.daily_production.empty
 
     def set_years(self):
+        """
+        Установить годы на основе данных.
+
+        Вход:
+        self (Data): Экземпляр класса Data.
+
+        Автор: Наумов Виталий
+        """
         df = self.dates[['Дата']].copy()
         df['Дата'] = pd.to_datetime(df['Дата'], format='mixed', dayfirst=True).dt.year
         self.years = df['Дата'].unique()
 
     def set_countries(self):
+        """
+        Установить список стран на основе данных.
+
+        Вход:
+        self (Data): Экземпляр класса Data.
+
+        Автор: Наумов Виталий
+        """
         self.countries_list = self.countries['Страна']
     
     def save_data(self, name, path):
-        if path == None:
+        """
+        Сохранить данные в файл Excel.
+
+        Вход:
+        self (Data): Экземпляр класса Data.
+        name (str): Имя набора данных для сохранения.
+        path (str): Путь к файлу для сохранения.
+
+        Автор: Наумов Виталий
+        """
+        if path is None:
             return
         if not path.endswith('.xlsx'):
             path += '.xlsx'
         Workbook().save(path)
-        dict = {
-            'dates' : self.dates,
-            'countries' : self.countries,
-            'daily_production' : self.daily_production,
+        data_dict = {
+            'dates': self.dates,
+            'countries': self.countries,
+            'daily_production': self.daily_production,
         }
-        dict[name].to_excel(path, index=False)
+        data_dict[name].to_excel(path, index=False)
     
     def generate_datatable(self, df):
+        """
+        Создать таблицу данных из DataFrame.
+
+        Вход:
+        self (Data): Экземпляр класса Data.
+        df (pd.DataFrame): DataFrame с данными для отображения.
+
+        Выход:
+        ft.DataTable: Таблица данных для отображения.
+
+        Автор: Наумов Виталий
+        """
         if df.size == 0:
             return ft.Column()
         
@@ -95,6 +168,14 @@ class Data:
         return datatable
 
     def destroy(self):
+        """
+        Уничтожить данные и удалить файлы.
+
+        Вход:
+        self (Data): Экземпляр класса Data.
+
+        Автор: Наумов Виталий
+        """
         self.countries = pd.DataFrame()
         self.dates = pd.DataFrame()
         self.daily_production = pd.DataFrame()
@@ -105,14 +186,36 @@ class Data:
 
     
 class Uploader():
+    """
+    Класс для загрузки данных в указанное место.
+
+    Автор: Наумов Виталий
+    """
     def __init__(self, path):
+        """
+        Инициализация класса Uploader.
+
+        Вход:
+        self (Uploader): Экземпляр класса Uploader.
+        path (str): Путь для загрузки данных.
+        """
         self.upload_path = path
         
     def upload_data(self, name, path):
+        """
+        Загрузить данные в указанное место.
+
+        Вход:
+        self (Uploader): Экземпляр класса Uploader.
+        name (str): Имя загружаемых данных.
+        path (str): Путь к файлу для загрузки.
+
+        Выход:
+        str: Новый путь к загруженному файлу.
+        """
         if not os.path.exists(self.upload_path):
             os.makedirs(self.upload_path)
         new_path = os.path.join(self.upload_path, name + "_personal.xlsx")
         Workbook().save(new_path)
         shutil.copy(path, new_path)
         return new_path
-
