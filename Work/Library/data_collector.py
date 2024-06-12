@@ -66,7 +66,7 @@ class Data:
         if 'dates' in databases_paths:
             self.dates = pd.read_excel(databases_paths['dates'])
             self.dates['Дата'] = pd.to_datetime(self.dates['Дата'], format='%d.%m.%Y')
-            self.dates['Дата'] = self.dates['Дата'].dt.strftime('%d.%м.%Y')
+            self.dates['Дата'] = self.dates['Дата'].dt.strftime('%d.%m.%Y')
             self.set_years()
         if 'daily_production' in databases_paths:
             self.daily_production = pd.read_excel(databases_paths['daily_production'])
