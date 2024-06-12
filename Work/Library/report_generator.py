@@ -140,24 +140,29 @@ class ReportGenerator():
         df = self.current_data.dates.copy()
         df['Дата'] = pd.to_datetime(df['Дата'], format='%d.%m.%Y').dt.year
 
-        pivot_table = pd.pivot_table(df, index=['Дата'], values=['Цена', 'Курс'], aggfunc={'Цена': ['min', 'max'], 'Курс': ['max', 'min']})
-        pivot_table.columns = ['Максимальная цена за баррель', 'Минимальная цена за баррель', 'Максимальный курс доллара', 'Минимальный курс доллара']
+        pivot_table = pd.pivot_table(df, index=['Дата'], values=['Цена', 'Курс'], aggfunc={'Цена': ['min', 'max', 'mean'], 'Курс': ['min', 'max','mean']})
+        pivot_table.columns = ['Максимальный курс доллара', 'Средний курс доллара', 'Минимальный курс доллара', 'Максимальная цена за баррель',
+                           'Средняя цена за баррель','Минимальная цена за баррель']
+
         report_path = os.path.join(self.path, 'annual_minmax_report.txt')
 
-        with open(report_path, 'w') as f:
-            header = f"{'Год':<5} | {'Мин. цена за баррель':<20} | {'Макс. цена за баррель':<20} | {'Макс. курс доллара':<20} | {'Мин. курс доллара':<20}\n"
+        with open(report_path, 'w', encoding='utf-8') as f:
+            header = f"{'Год':<5} | {'Мин. цена за баррель':<20} | {'Макс. цена за баррель':<20} | {'Ср. цена за баррель':<20} | {'Мин. курс доллара':<20} | {'Макс. курс доллара':<20}| {'Ср. курс доллара':<20}\n"
             f.write(header)
             f.write('-' * len(header) + '\n')
 
             for year, row in pivot_table.iterrows():
                 min_price = f"{row['Минимальная цена за баррель']:.2f}"
                 max_price = f"{row['Максимальная цена за баррель']:.2f}"
-                max_rate = f"{row['Максимальный курс доллара']:.2f}"
+                sr_price = f"{row['Средняя цена за баррель']:.2f}"
                 min_rate = f"{row['Минимальный курс доллара']:.2f}"
-                line = f"{year:<5} | {min_price:<20} | {max_price:<20} | {max_rate:<20} | {min_rate:<20}\n"
+                max_rate = f"{row['Максимальный курс доллара']:.2f}"
+                sr_rate = f"{row['Средний курс доллара']:.2f}"
+                line = f"{year:<5} | {min_price:<20} | {max_price:<20} | {sr_price:<20} | {min_rate:<20} | {max_rate:<20} | {sr_rate:<20}\n"
                 f.write(line)
 
             f.write('-' * len(header) + '\n')
+
         return report_path
 
     def generate_pivot_table(self):
@@ -175,7 +180,7 @@ class ReportGenerator():
         df = pd.merge(self.current_data.daily_production, self.current_data.countries, on='country_id')[['Добыча', 'Страна']]
         pivot_table = pd.pivot_table(df, index=['Страна'], values=['Добыча'], aggfunc='sum')
         report_path = os.path.join(self.path, 'total_production.txt')
-        with open(report_path, 'w') as f:
+        with open(report_path, 'w', encoding='utf-8') as f:
             header = f"{'Страна':<20} | {'Суммарная добыча':<10}"
             f.write(header + '\n')
             f.write('-' * len(header) + '\n')
@@ -208,7 +213,7 @@ class ReportGenerator():
         pivot_table = pd.pivot_table(df[df['Страна'] == country_name], index=['Дата'], values=['Добыча'], aggfunc='sum')
         report_path = os.path.join(self.path, f'total_production_{country_name}.txt')
 
-        with open(report_path, 'w') as f:
+        with open(report_path, 'w', encoding='utf-8') as f:
             header = f"{'Год':<5} | {'Суммарная добыча':<10}\n"
             f.write(header)
             f.write('-' * len(header) + '\n')
