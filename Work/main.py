@@ -2,21 +2,10 @@
 Модуль `main` является входной точкой приложения Flet. Он содержит главную 
 функцию для инициализации и управления приложением.
 
-Функции:
-- main: Главная функция для инициализации и управления приложением Flet.
-
-Модули:
-- flet: Модуль, предоставляющий основные инструменты для создания веб-приложений.
-- Scripts.config: Модуль, содержащий конфигурационные параметры приложения.
-- Library.data_collector: Модуль для сбора данных из источников.
-- Library.graphics_generator: Модуль для генерации графиков на основе данных.
-- Library.report_generator: Модуль для создания отчетов на основе данных.
-- Scripts.views: Модули, содержащие классы для отображения различных страниц приложения.
-
-Автор: Наумов Виталий
+Автор: 
+    Наумов Виталий
 """
 
-import time
 import flet as ft
 from Scripts import config
 from Scripts.views import Home, Loading, Graphics, DataTables, Reports, Info
@@ -28,9 +17,10 @@ def main(page: ft.Page):
     Главная функция для инициализации и управления приложением Flet.
 
     Вход:
-    page (ft.Page): Экземпляр страницы Flet.
+        page (ft.Page): Экземпляр страницы Flet.
 
-    Автор: Наумов Виталий
+    Автор: 
+        Наумов Виталий
     """
 
     def route_change(e):
@@ -38,9 +28,10 @@ def main(page: ft.Page):
         Обработчик изменения маршрута.
 
         Вход:
-        e (Event): Событие изменения маршрута.
+            e (Event): Событие изменения маршрута.
 
-        Автор: Наумов Виталий
+        Автор: 
+            Наумов Виталий
         """
         if page.route == "/":
             page.views.clear()
@@ -81,8 +72,6 @@ def main(page: ft.Page):
         data, personal_data, cfg.graphics)
     r_generator = report_generator.ReportGenerator(
         data, personal_data, cfg.report_dir)
-
-    time.sleep(2)
 
     page.go('/home')
 

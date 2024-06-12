@@ -4,12 +4,8 @@
 Этот модуль предоставляет компоненты для создания пользовательского интерфейса
 в приложении на базе Flet.
 
-Классы:
-    TitleBar: Кастомная строка заголовка для окна приложения.
-    Page: Кастомное представление страницы для приложения.
-
 Автор:
-    Куров Егор
+    Куров Егор,
     Мирумян Артем
 """
 
@@ -30,10 +26,10 @@ class TitleBar(ft.ResponsiveRow):
         Инициализация TitleBar.
 
         Вход:
-        page (ft.Page): Объект страницы, представляющий окно приложения.
+            page (ft.Page): Объект страницы, представляющий окно приложения.
 
         Автор: 
-        Куров Егор
+            Куров Егор
         """
         super().__init__()
         self.page = page
@@ -46,7 +42,7 @@ class TitleBar(ft.ResponsiveRow):
         Добавляет кнопки свернуть, развернуть и закрыть в строку заголовка для Windows
 
         Автор: 
-        Куров Егор
+            Куров Егор
         """
         if os.name == 'posix':
             return
@@ -78,9 +74,8 @@ class TitleBar(ft.ResponsiveRow):
         """
         Развернуть окно приложения.
 
-
         Автор: 
-        Куров Егор
+            Куров Егор
         """
         self.page.window_maximized = True
         self.page.update()
@@ -89,9 +84,8 @@ class TitleBar(ft.ResponsiveRow):
         """
         Свернуть окно приложения.
 
-
         Автор: 
-        Куров Егор
+            Куров Егор
         """
         self.page.window_minimized = True
         self.page.update()
@@ -101,7 +95,7 @@ class TitleBar(ft.ResponsiveRow):
         Закрыть окно приложения.
 
         Автор: 
-        Куров Егор
+            Куров Егор
         """
         self.page.window_close()
 
@@ -110,15 +104,15 @@ class TitleBar(ft.ResponsiveRow):
         Создать кнопку для строки заголовка.
 
         Вход:
-        on_click_func (function): Функция, вызываемая при нажатии на кнопку.
-        icon (ft.icons): Иконка, отображаемая на кнопке.
-        hovered_color (ft.colors): Цвет кнопки при наведении. По умолчанию BLUE_200.
+            on_click_func (function): Функция, вызываемая при нажатии на кнопку.
+            icon (ft.icons): Иконка, отображаемая на кнопке.
+            hovered_color (ft.colors): Цвет кнопки при наведении. По умолчанию BLUE_200.
 
         Выход:
-        ft.FilledButton: Созданная кнопка.
+            ft.FilledButton: Созданная кнопка.
 
         Автор: 
-        Куров Егор
+            Куров Егор
         """
         return ft.FilledButton(
             content=ft.Row(
@@ -155,12 +149,12 @@ class Page(ft.View):
         Инициализация Page.
 
         Вход:
-        page (ft.Page): Объект страницы, представляющий окно приложения.
-        padding (int): Отступ для страницы. По умолчанию 0.
-        scroll (bool): Включение или отключение прокрутки. По умолчанию False.
+            page (ft.Page): Объект страницы, представляющий окно приложения.
+            padding (int): Отступ для страницы. По умолчанию 0.
+            scroll (bool): Включение или отключение прокрутки. По умолчанию False.
 
         Автор: 
-        Мирумян Артем
+            Мирумян Артем
         """
         super().__init__(scroll=scroll, padding=padding)
         self.page = page
@@ -179,7 +173,7 @@ class Page(ft.View):
         Конфигурирует тему и переходы для различных операционных систем.
 
         Автор: 
-        Мирумян Артем
+            Мирумян Артем
         """
         theme = ft.Theme()
         theme.page_transitions.windows = ft.PageTransitionTheme.NONE
@@ -200,7 +194,7 @@ class Page(ft.View):
         Устанавливает минимальные размеры окна и отступы.
 
         Автор: 
-        Мирумян Артем
+            Мирумян Артем
         """
         self.page.window_min_height = 800
         self.page.window_min_width = 700

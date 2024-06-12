@@ -3,11 +3,8 @@
 страниц приложения. Каждый класс страницы предоставляет функционал для 
 визуализации данных, взаимодействия с пользователем и обработки событий.
 
-Классы:
-Home, Loading, Graphics, DataTables, Reports, Info
-
 Авторы:
-Куров Егор, Рахматуллин Айгиз, Мирумян Артем, Наумов Виталий
+    Куров Егор, Рахматуллин Айгиз, Мирумян Артем, Наумов Виталий
 """
 
 import flet as ft
@@ -27,10 +24,10 @@ class Home(Page):
         Инициализация класса Home.
 
         Вход:
-        page (ft.Page): Экземпляр текущей страницы.
+            page (ft.Page): Экземпляр текущей страницы.
 
         Автор: 
-        Куров Егор
+            Куров Егор
         """
         super().__init__(page)
         self.page = page
@@ -47,13 +44,13 @@ class Home(Page):
         Создает основной контейнер с элементами управления на главной странице.
 
         Вход:
-        page (ft.Page): Экземпляр текущей страницы.
+            page (ft.Page): Экземпляр текущей страницы.
 
         Выход:
-        ft.Container: Контейнер с элементами управления.
+            ft.Container: Контейнер с элементами управления.
 
         Автор: 
-        Куров Егор
+            Куров Егор
         """
         return ft.Container(
             content=ft.Column(
@@ -121,10 +118,11 @@ class Loading(Page):
         Инициализация класса Loading.
 
         Вход:
-        self (Loading): Экземпляр класса Loading.
-        page (ft.Page): Экземпляр текущей страницы.
+            self (Loading): Экземпляр класса Loading.
+            page (ft.Page): Экземпляр текущей страницы.
 
-        Автор: Рахматуллин Айгиз
+        Автор: 
+            Рахматуллин Айгиз
         """
         super().__init__(page)
         self.page = page
@@ -168,11 +166,11 @@ class Graphics(Page):
         Инициализация класса Graphics.
 
         Вход:
-        page (ft.Page): Экземпляр текущей страницы.
-        generator (object): Объект генератора графиков.
+            page (ft.Page): Экземпляр текущей страницы.
+            generator (object): Объект генератора графиков.
 
         Автор: 
-        Куров Егор
+            Куров Егор
         """
         super().__init__(page, scroll=True)
         self.page = page
@@ -197,7 +195,7 @@ class Graphics(Page):
         Обновляет содержимое основной части страницы.
 
         Автор: 
-        Куров Егор
+            Куров Егор
         """
         self.controls[-1] = ft.Container(
             content=ft.Row(
@@ -251,10 +249,10 @@ class Graphics(Page):
         Создает и возвращает навигационную панель.
 
         Выход:
-        ft.Row: Навигационная панель.
+            ft.Row: Навигационная панель.
 
         Автор: 
-        Куров Егор
+            Куров Егор
         """
         return ft.Row(
             [
@@ -352,12 +350,12 @@ class Graphics(Page):
         Открывает окно настройки графика.
 
         Вход:
-        plot_func (function): Функция построения графика.
-        atr (str, optional): Атрибут для построения графика.
-        countries_disabled (bool, optional): Флаг отключения выбора стран.
+            plot_func (function): Функция построения графика.
+            atr (str, optional): Атрибут для построения графика.
+            countries_disabled (bool, optional): Флаг отключения выбора стран.
 
         Автор: 
-        Мирумян Артем
+            Куров Егор
         """
         years = self.graph_generator.current_data.years
         min_year, max_year = min(years), max(years)
@@ -427,10 +425,10 @@ class Graphics(Page):
         Отображает график на странице и добавляет кнопку для сохранения графика.
 
         Вход:
-        fig (matplotlib.figure.Figure): Объект фигуры графика.
+            fig (matplotlib.figure.Figure): Объект фигуры графика.
 
         Автор: 
-        Мирумян Артем
+            Куров Егор
         """
         file_picker = ft.FilePicker(
             on_result=lambda e: self.graph_generator.save_graph(fig, e.path))
@@ -457,13 +455,13 @@ class DataTables(Page):
         Инициализация класса DataTables.
 
         Вход:
-        page (ft.Page): Экземпляр текущей страницы.
-        data (object): Объект данных.
-        personal_data (object): Объект пользовательских данных.
-        uploader (object): Объект загрузчика данных.
+            page (ft.Page): Экземпляр текущей страницы.
+            data (object): Объект данных.
+            personal_data (object): Объект пользовательских данных.
+            uploader (object): Объект загрузчика данных.
 
         Автор: 
-        Куров Егор
+            Куров Егор
         """
         super().__init__(page)
         self.page = page
@@ -510,10 +508,10 @@ class DataTables(Page):
         Переключает использование данных между основными и пользовательскими.
 
         Вход:
-        e (Event): Событие переключения.
+            e (Event): Событие переключения.
 
         Автор: 
-        Наумов Виталий
+            Куров Егор
         """
         if self.data.is_in_priority:
             self.data.remove_priority()
@@ -527,7 +525,7 @@ class DataTables(Page):
         Обновляет таблицу с пользовательскими данными.
 
         Автор: 
-        Наумов Виталий
+            Наумов Виталий
         """
         self.controls[-2].controls = [
             self.get_table('ДАТА', 420, 500, self.personal_data.generate_datatable(
@@ -552,13 +550,13 @@ class DataTables(Page):
         Создает кнопку для сохранения данных.
 
         Вход:
-        name (str): Имя данных для сохранения.
+            name (str): Имя данных для сохранения.
 
         Выход:
-        ft.ElevatedButton: Кнопка сохранения данных.
+            ft.ElevatedButton: Кнопка сохранения данных.
 
         Автор: 
-        Наумов Виталий
+            Куров Егор
         """
         return ft.ElevatedButton('Экспортировать данные', data=name, on_click=self.save_data)
 
@@ -567,13 +565,13 @@ class DataTables(Page):
         Создает кнопку для загрузки данных.
 
         Вход:
-        name (str): Имя данных для загрузки.
+            name (str): Имя данных для загрузки.
 
         Выход:
-        ft.ElevatedButton: Кнопка загрузки данных.
+            ft.ElevatedButton: Кнопка загрузки данных.
 
         Автор: 
-        Наумов Виталий
+            Куров Егор
         """
         return ft.ElevatedButton('Загрузить данные', data=name, on_click=self.upload_data)
 
@@ -582,17 +580,17 @@ class DataTables(Page):
         Создает таблицу данных.
 
         Вход:
-        name (str): Имя таблицы.
-        width (int): Ширина таблицы.
-        height (int): Высота таблицы.
-        table (object): Объект таблицы данных.
-        button (ft.ElevatedButton): Кнопка действия для таблицы.
+            name (str): Имя таблицы.
+            width (int): Ширина таблицы.
+            height (int): Высота таблицы.
+            table (object): Объект таблицы данных.
+            button (ft.ElevatedButton): Кнопка действия для таблицы.
 
         Выход:
-        ft.Column: Колонка с таблицей и кнопкой.
+            ft.Column: Колонка с таблицей и кнопкой.
 
         Автор: 
-        Наумов Виталий
+            Наумов Виталий
         """
         return ft.Column(
             [
@@ -624,10 +622,10 @@ class DataTables(Page):
         Создает навигационную панель.
 
         Выход:
-        ft.Row: Навигационная панель.
+            ft.Row: Навигационная панель.
 
         Автор: 
-        Куров Егор
+            Куров Егор
         """
         return ft.Row(
             [
@@ -662,13 +660,10 @@ class DataTables(Page):
         Обрабатывает результат сохранения файла.
 
         Вход:
-        e (Event): Событие сохранения файла.
-
-        Выход:
-        None
+            e (Event): Событие сохранения файла.
 
         Автор: 
-        Мирумян Артем
+            Куров Егор
         """
         if self.file_name:
             self.data.save_data(self.file_name, e.path)
@@ -679,10 +674,10 @@ class DataTables(Page):
         Обрабатывает результат загрузки файла.
 
         Вход:
-        e (Event): Событие загрузки файла.
+            e (Event): Событие загрузки файла.
 
         Автор: 
-        Мирумян Артем
+            Куров Егор
         """
         if self.file_name:
             personal_path = self.uploader.upload_data(
@@ -696,10 +691,10 @@ class DataTables(Page):
         Запускает процесс сохранения данных.
 
         Вход:
-        e (Event): Событие нажатия на кнопку сохранения.
+            e (Event): Событие нажатия на кнопку сохранения.
 
         Автор: 
-        Мирумян Артем
+            Куров Егор
         """
         self.file_name = e.control.data
         self.file_saver.save_file(allowed_extensions=['xlsx'])
@@ -709,10 +704,10 @@ class DataTables(Page):
         Запускает процесс загрузки данных.
 
         Вход:
-        e (Event): Событие нажатия на кнопку загрузки.
+            e (Event): Событие нажатия на кнопку загрузки.
 
         Автор: 
-        Мирумян Артем
+            Куров Егор
         """
         self.file_name = e.control.data
         self.file_uploader.pick_files(allow_multiple=False)
@@ -723,10 +718,10 @@ class DataTables(Page):
         Очищает пользовательские данные.
 
         Вход:
-        e (Event): Событие нажатия на кнопку очистки данных.
+            e (Event): Событие нажатия на кнопку очистки данных.
 
         Автор: 
-        Мирумян Артем
+            Куров Егор
         """
         self.personal_data.destroy()
         self.update_personal_table()
@@ -736,7 +731,7 @@ class DataTables(Page):
         Открывает страницу с основными данными.
 
         Автор: 
-        Мирумян Артем
+            Наумов Виталий
         """
         self.controls[-1].visible = False
         self.controls[-2].visible = False
@@ -748,7 +743,7 @@ class DataTables(Page):
         Открывает страницу с пользовательскими данными.
 
         Автор:
-        Мирумян Артем
+            Наумов Виталий
         """
         self.controls[-3].visible = False
         self.controls[-2].visible = True
@@ -766,11 +761,11 @@ class Reports(Page):
         Инициализация класса Reports.
 
         Вход:
-        page (ft.Page): Экземпляр текущей страницы.
-        generator (object): Объект генератора отчетов.
+            page (ft.Page): Экземпляр текущей страницы.
+            generator (object): Объект генератора отчетов.
 
         Автор: 
-        Мирумян Артем
+            Мирумян Артем
         """
         super().__init__(page)
         self.page = page
@@ -831,10 +826,10 @@ class Reports(Page):
         Создает выпадающий список стран.
 
         Выход:
-        ft.Dropdown: Выпадающий список стран.
+            ft.Dropdown: Выпадающий список стран.
 
         Автор: 
-        Мирумян Артем
+            Мирумян Артем
         """
         countries = self.report_generator.current_data.countries_list
         return ft.Dropdown(
@@ -846,10 +841,10 @@ class Reports(Page):
         Обрабатывает результат выбора файла.
 
         Вход:
-        e (Event): Событие выбора файла.
+            e (Event): Событие выбора файла.
 
         Автор: 
-        Мирумян Артем
+            Мирумян Артем
         """
         save_dir = e.path
         if e.path is not None:
@@ -860,10 +855,10 @@ class Reports(Page):
         Создает отчеты для выбранной страны.
 
         Вход:
-        e (Event): Событие нажатия на кнопку создания отчетов.
+            e (Event): Событие нажатия на кнопку создания отчетов.
 
         Автор: 
-        Мирумян Артем
+            Мирумян Артем
         """
         self.save_button.disabled = False
         self.page.update()
@@ -880,7 +875,7 @@ class Reports(Page):
         Показывает диалоговое окно ошибки.
 
         Автор: 
-        Мирумян Артем
+            Мирумян Артем
         """
         def close_error_dialog():
             error_dialog.open = False
@@ -902,11 +897,11 @@ class Reports(Page):
         Открывает диалоговое окно с отчетами.
 
         Вход:
-        page (ft.Page): Экземпляр текущей страницы.
-        reports (list): Список отчетов.
+            page (ft.Page): Экземпляр текущей страницы.
+            reports (list): Список отчетов.
 
         Автор: 
-        Мирумян Артем
+            Мирумян Артем
         """
         report_contents = []
         for report in reports:
@@ -950,10 +945,10 @@ class Info(Page):
         Инициализация класса Info.
 
         Вход:
-        page (ft.Page): Экземпляр текущей страницы.
+            page (ft.Page): Экземпляр текущей страницы.
 
         Автор: 
-        Рахматуллин Айгиз
+            Рахматуллин Айгиз
         """
         super().__init__(page)
         self.page = page

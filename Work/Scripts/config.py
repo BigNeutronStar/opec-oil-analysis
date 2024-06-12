@@ -1,5 +1,10 @@
-"""Модуль для загрузки и хранения конфигурационных параметров из файла
-config.ini и работы с ними."""
+"""
+Модуль для загрузки и хранения конфигурационных параметров из файла
+config.ini и работы с ними.
+
+Автор: 
+    Рахматуллин Айгиз
+"""
 import configparser
 
 
@@ -8,7 +13,7 @@ class Config:
     Класс для загрузки и хранения конфигурационных параметров.
 
     Автор: 
-    Рахматуллин Айгиз
+        Рахматуллин Айгиз
     """
 
     def __init__(self, config):
@@ -16,7 +21,7 @@ class Config:
         Инициализация класса Config.
 
         Вход:
-        config (configparser.ConfigParser): Объект ConfigParser с загруженной конфигурацией.
+            config (configparser.ConfigParser): Объект ConfigParser с загруженной конфигурацией.
         """
         self.report_dir = config['directories']['report_dir']
         self.personal_dir = config['directories']['personal_dir']
@@ -31,14 +36,11 @@ def load():
     """
     Функция для загрузки конфигурации из файла.
 
-    Вход:
-    нет.
-
     Выход:
-    config (Config): Экземпляр класса Config с загруженной конфигурацией.
+        config (Config): Экземпляр класса Config с загруженной конфигурацией.
 
     Автор: 
-    Рахматуллин Айгиз
+        Рахматуллин Айгиз
     """
     config = configparser.ConfigParser()
     config.read('Scripts/config.ini')
