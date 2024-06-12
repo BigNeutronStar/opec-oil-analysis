@@ -10,11 +10,7 @@ def main(page: ft.Page):
     Вход:
     page (ft.Page): Экземпляр страницы Flet.
 
-    Выход:
-    нет.
-
-    Автор: 
-    Наумов Виталий
+    Автор: Наумов Виталий
     """
     
     def route_change(e):
@@ -24,15 +20,11 @@ def main(page: ft.Page):
         Вход:
         e (Event): Событие изменения маршрута.
 
-        Выход:
-        нет.
-
-        Автор: 
-        Наумов Виталий
+        Автор: Наумов Виталий
         """
         if page.route == "/":
             page.views.clear()
-            page.views.append(Loading(page))
+            page.views.append(Loading(page, cfg.loading_gif))
         elif page.route == "/home":
             page.views.clear()
             page.views.append(Home(page))
@@ -50,11 +42,11 @@ def main(page: ft.Page):
             page.views.append(Info(page))
         page.update()
 
+    cfg = config.Load()
+
     page.on_route_change = route_change
 
     page.go(page.route)
-
-    cfg = config.Load()
 
     data = data_collector.Data()
     data.read_data(cfg.databases)

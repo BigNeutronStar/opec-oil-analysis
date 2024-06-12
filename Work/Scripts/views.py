@@ -88,25 +88,31 @@ class Loading(Page):
     """
     Класс Loading представляет страницу загрузки данных.
     """
-    def __init__(self, page: ft.Page):
+    def __init__(self, page: ft.Page, loading_gif):
         """
         Инициализация класса Loading.
 
         Вход:
+        self (Loading): Экземпляр класса Loading.
         page (ft.Page): Экземпляр текущей страницы.
 
-        Автор: 
-        Рахматуллин Айгиз
+        Автор: Рахматуллин Айгиз
         """
         super().__init__(page)
         self.page = page
+        self.loading_gif_path = loading_gif
         self.controls = [
             ft.Container(
                 content=ft.Row(
                     [
                         ft.Column(
                             [
-                                ft.ProgressRing(),
+                                ft.Image(
+                                    src=self.loading_gif_path,
+                                    width=100,
+                                    height=100,
+                                    fit=ft.ImageFit.CONTAIN,
+                                ),
                                 ft.Text("Загрузка данных"),
                             ],
                             alignment=ft.MainAxisAlignment.CENTER,
@@ -122,6 +128,7 @@ class Loading(Page):
                 expand=True,
             )
         ]
+
 
 class Graphics(Page):
     """

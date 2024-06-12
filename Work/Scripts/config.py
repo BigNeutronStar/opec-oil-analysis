@@ -20,6 +20,7 @@ class Config:
         self.databases = config['databases'] 
         self.personal_databases = config['personal_databases']
         self.graphics = config['graphics']
+        self.loading_gif = config['loading_gif']['custom_loading']
 
 def Load():
     """
