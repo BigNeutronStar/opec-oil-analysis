@@ -4,12 +4,10 @@
 
 # Запуск приложения
 ```
+python -m venv venv
+venv\Scripts\activate
 cd ./Work
-conda create -n <ENV_NAME> python=<VERSION>
-conda activate <ENV_NAME>
-conda config --add channels conda-forge
-conda config --set channel_priority strict
-conda install --file requirements.txt
+pip install -r requirements.txt
 python main.py
 ```
 

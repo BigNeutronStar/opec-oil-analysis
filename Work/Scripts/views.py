@@ -860,8 +860,6 @@ class Reports(Page):
         Автор: 
             Мирумян Артем
         """
-        self.save_button.disabled = False
-        self.page.update()
 
         country_name = self.country_combobox.value
         if not country_name:
@@ -869,6 +867,8 @@ class Reports(Page):
         else:
             reports = self.report_generator.run_generator(country_name)
             self.open_reports_dialog(e.page, reports)
+            self.save_button.disabled = False
+            self.page.update()
 
     def show_error_dialog(self):
         """

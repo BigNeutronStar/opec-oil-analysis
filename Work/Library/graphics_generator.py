@@ -395,7 +395,6 @@ class GraphGenerator():
         Автор: 
             Наумов Виталий
         """
-        print(path)
         if path is not None:
             fig.savefig(path)
 

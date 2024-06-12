@@ -183,7 +183,6 @@ class Data:
         self.dates = pd.DataFrame()
         self.daily_production = pd.DataFrame()
         directory = os.path.dirname(list(self.paths.values())[0])
-        print(directory)
         shutil.rmtree(directory, ignore_errors=True)
         self.is_empty = True
 
