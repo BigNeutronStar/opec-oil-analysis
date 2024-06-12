@@ -2,7 +2,7 @@ import flet as ft
 from Scripts import config
 from Library import data_collector, graphics_generator, report_generator
 from Scripts.views import Home, Loading, Graphics, DataTables, Reports, Info
-
+import time
 def main(page: ft.Page):
     """
     Главная функция для инициализации и управления приложением Flet.
@@ -60,6 +60,8 @@ def main(page: ft.Page):
     graphGenerator = graphics_generator.GraphGenerator(data, personal_data, cfg.graphics)
     reportGenerator = report_generator.ReportGenerator(data, personal_data, cfg.report_dir)
 
+    time.sleep(2)
+    
     page.go('/home')
 
 if __name__ == "__main__":
