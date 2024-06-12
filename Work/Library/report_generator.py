@@ -117,16 +117,14 @@ class ReportGenerator():
         report_path = os.path.join(self.path, 'annual_average_report.txt')
 
         with open(report_path, 'w') as f:
-            header = f"{'Год':<5} | {'Цена за баррель (средняя)':<30} | {
-                'Курс доллара (средний)':<20}\n"
+            header = f"{'Год':<5} | {'Цена за баррель (средняя)':<30} | {'Курс доллара (средний)':<20}\n"
             f.write(header)
             f.write('-' * len(header) + '\n')
 
             for year, row in pivot_table.iterrows():
                 avg_price = f"{row['Цена']:.2f}"
                 avg_exchange_rate = f"{row['Курс']:.2f}"
-                line = f"{year:<5} | {avg_price:<30} | {
-                    avg_exchange_rate:<20}\n"
+                line = f"{year:<5} | {avg_price:<30} | {avg_exchange_rate:<20}\n"
                 f.write(line)
 
             f.write('-' * len(header) + '\n')
@@ -153,8 +151,7 @@ class ReportGenerator():
         report_path = os.path.join(self.path, 'annual_minmax_report.txt')
 
         with open(report_path, 'w') as f:
-            header = f"{'Год':<5} | {'Мин. цена за баррель':<20} | {'Макс. цена за баррель':<20} | {
-                'Ср. цена за баррель':<20} | {'Мин. курс доллара':<20} | {'Макс. курс доллара':<20}| {'Ср. курс доллара':<20}\n"
+            header = f"{'Год':<5} | {'Мин. цена за баррель':<20} | {'Макс. цена за баррель':<20} | {'Ср. цена за баррель':<20} | {'Мин. курс доллара':<20} | {'Макс. курс доллара':<20}| {'Ср. курс доллара':<20}\n"
             f.write(header)
             f.write('-' * len(header) + '\n')
 
@@ -165,8 +162,7 @@ class ReportGenerator():
                 min_rate = f"{row['Минимальный курс доллара']:.2f}"
                 max_rate = f"{row['Максимальный курс доллара']:.2f}"
                 sr_rate = f"{row['Средний курс доллара']:.2f}"
-                line = f"{year:<5} | {min_price:<20} | {max_price:<20} | {
-                    sr_price:<20} | {min_rate:<20} | {max_rate:<20} | {sr_rate:<20}\n"
+                line = f"{year:<5} | {min_price:<20} | {max_price:<20} | {sr_price:<20} | {min_rate:<20} | {max_rate:<20} | {sr_rate:<20}\n"
                 f.write(line)
 
             f.write('-' * len(header) + '\n')
